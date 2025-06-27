@@ -81,7 +81,8 @@ const OnlineCompiler = ({ language }) => {
         <div className="flex items-center mb-2 gap-2">
           <button
             onClick={handleRun}
-            className="px-6 py-2 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 transition"
+            className="px-6 py-2 bg-kappel text-eerie-black-1 rounded font-bold transition duration-200
+              hover:bg-gradient-to-r hover:from-kappel hover:to-green-400 hover:text-white"
             disabled={loading}
           >
             {loading ? "Running..." : "Run"}
