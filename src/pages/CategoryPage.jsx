@@ -6,6 +6,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Menu, X } from "lucide-react";
 import Navbar from "../components/Navbar";
+import { escapeHtml } from "../utils/escapeHtml";
 
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center h-64">
@@ -199,7 +200,10 @@ const TutorialContent = ({ tutorial }) => (
                 {block.content && (
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: block.content.replace(/\n/g, "<br />"),
+                      __html: escapeHtml(block.content).replace(
+                        /\n/g,
+                        "<br />"
+                      ),
                     }}
                   />
                 )}
@@ -252,7 +256,10 @@ const TutorialContent = ({ tutorial }) => (
               {section.content && (
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: section.content.replace(/\n/g, "<br />"),
+                    __html: escapeHtml(section.content).replace(
+                      /\n/g,
+                      "<br />"
+                    ),
                   }}
                 />
               )}
