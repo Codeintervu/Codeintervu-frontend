@@ -15,7 +15,9 @@ const Navbar = ({ tutorials }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const { data } = await axios.get("/api/categories");
+        const { data } = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/categories`
+        );
         setCategories(data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);

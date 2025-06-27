@@ -312,7 +312,9 @@ const CategoryPage = () => {
         setLoading(true);
         setError(null);
 
-        const allCategoriesRes = await axios.get("/api/categories");
+        const allCategoriesRes = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/categories`
+        );
         const currentCategory = allCategoriesRes.data.find(
           (c) => c.path.replace(/^\/*/, "") === categoryPath
         );
@@ -324,7 +326,9 @@ const CategoryPage = () => {
         setCategory(currentCategory);
 
         const tutorialsRes = await axios.get(
-          `/api/tutorials?category=${currentCategory._id}`
+          `${import.meta.env.VITE_API_URL}/api/tutorials?category=${
+            currentCategory._id
+          }`
         );
         setTutorials(tutorialsRes.data);
       } catch (err) {
