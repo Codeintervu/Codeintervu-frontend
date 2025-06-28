@@ -75,12 +75,11 @@ const OnlineCompiler = ({ language }) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row gap-6 w-full">
-      {/* Left: Code Editor */}
-      <div className="w-full md:w-1/2 bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow-md flex flex-col">
-        {/* Java-specific note */}
-        {language === "java" && (
-          <div className="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg">
+    <div className="flex flex-col gap-6 w-full">
+      {/* Java-specific note - moved to top */}
+      {language === "java" && (
+        <div className="w-full flex justify-center">
+          <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg max-w-md">
             <div className="flex items-center gap-2">
               <svg
                 className="w-5 h-5 text-yellow-600 dark:text-yellow-400"
@@ -99,54 +98,59 @@ const OnlineCompiler = ({ language }) => {
               </span>
             </div>
           </div>
-        )}
-
-        <div className="flex items-center mb-2 gap-2">
-          <button
-            onClick={handleRun}
-            className="px-6 py-2 bg-kappel text-eerie-black-1 rounded font-bold transition duration-200
-              hover:bg-gradient-to-r hover:from-kappel hover:to-green-400 hover:text-white"
-            disabled={loading}
-          >
-            {loading ? "Running..." : "Run"}
-          </button>
         </div>
-        <label className="block font-bold mb-2 text-gray-800 dark:text-white text-left">
-          {lang.name} Code:
-        </label>
-        <textarea
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Tab") {
-              e.preventDefault();
-              const start = e.target.selectionStart;
-              const end = e.target.selectionEnd;
-              setCode(code.substring(0, start) + "\t" + code.substring(end));
-              setTimeout(() => {
-                e.target.selectionStart = e.target.selectionEnd = start + 1;
-              }, 0);
-            }
-          }}
-          className="w-full font-mono bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-3 rounded mb-2 border border-gray-300 dark:border-gray-700 flex-1 min-h-[300px]"
-          rows={16}
-        />
-      </div>
-      {/* Right: Output */}
-      <div className="w-full md:w-1/2 bg-white dark:bg-gray-900 rounded-lg p-4 shadow-md flex flex-col">
-        <label className="block font-bold mb-2 text-gray-800 dark:text-white text-left">
-          Output:
-        </label>
-        <div className="flex-1 min-h-[300px] bg-black rounded p-4 text-green-400 overflow-x-auto whitespace-pre-wrap">
-          {output ? (
-            output
-          ) : (
-            <span className="text-gray-500">Output will appear here.</span>
+      )}
+
+      <div className="flex flex-col md:flex-row gap-6 w-full">
+        {/* Left: Code Editor */}
+        <div className="w-full md:w-1/2 bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow-md flex flex-col">
+          <div className="flex items-center mb-2 gap-2">
+            <button
+              onClick={handleRun}
+              className="px-6 py-2 bg-kappel text-eerie-black-1 rounded font-bold transition duration-200
+                hover:bg-gradient-to-r hover:from-kappel hover:to-green-400 hover:text-white"
+              disabled={loading}
+            >
+              {loading ? "Running..." : "Run"}
+            </button>
+          </div>
+          <label className="block font-bold mb-2 text-gray-800 dark:text-white text-left">
+            {lang.name} Code:
+          </label>
+          <textarea
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Tab") {
+                e.preventDefault();
+                const start = e.target.selectionStart;
+                const end = e.target.selectionEnd;
+                setCode(code.substring(0, start) + "\t" + code.substring(end));
+                setTimeout(() => {
+                  e.target.selectionStart = e.target.selectionEnd = start + 1;
+                }, 0);
+              }
+            }}
+            className="w-full font-mono bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-3 rounded mb-2 border border-gray-300 dark:border-gray-700 flex-1 min-h-[300px]"
+            rows={16}
+          />
+        </div>
+        {/* Right: Output */}
+        <div className="w-full md:w-1/2 bg-white dark:bg-gray-900 rounded-lg p-4 shadow-md flex flex-col">
+          <label className="block font-bold mb-2 text-gray-800 dark:text-white text-left">
+            Output:
+          </label>
+          <div className="flex-1 min-h-[300px] bg-black rounded p-4 text-green-400 overflow-x-auto whitespace-pre-wrap">
+            {output ? (
+              output
+            ) : (
+              <span className="text-gray-500">Output will appear here.</span>
+            )}
+          </div>
+          {error && (
+            <div className="mt-4 text-red-500 font-semibold">{error}</div>
           )}
         </div>
-        {error && (
-          <div className="mt-4 text-red-500 font-semibold">{error}</div>
-        )}
       </div>
     </div>
   );
