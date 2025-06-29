@@ -38,7 +38,7 @@ const Navbar = ({ tutorials }) => {
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     // { name: "Courses", path: "/courses" }, // Commented out
-    { name: "Blog", path: "https://google.com", external: true },
+    { name: "Blog", path: "http://javabytrilochan.blogspot.com", external: true },
     { name: "Contact", path: "/contact" },
   ];
 
