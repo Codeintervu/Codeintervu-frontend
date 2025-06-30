@@ -27,10 +27,13 @@ const App = () => {
             <Route path="/courses" element={<Courses />} />
             <Route path="/contact" element={<Contact />} />
 
-            {/* 
-              This is the single, dynamic route that will handle ALL tutorial categories.
-            */}
-            <Route path="/:categoryPath/*" element={<CategoryPage />} />
+            {/* Pretty URL for tutorials: /categoryPath/tutorialSlug */}
+            <Route
+              path="/:categoryPath/:tutorialSlug"
+              element={<CategoryPage />}
+            />
+            {/* Fallback for category page without a tutorial selected */}
+            <Route path="/:categoryPath" element={<CategoryPage />} />
             <Route path="/compilers/java" element={<JavaCompiler />} />
             <Route path="/compilers/python" element={<PythonCompiler />} />
             <Route

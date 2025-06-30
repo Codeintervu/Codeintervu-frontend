@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FiLoader, FiAlertTriangle } from "react-icons/fi";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -71,7 +71,12 @@ const ImageSlideshow = ({ images, altText }) => {
   );
 };
 
-const TutorialSidebar = ({ tutorials, onTutorialSelect, activeTutorialId }) => (
+const TutorialSidebar = ({
+  tutorials,
+  onTutorialSelect,
+  activeTutorialSlug,
+  categoryPath,
+}) => (
   <aside className="md:w-72 bg-gray-50 dark:bg-gray-800 rounded-lg shadow self-start top-20 sticky p-6 hidden md:block">
     <h2 className="text-2xl font-bold mb-6 text-teal-600 dark:text-teal-400">
       Tutorials
@@ -81,16 +86,15 @@ const TutorialSidebar = ({ tutorials, onTutorialSelect, activeTutorialId }) => (
         {tutorials.map((tutorial) => (
           <li key={tutorial._id}>
             <a
-              href={`#${tutorial._id}`}
+              href={`/${categoryPath}/${tutorial.slug}`}
               className={`block px-4 py-2 rounded-md font-semibold whitespace-normal transition-colors duration-150 ${
-                activeTutorialId === tutorial._id
+                activeTutorialSlug === tutorial.slug
                   ? "bg-teal-100 dark:bg-gray-700 text-teal-700 dark:text-teal-300"
                   : "text-gray-900 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
               }`}
               onClick={(e) => {
                 e.preventDefault();
-                onTutorialSelect(tutorial._id);
-                window.history.replaceState(null, "", `#${tutorial._id}`);
+                onTutorialSelect(tutorial.slug);
               }}
               title={tutorial.title}
             >
@@ -304,8 +308,9 @@ const TutorialContent = ({ tutorial }) => (
 );
 
 const CategoryPage = () => {
-  const { categoryPath } = useParams();
+  const { categoryPath, tutorialSlug } = useParams();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [category, setCategory] = useState(null);
   const [tutorials, setTutorials] = useState([]);
@@ -351,15 +356,21 @@ const CategoryPage = () => {
 
   useEffect(() => {
     if (tutorials.length > 0) {
-      const hash = location.hash.substring(1);
-      const tutorialFromHash = tutorials.find((t) => t._id === hash);
-      setActiveTutorial(tutorialFromHash || tutorials[0]);
+      let tutorialToShow = null;
+      if (tutorialSlug) {
+        tutorialToShow = tutorials.find((t) => t.slug === tutorialSlug);
+      }
+      setActiveTutorial(tutorialToShow || tutorials[0]);
     } else {
       setActiveTutorial(null);
     }
-  }, [tutorials, location.hash]);
+  }, [tutorials, tutorialSlug]);
 
   useEffect(() => {
+    if (activeTutorial && activeTutorial.slug !== tutorialSlug) {
+      // Sync URL if needed
+      navigate(`/${categoryPath}/${activeTutorial.slug}`, { replace: true });
+    }
     if (activeTutorial) {
       // Scroll to the top of the tutorial content
       const el = document.getElementById(activeTutorial._id);
@@ -369,11 +380,12 @@ const CategoryPage = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
     }
-  }, [activeTutorial]);
+  }, [activeTutorial, categoryPath, tutorialSlug, navigate]);
 
-  const handleSidebarClick = (tutorialId) => {
-    const tutorial = tutorials.find((t) => t._id === tutorialId);
+  const handleSidebarClick = (slug) => {
+    const tutorial = tutorials.find((t) => t.slug === slug);
     setActiveTutorial(tutorial);
+    navigate(`/${categoryPath}/${slug}`);
   };
 
   if (loading) return <LoadingSpinner />;
@@ -388,7 +400,8 @@ const CategoryPage = () => {
             <TutorialSidebar
               tutorials={tutorials}
               onTutorialSelect={handleSidebarClick}
-              activeTutorialId={activeTutorial?._id}
+              activeTutorialSlug={activeTutorial?.slug}
+              categoryPath={categoryPath}
             />
             <main className="w-full md:flex-1">
               {activeTutorial ? (
