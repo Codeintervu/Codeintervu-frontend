@@ -38,6 +38,7 @@ const Hero = () => {
                 src="/assets/images/hero-banner-1.jpg"
                 alt="Hero banner"
                 className="w-4/5 h-full object-cover"
+                loading="lazy"
               />
             </div>
             <div className="rounded-tl-[50px] rounded-br-[90px] overflow-hidden mt-16 transform hover:scale-105 transition duration-500">
@@ -45,6 +46,7 @@ const Hero = () => {
                 src="/assets/images/hero-banner-2.jpg"
                 alt="Hero banner"
                 className="w-full h-full object-cover"
+                loading="lazy"
               />
             </div>
             {/* <img
@@ -56,6 +58,7 @@ const Hero = () => {
               src="/assets/images/hero-shape-2.png"
               alt=""
               className="absolute -top-20 -right-20 z-0 hidden lg:block animate-fade-in delay-200 dark:opacity-50"
+              loading="lazy"
             />
           </div>
         </div>

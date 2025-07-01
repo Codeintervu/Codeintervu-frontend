@@ -7,6 +7,7 @@ import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { Menu, X } from "lucide-react";
 import Navbar from "../components/Navbar";
 import { escapeHtml } from "../utils/escapeHtml";
+import { Helmet } from "react-helmet";
 
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center h-64">
@@ -50,6 +51,7 @@ const ImageSlideshow = ({ images, altText }) => {
         src={images[currentIndex]}
         alt={`${altText} ${currentIndex + 1}`}
         className="rounded-lg shadow-md block mx-auto"
+        loading="lazy"
       />
       {images.length > 1 && (
         <>
@@ -203,6 +205,7 @@ const TutorialContent = ({ tutorial }) => (
                     src={block.mediaUrl}
                     alt={block.subheading || "Content Media"}
                     className="my-4 rounded-lg shadow-md block mx-auto max-w-full h-auto"
+                    loading="lazy"
                   />
                 )}
                 {block.compiler?.enabled && (
@@ -239,6 +242,7 @@ const TutorialContent = ({ tutorial }) => (
               src={section.mediaUrl}
               alt={section.heading || "Tutorial Media"}
               className="my-4 rounded-lg shadow-md block mx-auto max-w-full h-auto"
+              loading="lazy"
             />
           )}
           {section.youtubeUrl && (
@@ -359,6 +363,39 @@ const CategoryPage = () => {
 
   return (
     <>
+      <Helmet>
+        <title>
+          {category
+            ? `${category.name} Tutorials - CodeIntervu`
+            : "Tutorials - CodeIntervu"}
+        </title>
+        <meta
+          name="description"
+          content={
+            category
+              ? `Learn ${category.name} with hands-on tutorials, code examples, and interview prep at CodeIntervu.`
+              : "Explore programming tutorials and interview prep at CodeIntervu."
+          }
+        />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "Article",
+              "headline": "${category ? category.name : "Tutorial"}",
+              "description": "${
+                category
+                  ? `Learn ${category.name} with hands-on tutorials, code examples, and interview prep at CodeIntervu.`
+                  : "Explore programming tutorials and interview prep at CodeIntervu."
+              }",
+              "author": {
+                "@type": "Organization",
+                "name": "CodeIntervu"
+              }
+            }
+          `}
+        </script>
+      </Helmet>
       <Navbar tutorials={tutorials} />
       <div className="container mx-auto px-4 py-8">
         {tutorials.length > 0 ? (

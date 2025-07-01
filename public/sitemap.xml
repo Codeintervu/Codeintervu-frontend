@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://codeintervu.com/</loc>
+  </url>
+  <url>
+    <loc>https://codeintervu.com/about</loc>
+  </url>
+  <url>
+    <loc>https://codeintervu.com/contact</loc>
+  </url>
+  <url>
+    <loc>https://codeintervu.com/blog</loc>
+  </url>
+  <url>
+    <loc>https://codeintervu.com/courses</loc>
+  </url>
+  <!-- Add more URLs for your main categories and tutorials as needed -->
+</urlset> 

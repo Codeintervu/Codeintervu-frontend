@@ -10,9 +10,13 @@ const VideoComponent = () => {
               src="/assets/images/video-banner.jpg"
               alt="Video banner"
               className="w-full h-auto"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-black/30 dark:bg-black/50"></div>
-            <button className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-radical-red dark:bg-red-600 text-white p-6 rounded-full animate-pulse">
+            <button
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-radical-red dark:bg-red-600 text-white p-6 rounded-full animate-pulse"
+              aria-label="Play video"
+            >
               <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
@@ -26,11 +30,13 @@ const VideoComponent = () => {
             src="/assets/images/video-shape-1.png"
             alt=""
             className="absolute -top-10 -left-10 hidden lg:block dark:opacity-50"
+            loading="lazy"
           />
           <img
             src="/assets/images/video-shape-2.png"
             alt=""
             className="absolute -top-20 right-0 hidden lg:block dark:opacity-50"
+            loading="lazy"
           />
         </div>
       </div>

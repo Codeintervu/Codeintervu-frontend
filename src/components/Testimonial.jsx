@@ -62,6 +62,7 @@ const Testimonial = () => {
                   src={testimonial.avatar}
                   alt={testimonial.name}
                   className="w-16 h-16 rounded-full object-cover"
+                  loading="lazy"
                 />
                 <div>
                   <h4 className="font-league-spartan font-bold text-gray-900 dark:text-white">

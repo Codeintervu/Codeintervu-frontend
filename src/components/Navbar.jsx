@@ -38,7 +38,11 @@ const Navbar = ({ tutorials }) => {
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     // { name: "Courses", path: "/courses" }, // Commented out
-    { name: "Blog", path: "http://javabytrilochan.blogspot.com", external: true },
+    {
+      name: "Blog",
+      path: "http://javabytrilochan.blogspot.com",
+      external: true,
+    },
     { name: "Contact", path: "/contact" },
   ];
 
@@ -64,6 +68,7 @@ const Navbar = ({ tutorials }) => {
               alt="CodeIntervu Logo"
               className="h-8 w-8 md:h-10 md:w-10 object-contain"
               style={{ borderRadius: "50%" }}
+              loading="lazy"
             />
             <span>
               <span className="text-teal-600 dark:text-teal-400">CODE</span>
@@ -117,7 +122,10 @@ const Navbar = ({ tutorials }) => {
               );
             }}
           >
-            <button className="flex items-center gap-1 text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors">
+            <button
+              className="flex items-center gap-1 text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+              aria-label="Open tutorials dropdown"
+            >
               Tutorial <ChevronDown size={16} />
             </button>
             {isTutorialsOpen && (
@@ -157,6 +165,7 @@ const Navbar = ({ tutorials }) => {
           <button
             onClick={toggleTheme}
             className="p-2 text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+            aria-label="Toggle theme"
           >
             {isDarkMode ? <Sun size={22} /> : <Moon size={22} />}
           </button>

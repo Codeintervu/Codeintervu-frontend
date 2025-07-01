@@ -4,11 +4,12 @@ import React from "react";
 const Footer = () => {
   const footerLinks = {
     about: [
-      "Corporate & Academic Training",
-      "Website Designing",
-      "Website Development",
-      "Digital Marketing",
-      "Project Training",
+      "Comprehensive Tutorials",
+      "Online Practice Compilers",
+      "Internship Opportunities",
+      "Earn Certifications",
+      "Placement Preparation",
+      "Interview Questions & Answers"
     ],
     contact: [
       "Plot No-741, 2nd Floor,",
@@ -95,17 +96,14 @@ const Footer = () => {
             <h3 className="text-white text-xl font-league-spartan font-bold mb-4">
               About us
             </h3>
-            <p className="mb-4 text-gray-400">
-              The best online training team for Python, Machine Learning, Deep
-              Learning, Data Mining, Power BI, DAA, Data Structures using C &
-              C++ Programming (HTML, SQL & Java). For Python best Academic
-              training, Corporate training, and Project Training.
+            <p className="mb-4 text-gray-500">
+            CodeIntervu.com is a cutting-edge EdTech platform designed to empower technocrats and aspiring professionals. Developed by Silan Software, CodeIntervu.com offers a unique blend of tutorials, practice tools, and career-focused resources, making it your one-stop destination for mastering technology and securing placements. 
             </p>
             <ul className="space-y-2">
               {footerLinks.about.map((item, index) => (
                 <li
                   key={index}
-                  className="text-gray-400 hover:text-kappel transition-colors"
+                  className="text-gray-500 hover:text-kappel transition-colors"
                 >
                   {item}
                 </li>
@@ -122,7 +120,7 @@ const Footer = () => {
               {footerLinks.contact.map((item, index) => (
                 <li
                   key={index}
-                  className="text-gray-400 hover:text-kappel transition-colors"
+                  className="text-gray-500 hover:text-kappel transition-colors"
                 >
                   {item}
                 </li>
@@ -146,28 +144,28 @@ const Footer = () => {
             <div className="flex items-center gap-4 mb-6">
               <a
                 href="#"
-                className="text-gray-400 hover:text-kappel transition-colors"
+                className="text-gray-500 hover:text-kappel transition-colors"
                 aria-label="YouTube"
               >
                 <Youtube size={28} />
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-kappel transition-colors"
+                className="text-gray-500 hover:text-kappel transition-colors"
                 aria-label="LinkedIn"
               >
                 <Linkedin size={28} />
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-kappel transition-colors"
+                className="text-gray-500 hover:text-kappel transition-colors"
                 aria-label="Facebook"
               >
                 <Facebook size={28} />
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-kappel transition-colors"
+                className="text-gray-500 hover:text-kappel transition-colors"
                 aria-label="Twitter"
               >
                 <Twitter size={28} />
@@ -186,7 +184,7 @@ const Footer = () => {
               <a
                 key={index}
                 href="#"
-                className="text-gray-400 hover:text-kappel transition-colors text-sm px-3 py-1 bg-gray-800 rounded-md"
+                className="text-gray-500 hover:text-kappel transition-colors text-sm px-3 py-1 bg-gray-800 rounded-md"
               >
                 {course}
               </a>
@@ -204,7 +202,7 @@ const Footer = () => {
               <a
                 key={index}
                 href="#"
-                className="text-gray-400 hover:text-kappel transition-colors text-sm px-3 py-1 bg-gray-800 rounded-md"
+                className="text-gray-500 hover:text-kappel transition-colors text-sm px-3 py-1 bg-gray-800 rounded-md"
               >
                 {tutorial}
               </a>
