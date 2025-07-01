@@ -452,7 +452,111 @@ const CategoryPage = () => {
             </aside>
             <main className="w-full md:flex-1">
               {activeTutorial ? (
-                <TutorialContent tutorial={activeTutorial} />
+                <>
+                  {/* Tutorial Navigation Bar (Top) */}
+                  <div className="flex justify-between items-center mb-8 mt-16 md:mt-0">
+                    {/* Left Button */}
+                    {tutorials.findIndex(
+                      (t) => t.slug === activeTutorial.slug
+                    ) === 0 ? (
+                      <button
+                        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded flex items-center gap-2"
+                        onClick={() => navigate("/")}
+                      >
+                        <span>&lt; Home</span>
+                      </button>
+                    ) : (
+                      <button
+                        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded flex items-center gap-2"
+                        onClick={() =>
+                          handleSidebarClick(
+                            tutorials[
+                              tutorials.findIndex(
+                                (t) => t.slug === activeTutorial.slug
+                              ) - 1
+                            ].slug
+                          )
+                        }
+                      >
+                        <span>&lt; Previous</span>
+                      </button>
+                    )}
+                    {/* Right Button */}
+                    {tutorials.findIndex(
+                      (t) => t.slug === activeTutorial.slug
+                    ) <
+                    tutorials.length - 1 ? (
+                      <button
+                        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded flex items-center gap-2"
+                        onClick={() =>
+                          handleSidebarClick(
+                            tutorials[
+                              tutorials.findIndex(
+                                (t) => t.slug === activeTutorial.slug
+                              ) + 1
+                            ].slug
+                          )
+                        }
+                      >
+                        <span>Next &gt;</span>
+                      </button>
+                    ) : (
+                      <div />
+                    )}
+                  </div>
+                  <TutorialContent tutorial={activeTutorial} />
+                  {/* Tutorial Navigation Bar (Bottom) */}
+                  <div className="flex justify-between items-center mt-8">
+                    {/* Left Button */}
+                    {tutorials.findIndex(
+                      (t) => t.slug === activeTutorial.slug
+                    ) === 0 ? (
+                      <button
+                        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded flex items-center gap-2"
+                        onClick={() => navigate("/")}
+                      >
+                        <span>&lt; Home</span>
+                      </button>
+                    ) : (
+                      <button
+                        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded flex items-center gap-2"
+                        onClick={() =>
+                          handleSidebarClick(
+                            tutorials[
+                              tutorials.findIndex(
+                                (t) => t.slug === activeTutorial.slug
+                              ) - 1
+                            ].slug
+                          )
+                        }
+                      >
+                        <span>&lt; Previous</span>
+                      </button>
+                    )}
+                    {/* Right Button */}
+                    {tutorials.findIndex(
+                      (t) => t.slug === activeTutorial.slug
+                    ) <
+                    tutorials.length - 1 ? (
+                      <button
+                        className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded flex items-center gap-2"
+                        onClick={() =>
+                          handleSidebarClick(
+                            tutorials[
+                              tutorials.findIndex(
+                                (t) => t.slug === activeTutorial.slug
+                              ) + 1
+                            ].slug
+                          )
+                        }
+                      >
+                        <span>Next &gt;</span>
+                      </button>
+                    ) : (
+                      <div />
+                    )}
+                  </div>
+                </>
               ) : (
                 <div className="text-center py-16">
                   <h2 className="text-2xl font-semibold">
