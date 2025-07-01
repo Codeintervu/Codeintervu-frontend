@@ -71,42 +71,6 @@ const ImageSlideshow = ({ images, altText }) => {
   );
 };
 
-const TutorialSidebar = ({
-  tutorials,
-  onTutorialSelect,
-  activeTutorialSlug,
-  categoryPath,
-}) => (
-  <aside className="md:w-72 bg-gray-50 dark:bg-gray-800 rounded-lg shadow self-start top-20 sticky p-6 hidden md:block">
-    <h2 className="text-2xl font-bold mb-6 text-teal-600 dark:text-teal-400">
-      Tutorials
-    </h2>
-    <nav>
-      <ul className="space-y-2">
-        {tutorials.map((tutorial) => (
-          <li key={tutorial._id}>
-            <a
-              href={`/${categoryPath}/${tutorial.slug}`}
-              className={`block px-4 py-2 rounded-md font-semibold whitespace-normal transition-colors duration-150 ${
-                activeTutorialSlug === tutorial.slug
-                  ? "bg-teal-100 dark:bg-gray-700 text-teal-700 dark:text-teal-300"
-                  : "text-gray-900 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
-              }`}
-              onClick={(e) => {
-                e.preventDefault();
-                onTutorialSelect(tutorial.slug);
-              }}
-              title={tutorial.title}
-            >
-              {tutorial.title}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  </aside>
-);
-
 const CompilerBlock = ({ language, initialCode, editable }) => {
   const [code, setCode] = useState(initialCode || "");
   const [output, setOutput] = useState("");
@@ -317,6 +281,7 @@ const CategoryPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeTutorial, setActiveTutorial] = useState(null);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -386,6 +351,7 @@ const CategoryPage = () => {
     const tutorial = tutorials.find((t) => t.slug === slug);
     setActiveTutorial(tutorial);
     navigate(`/${categoryPath}/${slug}`);
+    setMobileSidebarOpen(false);
   };
 
   if (loading) return <LoadingSpinner />;
@@ -397,12 +363,93 @@ const CategoryPage = () => {
       <div className="container mx-auto px-4 py-8">
         {tutorials.length > 0 ? (
           <div className="flex flex-col md:flex-row gap-8">
-            <TutorialSidebar
-              tutorials={tutorials}
-              onTutorialSelect={handleSidebarClick}
-              activeTutorialSlug={activeTutorial?.slug}
-              categoryPath={categoryPath}
-            />
+            <button
+              className="md:hidden fixed top-4 left-4 z-50 bg-white dark:bg-gray-900 rounded-full p-2 shadow-lg border border-gray-200 dark:border-gray-700"
+              onClick={() => setMobileSidebarOpen(true)}
+              aria-label="Open tutorial sidebar"
+            >
+              <Menu size={28} />
+            </button>
+            <div
+              className={`fixed inset-0 z-40 flex md:hidden transition-all duration-300 ${
+                mobileSidebarOpen ? "" : "pointer-events-none"
+              }`}
+            >
+              <div
+                className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity ${
+                  mobileSidebarOpen ? "opacity-100" : "opacity-0"
+                }`}
+                onClick={() => setMobileSidebarOpen(false)}
+              />
+              <aside
+                className={`relative w-64 bg-gray-50 dark:bg-gray-800 h-full shadow-lg transform transition-transform ${
+                  mobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                }`}
+              >
+                <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+                  <h2 className="text-xl font-bold text-teal-600 dark:text-teal-400">
+                    Tutorials
+                  </h2>
+                  <button
+                    onClick={() => setMobileSidebarOpen(false)}
+                    aria-label="Close sidebar"
+                  >
+                    <span className="text-2xl">&times;</span>
+                  </button>
+                </div>
+                <nav className="p-4">
+                  <ul className="space-y-2">
+                    {tutorials.map((tutorial) => (
+                      <li key={tutorial._id}>
+                        <a
+                          href={`/${categoryPath}/${tutorial.slug}`}
+                          className={`block px-4 py-2 rounded-md font-semibold whitespace-normal transition-colors duration-150 ${
+                            activeTutorial?.slug === tutorial.slug
+                              ? "bg-teal-100 dark:bg-gray-700 text-teal-700 dark:text-teal-300"
+                              : "text-gray-900 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+                          }`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleSidebarClick(tutorial.slug);
+                          }}
+                          title={tutorial.title}
+                        >
+                          {tutorial.title}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              </aside>
+            </div>
+            <aside className="hidden md:block md:w-72 bg-gray-50 dark:bg-gray-800 rounded-lg shadow self-start top-20 sticky p-6">
+              <h2 className="text-2xl font-bold mb-6 text-teal-600 dark:text-teal-400">
+                Tutorials
+              </h2>
+              <nav>
+                <ul className="space-y-2">
+                  {tutorials.map((tutorial) => (
+                    <li key={tutorial._id}>
+                      <a
+                        href={`/${categoryPath}/${tutorial.slug}`}
+                        className={`block px-4 py-2 rounded-md font-semibold whitespace-normal transition-colors duration-150 ${
+                          activeTutorial?.slug === tutorial.slug
+                            ? "bg-teal-100 dark:bg-gray-700 text-teal-700 dark:text-teal-300"
+                            : "text-gray-900 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700"
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleSidebarClick(tutorial.slug);
+                        }}
+                        title={tutorial.title}
+                      >
+                        {tutorial.title}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            </aside>
             <main className="w-full md:flex-1">
               {activeTutorial ? (
                 <TutorialContent tutorial={activeTutorial} />
@@ -414,7 +461,6 @@ const CategoryPage = () => {
                 </div>
               )}
             </main>
-            {/* Ad Space - right on desktop, below on mobile/tablet */}
             <aside className="w-full md:w-64 order-3 md:order-none mt-8 md:mt-0">
               {/* Blank space for organic ad area, no visible content or border */}
             </aside>
