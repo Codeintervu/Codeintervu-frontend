@@ -8,6 +8,7 @@ import { Menu, X } from "lucide-react";
 import Navbar from "../components/Navbar";
 import { escapeHtml } from "../utils/escapeHtml";
 import { Helmet } from "react-helmet";
+import YouTubeVideo from "../components/YouTubeVideo";
 
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center h-64">
@@ -246,20 +247,10 @@ const TutorialContent = ({ tutorial }) => (
             />
           )}
           {section.youtubeUrl && (
-            <div className="flex justify-center">
-              <div className="aspect-w-16 aspect-h-9 my-4 w-full">
-                <iframe
-                  src={`https://www.youtube.com/embed/${
-                    section.youtubeUrl.split("v=")[1]
-                  }`}
-                  title={section.heading || "YouTube Video"}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="rounded-lg shadow-md"
-                ></iframe>
-              </div>
-            </div>
+            <YouTubeVideo
+              youtubeUrl={section.youtubeUrl}
+              title={section.heading || "YouTube Video"}
+            />
           )}
           {section.compiler?.enabled && (
             <CompilerBlock
