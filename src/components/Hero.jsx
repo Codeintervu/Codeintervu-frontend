@@ -18,7 +18,7 @@ const Hero = () => {
               <br />
               <span className="text-kappel dark:text-teal-400">Get Hired.</span>
             </h1>
-            <p className="text-lg text-gray-600 dark:text-gray-300">
+            <p className="text-lg text-gray-800 dark:text-gray-100">
               Bite-sized tutorials, real projects, and expert guidance — all in
               one platform. From basics to building full-stack apps , we've got
               your back.

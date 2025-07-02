@@ -399,7 +399,7 @@ const CategoryPage = () => {
       <Navbar tutorials={tutorials} />
       <div className="container mx-auto px-4 py-8">
         {tutorials.length > 0 ? (
-          <div className="flex flex-col md:flex-row gap-8">
+          <div className="flex flex-col md:flex-row gap-8 min-w-0">
             <button
               className="md:hidden fixed top-4 left-4 z-50 bg-white dark:bg-gray-900 rounded-full p-2 shadow-lg border border-gray-200 dark:border-gray-700"
               onClick={() => setMobileSidebarOpen(true)}
@@ -459,7 +459,7 @@ const CategoryPage = () => {
                 </nav>
               </aside>
             </div>
-            <aside className="hidden md:block md:w-72 bg-gray-50 dark:bg-gray-800 rounded-lg shadow self-start top-20 sticky p-6">
+            <aside className="hidden md:block md:w-72 bg-gray-50 dark:bg-gray-800 rounded-lg shadow self-start top-20 sticky p-6 flex-shrink-0">
               <h2 className="text-2xl font-bold mb-6 text-teal-600 dark:text-teal-400">
                 Tutorials
               </h2>
@@ -487,7 +487,7 @@ const CategoryPage = () => {
                 </ul>
               </nav>
             </aside>
-            <main className="w-full md:flex-1">
+            <main className="w-full md:flex-1 max-w-4xl mx-auto px-4 min-w-0">
               {activeTutorial ? (
                 <>
                   {/* Tutorial Navigation Bar (Top) */}
@@ -602,7 +602,7 @@ const CategoryPage = () => {
                 </div>
               )}
             </main>
-            <aside className="w-full md:w-64 order-3 md:order-none mt-8 md:mt-0">
+            <aside className="w-full md:w-64 order-3 md:order-none mt-8 md:mt-0 flex-shrink-0">
               {/* Blank space for organic ad area, no visible content or border */}
             </aside>
           </div>

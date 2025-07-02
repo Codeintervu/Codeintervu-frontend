@@ -62,7 +62,7 @@ const Home = () => {
                   Practice with our Online Compilers
                 </h2>
               </div>
-              <p className="text-center text-gray-600 dark:text-gray-300 max-w-2xl">
+              <p className="text-center text-gray-800 dark:text-gray-100 max-w-2xl">
                 We believe coding should be accessible to all, so we made our
                 own compilers for web and mobile—and they're free!
               </p>

@@ -80,7 +80,7 @@ const FAQ = () => {
                     : "max-h-0 opacity-0 py-0"
                 }`}
               >
-                <p className="text-gray-700 dark:text-gray-300">{faq.answer}</p>
+                <p className="text-gray-900 dark:text-gray-100">{faq.answer}</p>
               </div>
             </div>
           ))}

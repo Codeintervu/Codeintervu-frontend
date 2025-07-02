@@ -15,7 +15,7 @@ const Contact = () => {
           <h1 className="text-5xl font-extrabold text-gray-800 dark:text-white mb-4 animate-fade-in">
             Get in Touch
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 text-lg">
+          <p className="text-gray-800 dark:text-gray-100 text-lg">
             Have a question or want to work together? We'd love to hear from
             you!
           </p>
@@ -26,7 +26,7 @@ const Contact = () => {
             <h2 className="text-2xl font-bold text-teal-600 dark:text-teal-400 mb-4">
               Thank you for contacting us!
             </h2>
-            <p className="text-gray-700 dark:text-gray-300 text-lg">
+            <p className="text-gray-900 dark:text-gray-100 text-lg">
               We'll get back to you soon.
             </p>
           </div>

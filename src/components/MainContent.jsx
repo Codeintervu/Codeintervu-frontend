@@ -5,7 +5,7 @@ const MainContent = ({ title, content }) => (
     <h1 className="text-3xl mb-4 font-bold text-gray-900 dark:text-white">
       {title}
     </h1>
-    <p className="text-lg leading-7 text-gray-700 dark:text-gray-300">
+    <p className="text-lg leading-7 text-gray-900 dark:text-gray-100">
       {content}
     </p>
   </main>

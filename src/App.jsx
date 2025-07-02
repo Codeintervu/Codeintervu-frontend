@@ -17,7 +17,7 @@ import CppCompiler from "./compilers/CppCompiler";
 const App = () => {
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200 overflow-x-hidden">
         <Navbar />
         <SubNavbar />
         <main className="pt-8 sm:pt-12">

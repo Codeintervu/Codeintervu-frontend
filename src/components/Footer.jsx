@@ -9,7 +9,7 @@ const Footer = () => {
       "Internship Opportunities",
       "Earn Certifications",
       "Placement Preparation",
-      "Interview Questions & Answers"
+      "Interview Questions & Answers",
     ],
     contact: [
       "Plot No-741, 2nd Floor,",
@@ -97,7 +97,12 @@ const Footer = () => {
               About us
             </h3>
             <p className="mb-4 text-gray-500">
-            CodeIntervu.com is a cutting-edge EdTech platform designed to empower technocrats and aspiring professionals. Developed by Silan Software, CodeIntervu.com offers a unique blend of tutorials, practice tools, and career-focused resources, making it your one-stop destination for mastering technology and securing placements. 
+              CodeIntervu.com is a cutting-edge EdTech platform designed to
+              empower technocrats and aspiring professionals. Developed by Silan
+              Software, CodeIntervu.com offers a unique blend of tutorials,
+              practice tools, and career-focused resources, making it your
+              one-stop destination for mastering technology and securing
+              placements.
             </p>
             <ul className="space-y-2">
               {footerLinks.about.map((item, index) => (
@@ -184,7 +189,7 @@ const Footer = () => {
               <a
                 key={index}
                 href="#"
-                className="text-gray-500 hover:text-kappel transition-colors text-sm px-3 py-1 bg-gray-800 rounded-md"
+                className="text-gray-200 hover:text-kappel transition-colors text-sm px-3 py-1 bg-gray-800 rounded-md"
               >
                 {course}
               </a>
@@ -202,7 +207,7 @@ const Footer = () => {
               <a
                 key={index}
                 href="#"
-                className="text-gray-500 hover:text-kappel transition-colors text-sm px-3 py-1 bg-gray-800 rounded-md"
+                className="text-gray-200 hover:text-kappel transition-colors text-sm px-3 py-1 bg-gray-800 rounded-md"
               >
                 {tutorial}
               </a>

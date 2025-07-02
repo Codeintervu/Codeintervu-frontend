@@ -8,7 +8,7 @@ const CppCompiler = () => {
         <h1 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">
           C++ Online Compiler
         </h1>
-        <p className="mb-8 text-gray-700 dark:text-gray-300">
+        <p className="mb-8 text-gray-900 dark:text-gray-100">
           Write, compile, and run C++ code instantly in your browser. No setup
           required!
         </p>
