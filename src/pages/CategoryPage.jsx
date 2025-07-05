@@ -9,6 +9,7 @@ import Navbar from "../components/Navbar";
 import { escapeHtml } from "../utils/escapeHtml";
 import { Helmet } from "react-helmet";
 import YouTubeVideo from "../components/YouTubeVideo";
+import api from "../utils/api";
 
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center h-64">
@@ -284,9 +285,7 @@ const CategoryPage = () => {
         setLoading(true);
         setError(null);
 
-        const allCategoriesRes = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/categories`
-        );
+        const allCategoriesRes = await api.get("/api/categories");
         const currentCategory = allCategoriesRes.data.find(
           (c) => c.path.replace(/^\/*/, "") === categoryPath
         );
@@ -297,10 +296,8 @@ const CategoryPage = () => {
 
         setCategory(currentCategory);
 
-        const tutorialsRes = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/tutorials?category=${
-            currentCategory._id
-          }`
+        const tutorialsRes = await api.get(
+          `/api/tutorials?category=${currentCategory._id}`
         );
         setTutorials(tutorialsRes.data);
       } catch (err) {

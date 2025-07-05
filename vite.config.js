@@ -5,12 +5,6 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    proxy: {
-      "/api": {
-        // target: "http://localhost:5000",
-        target: "https://codeintervu-backend.onrender.com",
-        changeOrigin: true,
-      },
-    },
+    // Proxy configuration removed - now handled dynamically in api.js
   },
 });

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
+import api from "../utils/api";
 import { FiLoader, FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import { formatCategoryPath } from "../utils/pathUtils";
 
@@ -15,9 +15,7 @@ const SubNavbar = () => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get(
-          `${import.meta.env.VITE_API_URL}/api/categories`
-        );
+        const { data } = await api.get("/api/categories");
         setCategories(data);
       } catch (error) {
         console.error("Failed to fetch categories for SubNavbar:", error);
