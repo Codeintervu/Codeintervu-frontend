@@ -102,6 +102,7 @@ const CompilerBlock = ({ language, initialCode, editable }) => {
           headers: {
             "Content-Type": "application/json",
             "X-RapidAPI-Key":
+              import.meta.env.VITE_RAPIDAPI_KEY ||
               "be6766c2cdmsh1014f6bba39facap1eb9c0jsne168ae4664f9", // NOTE: Replace 'YOUR_RAPIDAPI_KEY' with your actual RapidAPI key for Judge0 API
             "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
           },
@@ -121,9 +122,6 @@ const CompilerBlock = ({ language, initialCode, editable }) => {
 
   return (
     <div className="my-6 bg-gray-900 p-4 rounded-lg">
-      <label className="block font-bold mb-2 text-white">
-        Try it yourself ({language}):
-      </label>
       <textarea
         value={code}
         onChange={(e) => setCode(e.target.value)}
@@ -285,7 +283,7 @@ const CategoryPage = () => {
         setLoading(true);
         setError(null);
 
-        const allCategoriesRes = await api.get("/api/categories");
+        const allCategoriesRes = await api.get("/categories");
         const currentCategory = allCategoriesRes.data.find(
           (c) => c.path.replace(/^\/*/, "") === categoryPath
         );
@@ -297,7 +295,7 @@ const CategoryPage = () => {
         setCategory(currentCategory);
 
         const tutorialsRes = await api.get(
-          `/api/tutorials?category=${currentCategory._id}`
+          `/tutorials?category=${currentCategory._id}`
         );
         setTutorials(tutorialsRes.data);
       } catch (err) {
@@ -447,7 +445,15 @@ const CategoryPage = () => {
                 </nav>
               </aside>
             </div>
+
             <aside className="hidden md:block md:w-72 bg-gray-50 dark:bg-gray-800 rounded-lg shadow self-start top-20 sticky p-6 flex-shrink-0">
+              {/* <aside
+              className="hidden md:block md:w-72 bg-gray-50 dark:bg-gray-800 shadow p-6 overflow-y-auto rounded-lg"
+              style={{
+                minHeight: "calc(100vh - 100px)",
+                maxHeight: "calc(100vh - 64px)",
+              }}
+            > */}
               <h2 className="text-2xl font-bold mb-6 text-teal-600 dark:text-teal-400">
                 Tutorials
               </h2>

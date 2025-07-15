@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Sun, Moon, ChevronDown } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
@@ -8,6 +8,8 @@ import { formatCategoryPath } from "../utils/pathUtils";
 const Navbar = ({ tutorials }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isTutorialsOpen, setIsTutorialsOpen] = useState(false);
+  const [isCompilersOpen, setIsCompilersOpen] = useState(false); // NEW
+  const compilersRef = useRef(null); // NEW
   const { isDarkMode, toggleTheme } = useTheme();
   const [categories, setCategories] = useState([]);
   const closeTimeout = React.useRef(null);
@@ -15,7 +17,7 @@ const Navbar = ({ tutorials }) => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const { data } = await api.get("/api/categories");
+        const { data } = await api.get("/categories");
         setCategories(data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -25,6 +27,25 @@ const Navbar = ({ tutorials }) => {
     fetchCategories();
   }, []);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        compilersRef.current &&
+        !compilersRef.current.contains(event.target)
+      ) {
+        setIsCompilersOpen(false);
+      }
+    };
+    if (isCompilersOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isCompilersOpen]);
+
   const toggleNav = () => setIsOpen(!isOpen);
 
   const closeMenus = () => {
@@ -33,7 +54,7 @@ const Navbar = ({ tutorials }) => {
   };
 
   const navLinks = [
-    { name: "Home", path: "/" },
+    // { name: "Home", path: "/" }, // Removed Home
     { name: "About", path: "/about" },
     // { name: "Courses", path: "/courses" }, // Commented out
     {
@@ -42,6 +63,7 @@ const Navbar = ({ tutorials }) => {
       external: true,
     },
     { name: "Contact", path: "/contact" },
+    { name: "Quiz", path: "/quiz" },
   ];
 
   return (
@@ -157,6 +179,56 @@ const Navbar = ({ tutorials }) => {
               </div>
             )}
           </div>
+          {/* Compilers Dropdown */}
+          <div className="relative" ref={compilersRef}>
+            <button
+              className="flex items-center gap-1 text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+              aria-label="Open compilers dropdown"
+              onClick={() => setIsCompilersOpen((open) => !open)}
+              type="button"
+            >
+              Compilers <ChevronDown size={16} />
+            </button>
+            {isCompilersOpen && (
+              <div className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-gray-700 rounded-md shadow-lg py-2 z-20">
+                <Link
+                  to="/compilers/java-compiler"
+                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  onClick={closeMenus}
+                >
+                  Java Compiler
+                </Link>
+                <Link
+                  to="/compilers/python-compiler"
+                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  onClick={closeMenus}
+                >
+                  Python Compiler
+                </Link>
+                <Link
+                  to="/compilers/javascript-compiler"
+                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  onClick={closeMenus}
+                >
+                  JavaScript Compiler
+                </Link>
+                <Link
+                  to="/compilers/c-compiler"
+                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  onClick={closeMenus}
+                >
+                  C Compiler
+                </Link>
+                <Link
+                  to="/compilers/cpp-compiler"
+                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                  onClick={closeMenus}
+                >
+                  C++ Compiler
+                </Link>
+              </div>
+            )}
+          </div>
         </nav>
 
         <div className="hidden md:flex items-center gap-4">
@@ -188,6 +260,47 @@ const Navbar = ({ tutorials }) => {
                         {tutorial.title}
                       </Link>
                     ))}
+                  </div>
+                </div>
+                {/* Compilers Dropdown for Mobile */}
+                <div className="text-gray-700 dark:text-gray-200 mt-4">
+                  <p className="font-bold mb-2">Compilers</p>
+                  <div className="flex flex-col gap-2 pl-4">
+                    <Link
+                      to="/compilers/java-compiler"
+                      className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+                      onClick={closeMenus}
+                    >
+                      Java Compiler
+                    </Link>
+                    <Link
+                      to="/compilers/python-compiler"
+                      className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+                      onClick={closeMenus}
+                    >
+                      Python Compiler
+                    </Link>
+                    <Link
+                      to="/compilers/javascript-compiler"
+                      className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+                      onClick={closeMenus}
+                    >
+                      JavaScript Compiler
+                    </Link>
+                    <Link
+                      to="/compilers/c-compiler"
+                      className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+                      onClick={closeMenus}
+                    >
+                      C Compiler
+                    </Link>
+                    <Link
+                      to="/compilers/cpp-compiler"
+                      className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+                      onClick={closeMenus}
+                    >
+                      C++ Compiler
+                    </Link>
                   </div>
                 </div>
               </>

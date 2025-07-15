@@ -28,8 +28,6 @@ const YouTubeVideo = ({ youtubeUrl, title }) => {
   const [showPlayer, setShowPlayer] = useState(false);
   const videoId = extractYouTubeId(youtubeUrl);
 
-  console.log("YouTubeVideo: youtubeUrl=", youtubeUrl, "videoId=", videoId);
-
   if (!videoId) return null;
 
   const thumbnailUrl = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;

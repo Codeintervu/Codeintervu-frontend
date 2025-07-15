@@ -28,7 +28,9 @@ const languageMap = {
   },
 };
 
-const RAPIDAPI_KEY = "be6766c2cdmsh1014f6bba39facap1eb9c0jsne168ae4664f9";
+const RAPIDAPI_KEY =
+  import.meta.env.VITE_RAPIDAPI_KEY ||
+  "be6766c2cdmsh1014f6bba39facap1eb9c0jsne168ae4664f9";
 
 const OnlineCompiler = ({ language }) => {
   const lang = languageMap[language];

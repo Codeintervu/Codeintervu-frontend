@@ -69,31 +69,31 @@ const Home = () => {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               <Link
-                to="/compilers/java"
+                to="/compilers/java-compiler"
                 className="bg-white dark:bg-gray-800 shadow rounded-lg px-6 py-5 flex items-center justify-between hover:shadow-lg transition border border-gray-100 dark:border-gray-700"
               >
                 Java Compiler <span className="ml-2">→</span>
               </Link>
               <Link
-                to="/compilers/python"
+                to="/compilers/python-compiler"
                 className="bg-white dark:bg-gray-800 shadow rounded-lg px-6 py-5 flex items-center justify-between hover:shadow-lg transition border border-gray-100 dark:border-gray-700"
               >
                 Python Compiler <span className="ml-2">→</span>
               </Link>
               <Link
-                to="/compilers/javascript"
+                to="/compilers/javascript-compiler"
                 className="bg-white dark:bg-gray-800 shadow rounded-lg px-6 py-5 flex items-center justify-between hover:shadow-lg transition border border-gray-100 dark:border-gray-700"
               >
                 JavaScript Compiler <span className="ml-2">→</span>
               </Link>
               <Link
-                to="/compilers/c"
+                to="/compilers/c-compiler"
                 className="bg-white dark:bg-gray-800 shadow rounded-lg px-6 py-5 flex items-center justify-between hover:shadow-lg transition border border-gray-100 dark:border-gray-700"
               >
                 C Compiler <span className="ml-2">→</span>
               </Link>
               <Link
-                to="/compilers/cpp"
+                to="/compilers/cpp-compiler"
                 className="bg-white dark:bg-gray-800 shadow rounded-lg px-6 py-5 flex items-center justify-between hover:shadow-lg transition border border-gray-100 dark:border-gray-700"
               >
                 C++ Compiler <span className="ml-2">→</span>

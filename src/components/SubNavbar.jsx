@@ -15,8 +15,8 @@ const SubNavbar = () => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const { data } = await api.get("/api/categories");
-        setCategories(data);
+        const { data } = await api.get("/categories");
+        setCategories(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Failed to fetch categories for SubNavbar:", error);
       } finally {
@@ -87,6 +87,7 @@ const SubNavbar = () => {
               <span className="text-white text-sm">Loading...</span>
             </div>
           ) : (
+            Array.isArray(categories) &&
             categories.map((category) => (
               <NavLink
                 key={category._id}

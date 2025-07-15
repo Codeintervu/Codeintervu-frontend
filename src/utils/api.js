@@ -2,16 +2,21 @@ import axios from "axios";
 
 // API base URL configuration
 const getApiBaseUrl = () => {
+  // Use environment variable if available
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+
   // Check if we're in production (deployed on codeintervu.com)
   if (
     window.location.hostname === "codeintervu.com" ||
     window.location.hostname === "www.codeintervu.com"
   ) {
-    return "https://codeintervu-backend.onrender.com";
+    return "https://codeintervu-backend.onrender.com/api";
   }
 
-  // For development, use the proxy configured in vite.config.js
-  return "";
+  // For development, use deployed backend for testing
+  return "https://codeintervu-backend.onrender.com/api";
 };
 
 // Create axios instance with default configuration
