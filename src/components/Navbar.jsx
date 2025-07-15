@@ -69,8 +69,8 @@ const Navbar = ({ tutorials }) => {
   return (
     <header className="fixed top-0 left-0 w-full bg-white dark:bg-gray-800 shadow-md z-50 transition-colors duration-200">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        {/* Hamburger for mobile, left of logo */}
-        <div className="flex items-center gap-2">
+        {/* Left Section: Hamburger + Logo */}
+        <div className="flex items-center gap-2 flex-shrink-0">
           <button
             className="md:hidden mr-2 p-2 text-gray-700 dark:text-gray-200"
             onClick={toggleNav}
@@ -80,7 +80,7 @@ const Navbar = ({ tutorials }) => {
           </button>
           <Link
             to="/"
-            className="flex items-center gap-2 text-3xl font-bold"
+            className="flex items-center gap-2 text-2xl md:text-3xl font-bold flex-shrink-0"
             onClick={closeMenus}
           >
             <img
@@ -90,23 +90,15 @@ const Navbar = ({ tutorials }) => {
               style={{ borderRadius: "50%" }}
               loading="lazy"
             />
-            <span>
+            <span className="whitespace-nowrap">
               <span className="text-teal-600 dark:text-teal-400">CODE</span>
               <span className="text-gray-900 dark:text-white">INTERVU</span>
             </span>
-            {/* Mobile Theme Toggle (right of logo) */}
-            <button
-              className="md:hidden ml-2 p-2 text-gray-700 dark:text-gray-200"
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-            >
-              {isDarkMode ? <Sun size={22} /> : <Moon size={22} />}
-            </button>
           </Link>
         </div>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-10">
+        {/* Center Section: Desktop Navigation */}
+        <nav className="hidden md:flex items-center gap-6 lg:gap-8 flex-1 justify-center">
           {navLinks.map((item) =>
             item.external ? (
               <a
@@ -114,7 +106,7 @@ const Navbar = ({ tutorials }) => {
                 href={item.path}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap"
               >
                 {item.name}
               </a>
@@ -122,7 +114,7 @@ const Navbar = ({ tutorials }) => {
               <Link
                 key={item.name}
                 to={item.path}
-                className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+                className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap"
               >
                 {item.name}
               </Link>
@@ -143,7 +135,7 @@ const Navbar = ({ tutorials }) => {
             }}
           >
             <button
-              className="flex items-center gap-1 text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+              className="flex items-center gap-1 text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap"
               aria-label="Open tutorials dropdown"
             >
               Tutorial <ChevronDown size={16} />
@@ -182,7 +174,7 @@ const Navbar = ({ tutorials }) => {
           {/* Compilers Dropdown */}
           <div className="relative" ref={compilersRef}>
             <button
-              className="flex items-center gap-1 text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+              className="flex items-center gap-1 text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap"
               aria-label="Open compilers dropdown"
               onClick={() => setIsCompilersOpen((open) => !open)}
               type="button"
@@ -231,10 +223,20 @@ const Navbar = ({ tutorials }) => {
           </div>
         </nav>
 
-        <div className="hidden md:flex items-center gap-4">
+        {/* Right Section: Theme Toggle + Mobile Theme Toggle */}
+        <div className="flex items-center gap-4 flex-shrink-0">
+          {/* Mobile Theme Toggle */}
+          <button
+            className="md:hidden p-2 text-gray-700 dark:text-gray-200"
+            onClick={toggleTheme}
+            aria-label="Toggle theme"
+          >
+            {isDarkMode ? <Sun size={22} /> : <Moon size={22} />}
+          </button>
+          {/* Desktop Theme Toggle */}
           <button
             onClick={toggleTheme}
-            className="p-2 text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
+            className="hidden md:block p-2 text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors"
             aria-label="Toggle theme"
           >
             {isDarkMode ? <Sun size={22} /> : <Moon size={22} />}
