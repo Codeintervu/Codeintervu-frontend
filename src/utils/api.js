@@ -2,21 +2,21 @@ import axios from "axios";
 
 // API base URL configuration
 const getApiBaseUrl = () => {
-  // Use environment variable if available
-  if (import.meta.env.VITE_API_BASE_URL) {
-    return import.meta.env.VITE_API_BASE_URL;
-  }
-
-  // Check if we're in production (deployed on codeintervu.com)
+  // Check if we're in production (deployed)
   if (
-    window.location.hostname === "codeintervu.com" ||
-    window.location.hostname === "www.codeintervu.com"
+    window.location.hostname !== "localhost" &&
+    window.location.hostname !== "127.0.0.1"
   ) {
     return "https://codeintervu-backend.onrender.com/api";
   }
 
-  // For development, use deployed backend for testing
-  return "https://codeintervu-backend.onrender.com/api";
+  // Use environment variable if available (for development)
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+
+  // For development, use local backend
+  return "http://localhost:5000/api";
 };
 
 // Create axios instance with default configuration

@@ -103,7 +103,7 @@ const CompilerBlock = ({ language, initialCode, editable }) => {
             "Content-Type": "application/json",
             "X-RapidAPI-Key":
               import.meta.env.VITE_RAPIDAPI_KEY ||
-              "be6766c2cdmsh1014f6bba39facap1eb9c0jsne168ae4664f9", // NOTE: Replace 'YOUR_RAPIDAPI_KEY' with your actual RapidAPI key for Judge0 API
+              "be6766c2cdmsh1014f6bba39facap1eb9c0jsne168ae4664f9",
             "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
           },
         }

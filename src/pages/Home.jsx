@@ -1,6 +1,6 @@
 import React from "react";
 import Hero from "../components/Hero.jsx";
-import VideoComponent from "../components/VideoComponent.jsx";
+import CategoriesGrid from "../components/CategoriesGrid.jsx";
 import StatsComponent from "../components/StatsComponent.jsx";
 // import Testimonial from "../components/Testimonial.jsx";
 import Footer from "../components/Footer.jsx";
@@ -36,7 +36,7 @@ const Home = () => {
       </Helmet>
       <div>
         <Hero />
-        <VideoComponent />
+        <CategoriesGrid />
         {/* Online Compilers Section */}
         <section className="py-20 bg-white dark:bg-gray-900">
           <div className="container mx-auto px-4">

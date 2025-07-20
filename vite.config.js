@@ -4,6 +4,20 @@ import react from "@vitejs/plugin-react";
 /** @type {import('tailwindcss').Config} */
 export default defineConfig({
   plugins: [react()],
+  build: {
+    outDir: "dist",
+    sourcemap: false,
+    minify: "esbuild",
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom"],
+          router: ["react-router-dom"],
+          editor: ["@monaco-editor/react"],
+        },
+      },
+    },
+  },
   // Removed proxy configuration since we're using deployed backend
   // server: {
   //   proxy: {

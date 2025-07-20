@@ -20,6 +20,8 @@ export default {
       fontFamily: {
         "league-spartan": ['"League Spartan"', "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
+        outfit: ["Outfit", "sans-serif"],
+        sans: ["Outfit", "sans-serif"], // Set Outfit as default sans-serif font
       },
     },
   },

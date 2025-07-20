@@ -1,341 +1,545 @@
-// import React, { useState } from "react";
-// import axios from "axios";
-
-// const languageMap = {
-//   java: {
-//     id: 62,
-//     name: "Java",
-//     boilerplate:
-//       'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
-//   },
-//   python: { id: 71, name: "Python", boilerplate: "print('Hello, World!')" },
-//   javascript: {
-//     id: 63,
-//     name: "JavaScript",
-//     boilerplate: "console.log('Hello, World!');",
-//   },
-//   c: {
-//     id: 50,
-//     name: "C",
-//     boilerplate:
-//       '#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}',
-//   },
-//   cpp: {
-//     id: 54,
-//     name: "C++",
-//     boilerplate:
-//       '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!\\n";\n    return 0;\n}',
-//   },
-// };
-
-// const RAPIDAPI_KEY =
-//   import.meta.env.VITE_RAPIDAPI_KEY ||
-//   "be6766c2cdmsh1014f6bba39facap1eb9c0jsne168ae4664f9";
-
-// const OnlineCompiler = ({ language }) => {
-//   const lang = languageMap[language];
-//   const [code, setCode] = useState(lang.boilerplate);
-//   const [output, setOutput] = useState("");
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState("");
-
-//   const handleRun = async () => {
-//     setLoading(true);
-//     setOutput("");
-//     setError("");
-//     try {
-//       const payload = {
-//         source_code: code,
-//         language_id: lang.id,
-//       };
-//       const res = await axios.post(
-//         "https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&wait=true",
-//         payload,
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//             "X-RapidAPI-Key": RAPIDAPI_KEY,
-//             "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
-//           },
-//         }
-//       );
-//       setOutput(
-//         res.data.stdout ||
-//           res.data.stderr ||
-//           res.data.compile_output ||
-//           "No output"
-//       );
-//     } catch (err) {
-//       setError(
-//         "Error: " +
-//           (err.response?.data?.message ||
-//             JSON.stringify(err.response?.data) ||
-//             err.message)
-//       );
-//     }
-//     setLoading(false);
-//   };
-
-//   return (
-//     <div className="flex flex-col gap-6 w-full">
-//       {/* Java-specific note - moved to top */}
-//       {language === "java" && (
-//         <div className="w-full flex justify-center">
-//           <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg max-w-md">
-//             <div className="flex items-center gap-2">
-//               <svg
-//                 className="w-5 h-5 text-yellow-600 dark:text-yellow-400"
-//                 fill="currentColor"
-//                 viewBox="0 0 20 20"
-//               >
-//                 <path
-//                   fillRule="evenodd"
-//                   d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-//                   clipRule="evenodd"
-//                 />
-//               </svg>
-//               <span className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-//                 <strong>Important:</strong> Class name must be "Main" for Java
-//                 code to compile successfully.
-//               </span>
-//             </div>
-//           </div>
-//         </div>
-//       )}
-
-//       <div className="flex flex-col md:flex-row gap-6 w-full">
-//         {/* Left: Code Editor */}
-//         <div className="w-full md:w-1/2 bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow-md flex flex-col">
-//           <div className="flex items-center mb-2 gap-2">
-//             <button
-//               onClick={handleRun}
-//               className="px-6 py-2 bg-kappel text-eerie-black-1 rounded font-bold transition duration-200
-//                 hover:bg-gradient-to-r hover:from-kappel hover:to-green-400 hover:text-white"
-//               disabled={loading}
-//             >
-//               {loading ? "Running..." : "Run"}
-//             </button>
-//           </div>
-//           <label className="block font-bold mb-2 text-gray-800 dark:text-white text-left">
-//             {lang.name} Code:
-//           </label>
-//           <textarea
-//             value={code}
-//             onChange={(e) => setCode(e.target.value)}
-//             onKeyDown={(e) => {
-//               if (e.key === "Tab") {
-//                 e.preventDefault();
-//                 const start = e.target.selectionStart;
-//                 const end = e.target.selectionEnd;
-//                 setCode(code.substring(0, start) + "\t" + code.substring(end));
-//                 setTimeout(() => {
-//                   e.target.selectionStart = e.target.selectionEnd = start + 1;
-//                 }, 0);
-//               }
-//             }}
-//             className="w-full font-mono bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-3 rounded mb-2 border border-gray-300 dark:border-gray-700 flex-1 min-h-[300px]"
-//             rows={16}
-//           />
-//         </div>
-//         {/* Right: Output */}
-//         <div className="w-full md:w-1/2 bg-white dark:bg-gray-900 rounded-lg p-4 shadow-md flex flex-col">
-//           <label className="block font-bold mb-2 text-gray-800 dark:text-white text-left">
-//             Output:
-//           </label>
-//           <div className="flex-1 min-h-[300px] bg-black rounded p-4 text-green-400 overflow-x-auto whitespace-pre-wrap">
-//             {output ? (
-//               output
-//             ) : (
-//               <span className="text-gray-500">Output will appear here.</span>
-//             )}
-//           </div>
-//           {error && (
-//             <div className="mt-4 text-red-500 font-semibold">{error}</div>
-//           )}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default OnlineCompiler;
-
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
+import Editor from "@monaco-editor/react";
+import { useTheme } from "../context/ThemeContext";
+
+// Judge0 API configuration
+const JUDGE0_BASE_URL = "https://judge0-ce.p.rapidapi.com";
+const RAPIDAPI_KEY =
+  import.meta.env.VITE_RAPIDAPI_KEY ||
+  "be6766c2cdmsh1014f6bba39facap1eb9c0jsne168ae4664f9";
 
 const languageMap = {
   java: {
     id: 62,
     name: "Java",
+    monacoLang: "java",
     boilerplate:
       'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}',
   },
-  python: { id: 71, name: "Python", boilerplate: "print('Hello, World!')" },
+  python: {
+    id: 71,
+    name: "Python",
+    monacoLang: "python",
+    boilerplate: "print('Hello, World!')",
+  },
   javascript: {
     id: 63,
     name: "JavaScript",
+    monacoLang: "javascript",
     boilerplate: "console.log('Hello, World!');",
   },
   c: {
     id: 50,
     name: "C",
+    monacoLang: "c",
     boilerplate:
       '#include <stdio.h>\n\nint main() {\n    printf("Hello, World!\\n");\n    return 0;\n}',
   },
   cpp: {
     id: 54,
     name: "C++",
+    monacoLang: "cpp",
     boilerplate:
       '#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << "Hello, World!\\n";\n    return 0;\n}',
   },
+  csharp: {
+    id: 51,
+    name: "C#",
+    monacoLang: "csharp",
+    boilerplate:
+      'using System;\n\nclass Program {\n    static void Main() {\n        Console.WriteLine("Hello, World!");\n    }\n}',
+  },
+  fsharp: {
+    id: 87,
+    name: "F#",
+    monacoLang: "fsharp",
+    boilerplate: 'printfn "Hello, World!"',
+  },
+  nim: {
+    id: 78,
+    name: "Nim",
+    monacoLang: "nim",
+    boilerplate: 'echo "Hello, World!"',
+  },
 };
-
-const RAPIDAPI_KEY =
-  import.meta.env.VITE_RAPIDAPI_KEY ||
-  "be6766c2cdmsh1014f6bba39facap1eb9c0jsne168ae4664f9";
 
 const OnlineCompiler = ({ language }) => {
   const lang = languageMap[language];
+  const { isDarkMode } = useTheme();
   const [code, setCode] = useState(lang.boilerplate);
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [fontSize, setFontSize] = useState(18);
+  const [executionStatus, setExecutionStatus] = useState("");
+  const [input, setInput] = useState("");
+  const [showInput, setShowInput] = useState(false);
+  const [executionTime, setExecutionTime] = useState("");
+  const [memoryUsed, setMemoryUsed] = useState("");
+  const [isExecuting, setIsExecuting] = useState(false);
+  const editorRef = useRef(null);
+  const outputRef = useRef(null);
 
-  // ✅ Step 1: Helper to rewrite Java class to Main
-  const rewriteJavaClassNameToMain = (inputCode) => {
-    const classRegex = /public\s+class\s+([A-Za-z_][A-Za-z0-9_]*)/;
-    const match = inputCode.match(classRegex);
+  // Test API connection on component mount
+  useEffect(() => {
+    testJudge0Connection();
+  }, []);
 
-    if (match && match[1] !== "Main") {
-      const originalClassName = match[1];
-      return inputCode.replace(
-        new RegExp(`\\b${originalClassName}\\b`, "g"),
-        "Main"
-      );
-    }
-    return inputCode;
+  const handleEditorDidMount = (editor, monaco) => {
+    editorRef.current = editor;
+    editor.updateOptions({
+      fontSize: fontSize,
+      fontFamily: "Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace",
+      lineHeight: 1.5,
+      minimap: { enabled: false },
+      scrollBeyondLastLine: false,
+      automaticLayout: true,
+      wordWrap: "on",
+      lineNumbers: "on",
+      folding: true,
+      bracketPairColorization: { enabled: true },
+      guides: {
+        bracketPairs: true,
+        indentation: true,
+      },
+      padding: { top: 16, bottom: 16 },
+      renderLineHighlight: "all",
+      cursorBlinking: "smooth",
+      cursorSmoothCaretAnimation: "on",
+    });
   };
 
-  const handleRun = async () => {
-    setLoading(true);
+  const handleEditorChange = (value) => {
+    setCode(value);
+    const inputKeywords = [
+      "Scanner",
+      "System.in",
+      "next()",
+      "nextInt()",
+      "nextLine()",
+      "readLine()",
+      "input()",
+      "gets()",
+      "scanf",
+      "cin",
+      "getline",
+    ];
+    const needsInput = inputKeywords.some((keyword) => value.includes(keyword));
+    setShowInput(needsInput);
+  };
+
+  const clearOutput = () => {
     setOutput("");
     setError("");
+    setExecutionStatus("");
+    setInput("");
+    setShowInput(false);
+    setExecutionTime("");
+    setMemoryUsed("");
+  };
+
+  const handleInputSubmit = async () => {
+    if (!input.trim()) return;
+    await executeCode(input.trim() + "\n");
+  };
+
+  const executeCode = async (customInput = null) => {
+    if (isExecuting) return;
+
+    setIsExecuting(true);
+    setLoading(true);
+    setError("");
+    setExecutionStatus("");
+    setExecutionTime("");
+    setMemoryUsed("");
 
     try {
-      // ✅ Step 2: Transform Java code if needed
+      const languageId = lang.id;
       let finalCode = code;
+
+      // For Java, ensure the class is named Main
       if (language === "java") {
-        finalCode = rewriteJavaClassNameToMain(code);
+        const classMatch = code.match(/class\s+([A-Za-z_][A-Za-z0-9_]*)/);
+        if (classMatch) {
+          const className = classMatch[1];
+          if (className !== "Main") {
+            finalCode = code
+              .replace(
+                new RegExp(`class\\s+${className}\\b`, "g"),
+                "class Main"
+              )
+              .replace(new RegExp(`\\b${className}\\b`, "g"), "Main");
+          }
+        }
       }
 
-      const payload = {
+      const submissionData = {
         source_code: finalCode,
-        language_id: lang.id,
+        language_id: languageId,
+        stdin: customInput || input || "",
+        expected_output: null,
+        cpu_time_limit: 15,
+        memory_limit: 512000,
+        enable_network: false,
       };
 
-      const res = await axios.post(
-        "https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=false&wait=true",
-        payload,
+      if (import.meta.env.DEV) {
+        console.log("Submitting to Judge0:", submissionData);
+      }
+
+      // Submit code to Judge0
+      const response = await axios.post(
+        `${JUDGE0_BASE_URL}/submissions`,
+        submissionData,
         {
           headers: {
             "Content-Type": "application/json",
             "X-RapidAPI-Key": RAPIDAPI_KEY,
             "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
           },
+          timeout: 15000,
         }
       );
 
-      setOutput(
-        res.data.stdout ||
-          res.data.stderr ||
-          res.data.compile_output ||
-          "No output"
-      );
+      const { token } = response.data;
+      if (import.meta.env.DEV) {
+        console.log("Code submitted successfully. Token:", token);
+      }
+
+      // Wait for result
+      let result = null;
+      let attempts = 0;
+      const maxAttempts = 30;
+
+      while (attempts < maxAttempts) {
+        try {
+          const statusResponse = await axios.get(
+            `${JUDGE0_BASE_URL}/submissions/${token}`,
+            {
+              headers: {
+                "X-RapidAPI-Key": RAPIDAPI_KEY,
+                "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
+              },
+              timeout: 5000,
+            }
+          );
+
+          const submission = statusResponse.data;
+          if (import.meta.env.DEV) {
+            console.log(
+              `Status check ${attempts + 1}: ${
+                submission.status?.description || "Unknown"
+              }`
+            );
+          }
+
+          if (submission.status && submission.status.id > 2) {
+            result = {
+              status: submission.status.description,
+              stdout: submission.stdout || "",
+              stderr: submission.stderr || "",
+              compile_output: submission.compile_output || "",
+              time: submission.time,
+              memory: submission.memory,
+              exit_code: submission.exit_code,
+              message: submission.message || "",
+            };
+            break;
+          }
+
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          attempts++;
+        } catch (error) {
+          if (import.meta.env.DEV) {
+            console.error("Error checking submission status:", error.message);
+          }
+          break;
+        }
+      }
+
+      if (!result) {
+        throw new Error("Execution timeout");
+      }
+
+      // Handle specific error cases
+      if (result.status === "Internal Error") {
+        throw new Error("Judge0 internal error");
+      }
+
+      // Determine success
+      const success =
+        result.status === "Accepted" &&
+        !result.stderr &&
+        !result.compile_output;
+
+      if (success) {
+        setOutput(result.stdout || "No output");
+        setExecutionStatus("✓ Execution completed successfully");
+        setError("");
+      } else {
+        setOutput("");
+        setError(result.stderr || result.compile_output || "Execution failed");
+        setExecutionStatus("✗ Execution failed");
+      }
+
+      setExecutionTime(result.time ? `${result.time}s` : "N/A");
+      setMemoryUsed(result.memory ? `${result.memory}KB` : "N/A");
+
+      // Auto-scroll to bottom of output
+      if (outputRef.current) {
+        outputRef.current.scrollTop = outputRef.current.scrollHeight;
+      }
     } catch (err) {
-      setError(
-        "Error: " +
-          (err.response?.data?.message ||
-            JSON.stringify(err.response?.data) ||
-            err.message)
-      );
+      if (import.meta.env.DEV) {
+        console.error("Frontend execution error:", err);
+      }
+      const errorMessage =
+        err.response?.data?.error || err.message || "Unknown error occurred";
+
+      setError(`Error: ${errorMessage}`);
+      setExecutionStatus("✗ Execution failed");
+      setOutput("");
+      setExecutionTime("N/A");
+      setMemoryUsed("N/A");
+    } finally {
+      setLoading(false);
+      setIsExecuting(false);
     }
-    setLoading(false);
   };
 
+  // Test Judge0 API connection
+  const testJudge0Connection = async () => {
+    try {
+      const response = await axios.get(`${JUDGE0_BASE_URL}/languages`, {
+        headers: {
+          "X-RapidAPI-Key": RAPIDAPI_KEY,
+          "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com",
+        },
+        timeout: 10000,
+      });
+      if (import.meta.env.DEV) {
+        console.log(
+          "✅ Judge0 API connection successful, languages:",
+          response.data.length
+        );
+      }
+      return true;
+    } catch (error) {
+      if (import.meta.env.DEV) {
+        console.error("❌ Judge0 API connection failed:", error.message);
+      }
+      return false;
+    }
+  };
+
+  const handleRun = async () => {
+    if (showInput && !input.trim()) {
+      setOutput(
+        "Enter your input values below and click 'Submit Input' to run the program.\n$ "
+      );
+      setError("");
+      setExecutionStatus("");
+      setLoading(false);
+      return;
+    }
+    await executeCode();
+  };
+
+  useEffect(() => {
+    if (editorRef.current) {
+      editorRef.current.updateOptions({
+        fontSize: fontSize,
+      });
+    }
+  }, [fontSize]);
+
   return (
-    <div className="flex flex-col gap-6 w-full">
-      {language === "java" && (
-        <div className="w-full flex justify-center">
-          {/* <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-700 rounded-lg max-w-md">
+    <div className="flex flex-col gap-4 w-full">
+      {/* Header with language name centered */}
+      <div className="w-full flex justify-center">
+        {/* <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+          {lang.name} Compiler
+        </h2> */}
+      </div>
+
+      <div className="flex flex-col lg:flex-row gap-4 w-full">
+        {/* Code Editor Panel */}
+        <div className="w-full lg:w-1/2 bg-gray-50 dark:bg-gray-800 rounded-lg p-4 shadow-lg flex flex-col">
+          <div className="flex items-center justify-between mb-3">
+            <label className="block font-semibold text-gray-800 dark:text-white text-left">
+              {lang.name} Code
+            </label>
             <div className="flex items-center gap-2">
-              <svg
-                className="w-5 h-5 text-yellow-600 dark:text-yellow-400"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-                <strong>Important:</strong> Class name must be "Main" for Java
-                code to compile successfully.{" "}
+              <span className="text-sm text-gray-600 dark:text-gray-400">
+                Font:
               </span>
+              <button
+                onClick={() => setFontSize((prev) => Math.max(12, prev - 1))}
+                className="px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                title="Decrease font size"
+              >
+                A-
+              </button>
+              <span className="text-sm font-mono text-gray-700 dark:text-gray-300 min-w-[2rem] text-center">
+                {fontSize}
+              </span>
+              <button
+                onClick={() => setFontSize((prev) => Math.min(24, prev + 1))}
+                className="px-2 py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                title="Increase font size"
+              >
+                A+
+              </button>
             </div>
-          </div> */}
-        </div>
-      )}
-
-      <div className="flex flex-col md:flex-row gap-6 w-full">
-        <div className="w-full md:w-1/2 bg-gray-100 dark:bg-gray-800 rounded-lg p-4 shadow-md flex flex-col">
-          <div className="flex items-center mb-2 gap-2">
-            <button
-              onClick={handleRun}
-              className="px-6 py-2 bg-kappel text-eerie-black-1 rounded font-bold transition duration-200
-                hover:bg-gradient-to-r hover:from-kappel hover:to-green-400 hover:text-white"
-              disabled={loading}
-            >
-              {loading ? "Running..." : "Run"}
-            </button>
           </div>
-          <label className="block font-bold mb-2 text-gray-800 dark:text-white text-left">
-            {lang.name} Code:
-          </label>
-          <textarea
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Tab") {
-                e.preventDefault();
-                const start = e.target.selectionStart;
-                const end = e.target.selectionEnd;
-                setCode(code.substring(0, start) + "\t" + code.substring(end));
-                setTimeout(() => {
-                  e.target.selectionStart = e.target.selectionEnd = start + 1;
-                }, 0);
-              }
-            }}
-            className="w-full font-mono bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-3 rounded mb-2 border border-gray-300 dark:border-gray-700 flex-1 min-h-[300px]"
-            rows={16}
-          />
+
+          <div className="flex-1 min-h-[500px] rounded border border-gray-300 dark:border-gray-600 overflow-hidden bg-white dark:bg-gray-900">
+            <Editor
+              height="500px"
+              language={lang.monacoLang}
+              value={code}
+              onChange={handleEditorChange}
+              onMount={handleEditorDidMount}
+              theme={isDarkMode ? "vs-dark" : "vs"}
+              options={{
+                fontSize: fontSize,
+                fontFamily:
+                  "Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace",
+                lineHeight: 1.5,
+                minimap: { enabled: false },
+                scrollBeyondLastLine: false,
+                automaticLayout: true,
+                wordWrap: "on",
+                lineNumbers: "on",
+                folding: true,
+                bracketPairColorization: { enabled: true },
+                guides: {
+                  bracketPairs: true,
+                  indentation: true,
+                },
+                padding: { top: 16, bottom: 16 },
+                renderLineHighlight: "all",
+                cursorBlinking: "smooth",
+                cursorSmoothCaretAnimation: "on",
+              }}
+            />
+          </div>
         </div>
 
-        <div className="w-full md:w-1/2 bg-white dark:bg-gray-900 rounded-lg p-4 shadow-md flex flex-col">
-          <label className="block font-bold mb-2 text-gray-800 dark:text-white text-left">
-            Output:
-          </label>
-          <div className="flex-1 min-h-[300px] bg-black rounded p-4 text-green-400 overflow-x-auto whitespace-pre-wrap">
-            {output ? (
-              output
+        {/* Output Panel */}
+        <div className="w-full lg:w-1/2 bg-white dark:bg-gray-900 rounded-lg p-4 shadow-lg flex flex-col">
+          <div className="flex items-center justify-between mb-3">
+            <label className="block font-semibold text-gray-800 dark:text-white text-left">
+              Output
+            </label>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={clearOutput}
+                className="px-3 py-1.5 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded text-sm hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
+                title="Clear output"
+              >
+                Clear
+              </button>
+              <button
+                onClick={handleRun}
+                disabled={loading || isExecuting}
+                className="px-6 py-2 bg-blue-600 text-white rounded font-semibold transition duration-200 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {loading || isExecuting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    Running...
+                  </>
+                ) : (
+                  "Run"
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Output Terminal */}
+          <div
+            ref={outputRef}
+            className="flex-1 min-h-[500px] bg-black rounded p-4 text-green-400 overflow-y-auto font-mono text-sm"
+          >
+            {output || error ? (
+              <>
+                {/* Execution Info */}
+                {(executionTime || memoryUsed) && (
+                  <div className="text-gray-500 text-xs mb-2 border-b border-gray-700 pb-2">
+                    {executionTime && <span>Time: {executionTime}</span>}
+                    {executionTime && memoryUsed && (
+                      <span className="mx-2">|</span>
+                    )}
+                    {memoryUsed && <span>Memory: {memoryUsed}</span>}
+                  </div>
+                )}
+
+                {/* Output Content */}
+                {output && (
+                  <div className="text-green-300 whitespace-pre-wrap mb-2">
+                    {output}
+                  </div>
+                )}
+
+                {/* Error Content */}
+                {error && (
+                  <div className="text-red-400 whitespace-pre-wrap mb-2">
+                    {error}
+                  </div>
+                )}
+
+                {/* Interactive Input Panel */}
+                {showInput && output.includes("$") && (
+                  <div className="mt-3 border-t border-gray-700 pt-3">
+                    <div className="flex items-start">
+                      <span className="text-green-400 mr-2 mt-1">$ </span>
+                      <textarea
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        className="flex-1 bg-transparent text-green-300 border-none outline-none font-mono resize-none"
+                        placeholder="Enter input values..."
+                        rows={3}
+                        autoFocus
+                      />
+                    </div>
+                    <div className="mt-2 flex justify-between items-center">
+                      <div className="text-xs text-gray-500">
+                        Enter each value on a separate line
+                      </div>
+                      <button
+                        onClick={handleInputSubmit}
+                        disabled={loading || isExecuting || !input.trim()}
+                        className="px-3 py-1 bg-green-600 text-white rounded text-sm hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Submit Input
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Execution Status */}
+                {executionStatus && (
+                  <div
+                    className={`mt-3 font-semibold text-sm ${
+                      executionStatus.includes("successfully")
+                        ? "text-green-400"
+                        : "text-red-400"
+                    }`}
+                  >
+                    {executionStatus}
+                  </div>
+                )}
+              </>
             ) : (
-              <span className="text-gray-500">Output will appear here.</span>
+              <div className="text-gray-500 text-center mt-8">
+                <div className="text-4xl mb-2">▶</div>
+                <div>Click "Run" to execute your code</div>
+                <div className="text-xs mt-1">Output will appear here</div>
+              </div>
             )}
           </div>
-          {error && (
-            <div className="mt-4 text-red-500 font-semibold">{error}</div>
-          )}
         </div>
       </div>
     </div>
