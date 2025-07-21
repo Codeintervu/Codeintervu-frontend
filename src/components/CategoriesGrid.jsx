@@ -163,8 +163,8 @@ const CategoriesGrid = () => {
 
       NumPy: <SiNumpy className={classes} />,
       NUMPY: <SiNumpy className={classes} />, // Uppercase version
-      Panda: <PandasLogo className={classes} />, // Pass fillColor implicitly via currentColor
-      PANDA: <PandasLogo className={classes} />, // Uppercase version
+      Pandas: <PandasLogo className={classes} />, // Pass fillColor implicitly via currentColor
+      PANDAS: <PandasLogo className={classes} />, // Uppercase version
       MachineLearning: <SiTensorflow className={classes} />,
       "MACHINE LEARNING": <SiTensorflow className={classes} />, // Uppercase version
       "Deep Learning": <SiPytorch className={classes} />,
@@ -215,8 +215,8 @@ const CategoriesGrid = () => {
       PYTHON: "bg-blue-500", // Uppercase version
       NumPy: "bg-blue-500",
       NUMPY: "bg-blue-500", // Uppercase version
-      Panda: "bg-blue-600",
-      PANDA: "bg-blue-600", // Uppercase version
+      Pandas: "bg-blue-600",
+      PANDAS: "bg-blue-600", // Uppercase version
       MachineLearning: "bg-purple-600",
       "MACHINE LEARNING": "bg-purple-600", // Uppercase version
       "Deep Learning": "bg-purple-700",
