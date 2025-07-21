@@ -411,7 +411,7 @@ const CategoryPage = () => {
               >
                 <div className="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
                   <h2 className="text-xl font-bold text-teal-600 dark:text-teal-400">
-                    Tutorials
+                    {category ? `${category.name} Tutorials` : "Tutorials"}
                   </h2>
                   <button
                     onClick={() => setMobileSidebarOpen(false)}
@@ -455,7 +455,7 @@ const CategoryPage = () => {
               }}
             > */}
               <h2 className="text-2xl font-bold mb-6 text-teal-600 dark:text-teal-400">
-                Tutorials
+                {category ? `${category.name} Tutorials` : "Tutorials"}
               </h2>
               <nav>
                 <ul className="space-y-2">

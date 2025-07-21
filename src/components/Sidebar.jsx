@@ -3,7 +3,14 @@ import { X } from "lucide-react";
 
 const SIDEBAR_WIDTH = 260;
 
-const Sidebar = ({ items, onSelect, selected, isOpen, onClose }) => {
+const Sidebar = ({
+  items,
+  onSelect,
+  selected,
+  isOpen,
+  onClose,
+  categoryName,
+}) => {
   // Prevent background scroll when sidebar is open
   useEffect(() => {
     if (isOpen) {
@@ -41,7 +48,7 @@ const Sidebar = ({ items, onSelect, selected, isOpen, onClose }) => {
               if (onClose) onClose();
             }}
           >
-            {item}
+            {categoryName ? `${categoryName} - ${item}` : item}
           </li>
         ))}
       </ul>
