@@ -467,7 +467,7 @@ const OnlineCompiler = ({ language }) => {
               <>
                 {/* Execution Info */}
                 {(executionTime || memoryUsed) && (
-                  <div className="text-gray-500 text-xs mb-2 border-b border-gray-700 pb-2">
+                  <div className="text-gray-200 text-sm mb-2 border-b border-gray-700 pb-2">
                     {executionTime && <span>Time: {executionTime}</span>}
                     {executionTime && memoryUsed && (
                       <span className="mx-2">|</span>
