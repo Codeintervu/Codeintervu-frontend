@@ -4,12 +4,24 @@ import { Menu, X, Sun, Moon, ChevronDown } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
 import api from "../utils/api";
 import { formatCategoryPath } from "../utils/pathUtils";
+import {
+  FaQuestionCircle,
+  FaClipboardList,
+  FaChalkboardTeacher,
+  FaSearch,
+  FaCode,
+  FaFileAlt,
+  FaBlog,
+  FaUser,
+} from "react-icons/fa";
 
 const Navbar = ({ tutorials }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isTutorialsOpen, setIsTutorialsOpen] = useState(false);
-  const [isCompilersOpen, setIsCompilersOpen] = useState(false); // NEW
-  const compilersRef = useRef(null); // NEW
+  const [isCompilersOpen, setIsCompilersOpen] = useState(false);
+  const [isInterviewPrepOpen, setIsInterviewPrepOpen] = useState(false); // NEW
+  const compilersRef = useRef(null);
+  const interviewPrepRef = useRef(null); // NEW
   const { isDarkMode, toggleTheme } = useTheme();
   const [categories, setCategories] = useState([]);
   const closeTimeout = React.useRef(null);
@@ -35,8 +47,14 @@ const Navbar = ({ tutorials }) => {
       ) {
         setIsCompilersOpen(false);
       }
+      if (
+        interviewPrepRef.current &&
+        !interviewPrepRef.current.contains(event.target)
+      ) {
+        setIsInterviewPrepOpen(false);
+      }
     };
-    if (isCompilersOpen) {
+    if (isCompilersOpen || isInterviewPrepOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -44,26 +62,20 @@ const Navbar = ({ tutorials }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isCompilersOpen]);
+  }, [isCompilersOpen, isInterviewPrepOpen]);
 
   const toggleNav = () => setIsOpen(!isOpen);
 
   const closeMenus = () => {
     setIsOpen(false);
     setIsTutorialsOpen(false);
+    setIsInterviewPrepOpen(false);
   };
 
   const navLinks = [
     // { name: "Home", path: "/" }, // Removed Home
     { name: "About", path: "/about" },
-    // { name: "Courses", path: "/courses" }, // Commented out
-    {
-      name: "Blog",
-      path: "http://javabytrilochan.blogspot.com",
-      external: true,
-    },
     { name: "Contact", path: "/contact" },
-    { name: "Quiz", path: "/quiz" },
   ];
 
   return (
@@ -99,6 +111,82 @@ const Navbar = ({ tutorials }) => {
 
         {/* Center Section: Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-6 lg:gap-8 flex-1 justify-center">
+          {/* Interview Preparation Dropdown */}
+          <div className="relative" ref={interviewPrepRef}>
+            <button
+              className="flex items-center gap-1 text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap"
+              aria-label="Open interview preparation dropdown"
+              onClick={() => setIsInterviewPrepOpen((open) => !open)}
+              type="button"
+            >
+              Interview Preparation <ChevronDown size={16} />
+            </button>
+            {isInterviewPrepOpen && (
+              <div className="absolute top-full left-0 mt-2 w-[600px] bg-white dark:bg-gray-700 rounded-md shadow-lg py-6 z-20">
+                <div className="grid grid-cols-3 gap-4 px-6">
+                  <Link
+                    to="/quiz"
+                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
+                    onClick={closeMenus}
+                  >
+                    <FaQuestionCircle className="w-6 h-6" />
+                    Quiz
+                  </Link>
+                  <Link
+                    to="/interview-questions"
+                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
+                    onClick={closeMenus}
+                  >
+                    <FaClipboardList className="w-6 h-6" />
+                    Interview Questions
+                  </Link>
+                  <Link
+                    to="/whiteboard"
+                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
+                    onClick={closeMenus}
+                  >
+                    <FaChalkboardTeacher className="w-6 h-6" />
+                    Whiteboard
+                  </Link>
+                  <Link
+                    to="/mock-interviews"
+                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
+                    onClick={closeMenus}
+                  >
+                    <FaUser className="w-6 h-6" />
+                    Mock Interviews
+                  </Link>
+                  <Link
+                    to="/coding-interviews"
+                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
+                    onClick={closeMenus}
+                  >
+                    <FaCode className="w-6 h-6" />
+                    Coding Interviews
+                  </Link>
+                  <Link
+                    to="/resume-builder"
+                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
+                    onClick={closeMenus}
+                  >
+                    <FaFileAlt className="w-6 h-6" />
+                    Resume Builder
+                  </Link>
+                  <a
+                    href="http://javabytrilochan.blogspot.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
+                    onClick={closeMenus}
+                  >
+                    <FaBlog className="w-6 h-6" />
+                    Blog
+                  </a>
+                </div>
+              </div>
+            )}
+          </div>
+          {/* About and Contact Links */}
           {navLinks.map((item) =>
             item.external ? (
               <a
@@ -120,57 +208,13 @@ const Navbar = ({ tutorials }) => {
               </Link>
             )
           )}
-          {/* Tutorial Dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={() => {
-              if (closeTimeout.current) clearTimeout(closeTimeout.current);
-              setIsTutorialsOpen(true);
-            }}
-            onMouseLeave={() => {
-              closeTimeout.current = setTimeout(
-                () => setIsTutorialsOpen(false),
-                180
-              );
-            }}
+          {/* Projects Link */}
+          <Link
+            to="/projects"
+            className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap"
           >
-            <button
-              className="flex items-center gap-1 text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap"
-              aria-label="Open tutorials dropdown"
-            >
-              Tutorial <ChevronDown size={16} />
-            </button>
-            {isTutorialsOpen && (
-              <div
-                className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-gray-700 rounded-md shadow-lg py-2 z-20"
-                onMouseEnter={() => {
-                  if (closeTimeout.current) clearTimeout(closeTimeout.current);
-                  setIsTutorialsOpen(true);
-                }}
-                onMouseLeave={() => {
-                  closeTimeout.current = setTimeout(
-                    () => setIsTutorialsOpen(false),
-                    180
-                  );
-                }}
-              >
-                {categories.length > 0 ? (
-                  categories.map((category) => (
-                    <Link
-                      key={category._id}
-                      to={formatCategoryPath(category.path)}
-                      className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
-                      onClick={closeMenus}
-                    >
-                      {category.name}
-                    </Link>
-                  ))
-                ) : (
-                  <p className="px-4 py-2 text-sm text-gray-500">Loading...</p>
-                )}
-              </div>
-            )}
-          </div>
+            Projects
+          </Link>
           {/* Compilers Dropdown */}
           <div className="relative" ref={compilersRef}>
             <button
@@ -303,6 +347,70 @@ const Navbar = ({ tutorials }) => {
                     >
                       C++ Compiler
                     </Link>
+                  </div>
+                </div>
+                {/* Interview Preparation Dropdown for Mobile */}
+                <div className="text-gray-700 dark:text-gray-200 mt-4">
+                  <p className="font-bold mb-2">Interview Preparation</p>
+                  <div className="flex flex-col gap-2 pl-4">
+                    <Link
+                      to="/quiz"
+                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
+                      onClick={closeMenus}
+                    >
+                      <FaQuestionCircle className="w-4 h-4" />
+                      Quiz
+                    </Link>
+                    <Link
+                      to="/interview-questions"
+                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
+                      onClick={closeMenus}
+                    >
+                      <FaClipboardList className="w-4 h-4" />
+                      Interview Questions
+                    </Link>
+                    <Link
+                      to="/whiteboard"
+                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
+                      onClick={closeMenus}
+                    >
+                      <FaChalkboardTeacher className="w-4 h-4" />
+                      Whiteboard
+                    </Link>
+                    <Link
+                      to="/mock-interviews"
+                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
+                      onClick={closeMenus}
+                    >
+                      <FaUser className="w-4 h-4" />
+                      Mock Interviews
+                    </Link>
+                    <Link
+                      to="/coding-interviews"
+                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
+                      onClick={closeMenus}
+                    >
+                      <FaCode className="w-4 h-4" />
+                      Coding Interviews
+                    </Link>
+                    <Link
+                      to="/resume-builder"
+                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
+                      onClick={closeMenus}
+                    >
+                      <FaFileAlt className="w-4 h-4" />
+                      Resume Builder
+                    </Link>
+                    <a
+                      href="http://javabytrilochan.blogspot.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
+                      onClick={closeMenus}
+                    >
+                      <FaBlog className="w-4 h-4" />
+                      Blog
+                    </a>
                   </div>
                 </div>
               </>

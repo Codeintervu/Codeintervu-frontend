@@ -259,7 +259,7 @@ const CategoriesGrid = () => {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-              Learn programming for free
+              Learn Programming for Free
             </h1>
           </div>
           <div className="flex justify-center">
@@ -276,7 +276,7 @@ const CategoriesGrid = () => {
         {/* Title Section */}
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Learn programming for free
+            Learn Programming for Free
           </h1>
         </div>
 

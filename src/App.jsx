@@ -16,6 +16,13 @@ import CCompiler from "./compilers/CCompiler";
 import CppCompiler from "./compilers/CppCompiler";
 import QuizListPage from "./pages/QuizListPage";
 import QuizMCQPage from "./pages/QuizMCQPage";
+import ProjectsPage from "./pages/ProjectsPage";
+import ProjectDetailPage from "./pages/ProjectDetailPage";
+import TldrawWhiteboard from "./pages/TldrawWhiteboard";
+import InterviewQuestionsPage from "./pages/InterviewQuestionsPage";
+import MockInterviewsPage from "./pages/MockInterviewsPage";
+import CodingInterviewsPage from "./pages/CodingInterviewsPage";
+import ResumeBuilderPage from "./pages/ResumeBuilderPage";
 
 const App = () => {
   return (
@@ -32,14 +39,22 @@ const App = () => {
               <Route path="/contact" element={<Contact />} />
               <Route path="/quiz" element={<QuizListPage />} />
               <Route path="/quiz/:slug" element={<QuizMCQPage />} />
-
-              {/* Pretty URL for tutorials: /categoryPath/tutorialSlug */}
               <Route
-                path="/:categoryPath/:tutorialSlug"
-                element={<CategoryPage />}
+                path="/interview-questions"
+                element={<InterviewQuestionsPage />}
               />
-              {/* Fallback for category page without a tutorial selected */}
-              <Route path="/:categoryPath" element={<CategoryPage />} />
+              <Route path="/mock-interviews" element={<MockInterviewsPage />} />
+              <Route
+                path="/coding-interviews"
+                element={<CodingInterviewsPage />}
+              />
+              <Route path="/resume-builder" element={<ResumeBuilderPage />} />
+              <Route path="/projects" element={<ProjectsPage />} />
+              <Route
+                path="/projects/:projectId"
+                element={<ProjectDetailPage />}
+              />
+              <Route path="/whiteboard" element={<TldrawWhiteboard />} />
               <Route
                 path="/compilers/java-compiler"
                 element={<JavaCompiler />}
@@ -54,6 +69,14 @@ const App = () => {
               />
               <Route path="/compilers/c-compiler" element={<CCompiler />} />
               <Route path="/compilers/cpp-compiler" element={<CppCompiler />} />
+
+              {/* Pretty URL for tutorials: /categoryPath/tutorialSlug */}
+              <Route
+                path="/:categoryPath/:tutorialSlug"
+                element={<CategoryPage />}
+              />
+              {/* Fallback for category page without a tutorial selected */}
+              <Route path="/:categoryPath" element={<CategoryPage />} />
             </Routes>
           </main>
         </div>

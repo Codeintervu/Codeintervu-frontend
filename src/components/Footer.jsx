@@ -198,22 +198,7 @@ const Footer = () => {
         </div>
 
         {/* Tutorials Section */}
-        <div className="mt-6">
-          <h3 className="text-white text-xl font-league-spartan font-bold mb-4 text-center">
-            Our Tutorials
-          </h3>
-          <div className="flex flex-wrap justify-center gap-2">
-            {tutorials.map((tutorial, index) => (
-              <a
-                key={index}
-                href="#"
-                className="text-gray-200 hover:text-kappel transition-colors text-sm px-3 py-1 bg-gray-800 rounded-md"
-              >
-                {tutorial}
-              </a>
-            ))}
-          </div>
-        </div>
+        {/* REMOVED: Our Tutorials section */}
 
         {/* Copyright Section */}
         <div className="border-t border-gray-800 mt-12 pt-8 text-center">
