@@ -1,5 +1,6 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import api from "../utils/api";
 
 const mernProject = {
   name: "MERN Stack Project - EverWrite",
@@ -308,9 +309,33 @@ const genAIProject = {
 
 const ProjectDetailPage = () => {
   const { projectId } = useParams();
+  const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Map project IDs to project data
-  const getProjectData = () => {
+  useEffect(() => {
+    fetchProject();
+  }, [projectId]);
+
+  const fetchProject = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await api.get(`/projects/key/${projectId}`);
+      setProject(response.data.data);
+    } catch (error) {
+      console.error("Error fetching project:", error);
+      setError("Project not found");
+      // Fallback to hardcoded data if API fails
+      const fallbackProject = getFallbackProject();
+      setProject(fallbackProject);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fallback function for hardcoded data
+  const getFallbackProject = () => {
     switch (projectId) {
       case "mern":
         return mernProject;
@@ -323,17 +348,63 @@ const ProjectDetailPage = () => {
       case "genai":
         return genAIProject;
       default:
-        return mernProject; // Default fallback
+        return mernProject;
     }
   };
 
-  const project = getProjectData();
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-10 max-w-3xl">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-300 rounded w-3/4 mb-4"></div>
+          <div className="h-4 bg-gray-300 rounded w-full mb-2"></div>
+          <div className="h-4 bg-gray-300 rounded w-5/6 mb-2"></div>
+          <div className="h-4 bg-gray-300 rounded w-4/6 mb-6"></div>
+          <div className="h-6 bg-gray-300 rounded w-1/3 mb-2"></div>
+          <div className="h-4 bg-gray-300 rounded w-full mb-1"></div>
+          <div className="h-4 bg-gray-300 rounded w-full mb-1"></div>
+          <div className="h-4 bg-gray-300 rounded w-3/4 mb-6"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!project) {
+    return (
+      <div className="container mx-auto px-4 py-10 max-w-3xl text-center">
+        <h1 className="text-3xl font-bold mb-4 text-red-600">
+          Project Not Found
+        </h1>
+        <p className="text-gray-600 mb-6">
+          The project you're looking for doesn't exist.
+        </p>
+        <Link
+          to="/projects"
+          className="bg-teal-600 text-white px-6 py-3 rounded-md hover:bg-teal-700"
+        >
+          Back to Projects
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-10 max-w-3xl">
-      <h1 className="text-3xl font-bold mb-4 text-teal-600 dark:text-teal-400">
-        {project.name}
-      </h1>
+      <div className="flex justify-between items-start mb-6">
+        <h1 className="text-3xl font-bold text-teal-600 dark:text-teal-400">
+          {project.name}
+        </h1>
+        {project.topmateLink && (
+          <a
+            href={project.topmateLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+          >
+            Buy Now
+          </a>
+        )}
+      </div>
       {/* 1. Description */}
       <section className="mb-6">
         <h2 className="text-xl font-semibold mb-2">📌 Project Description</h2>

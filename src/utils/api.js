@@ -1,27 +1,17 @@
 import axios from "axios";
 
-// API base URL configuration
+// API base URL configuration - Always use deployed backend
 const getApiBaseUrl = () => {
-  // Check if we're in production (deployed)
-  if (
-    window.location.hostname !== "localhost" &&
-    window.location.hostname !== "127.0.0.1"
-  ) {
-    return "https://codeintervu-backend.onrender.com/api";
-  }
-
-  // Use environment variable if available (for development)
-  if (import.meta.env.VITE_API_BASE_URL) {
-    return import.meta.env.VITE_API_BASE_URL;
-  }
-
-  // For development, use local backend
-  return "http://localhost:5000/api";
+  // Always use the deployed backend URL
+  return "https://codeintervu-backend.onrender.com/api";
 };
 
 // Create axios instance with default configuration
+const baseURL = getApiBaseUrl();
+console.log("Frontend API Base URL:", baseURL);
+
 const api = axios.create({
-  baseURL: getApiBaseUrl(),
+  baseURL: baseURL,
   timeout: 30000,
   headers: {
     "Content-Type": "application/json",
