@@ -4,7 +4,9 @@
 
 ### 1. Environment Setup
 
-Create `.env` file in frontend folder:
+**No `.env` file needed!** The frontend is configured to directly use the deployed backend URL.
+
+If you need to override the API URL, create `.env` file in frontend folder:
 
 ```bash
 VITE_API_BASE_URL=https://codeintervu-backend.onrender.com/api
@@ -34,14 +36,14 @@ npm run build
 2. Connect repo to Netlify
 3. Build command: `npm run build`
 4. Publish directory: `dist`
-5. **Set Environment Variables in Netlify:**
+5. **Set Environment Variables in Netlify (Optional):**
    - Go to **Site settings** → **Environment variables**
-   - Add variables:
+   - Add variables (only if you need to override defaults):
      - **Key**: `VITE_API_BASE_URL`
      - **Value**: `https://codeintervu-backend.onrender.com/api`
      - **Key**: `VITE_RAPIDAPI_KEY`
      - **Value**: `your_rapidapi_key_here`
-   - **Important**: Make sure to redeploy after adding the environment variables
+   - **Note**: Environment variables are optional since the frontend is pre-configured
 6. Deploy!
 
 ### 4. Deploy to Vercel

@@ -1,13 +1,7 @@
 import axios from "axios";
 
-// API base URL configuration - Always use deployed backend
-const getApiBaseUrl = () => {
-  // Always use the deployed backend URL
-  return "https://codeintervu-backend.onrender.com/api";
-};
-
-// Create axios instance with default configuration
-const baseURL = getApiBaseUrl();
+// Direct backend URL configuration for production
+const baseURL = "https://codeintervu-backend.onrender.com/api";
 console.log("Frontend API Base URL:", baseURL);
 
 const api = axios.create({

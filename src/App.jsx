@@ -20,6 +20,8 @@ import ProjectsPage from "./pages/ProjectsPage";
 import ProjectDetailPage from "./pages/ProjectDetailPage";
 import TldrawWhiteboard from "./pages/TldrawWhiteboard";
 import InterviewQuestionsPage from "./pages/InterviewQuestionsPage";
+import InterviewQuestionDetailPage from "./pages/InterviewQuestionDetailPage";
+import BookmarkedQuestionsPage from "./pages/BookmarkedQuestionsPage";
 import MockInterviewsPage from "./pages/MockInterviewsPage";
 import CodingInterviewsPage from "./pages/CodingInterviewsPage";
 import ResumeBuilderPage from "./pages/ResumeBuilderPage";
@@ -42,6 +44,14 @@ const App = () => {
               <Route
                 path="/interview-questions"
                 element={<InterviewQuestionsPage />}
+              />
+              <Route
+                path="/interview-questions/:category/:slug"
+                element={<InterviewQuestionDetailPage />}
+              />
+              <Route
+                path="/bookmarked-questions"
+                element={<BookmarkedQuestionsPage />}
               />
               <Route path="/mock-interviews" element={<MockInterviewsPage />} />
               <Route
