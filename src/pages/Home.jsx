@@ -1,5 +1,6 @@
 import React from "react";
 import Hero from "../components/Hero.jsx";
+import InterviewPrepCarousel from "../components/InterviewPrepCarousel.jsx";
 import CategoriesGrid from "../components/CategoriesGrid.jsx";
 import StatsComponent from "../components/StatsComponent.jsx";
 // import Testimonial from "../components/Testimonial.jsx";
@@ -13,10 +14,10 @@ const Home = () => {
   return (
     <>
       <Helmet>
-        <title>Home - CodeIntervu</title>
+        <title>CodeIntervu: Code. Practice. Conquer.</title>
         <meta
           name="description"
-          content="Welcome to CodeIntervu! The best place to learn programming, practice coding, and prepare for interviews with hands-on tutorials and compilers."
+          content="CodeIntervu: Code. Practice. Conquer. The ultimate platform to learn programming, practice coding problems, and conquer technical interviews with hands-on tutorials and live compilers."
         />
         <script type="application/ld+json">
           {`
@@ -36,6 +37,7 @@ const Home = () => {
       </Helmet>
       <div>
         <Hero />
+        <InterviewPrepCarousel />
         <CategoriesGrid />
         {/* Online Compilers Section */}
         <section className="py-20 bg-white dark:bg-gray-900">
