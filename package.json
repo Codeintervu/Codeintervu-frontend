@@ -13,6 +13,7 @@
     "deploy": "npm run build"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
     "@tldraw/tldraw": "^3.15.0",
     "axios": "^1.10.0",
     "lucide-react": "^0.514.0",
