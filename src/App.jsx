@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
 import SubNavbar from "./components/SubNavbar";
 import Home from "./pages/Home";
@@ -24,13 +25,13 @@ import InterviewQuestionDetailPage from "./pages/InterviewQuestionDetailPage";
 import BookmarkedQuestionsPage from "./pages/BookmarkedQuestionsPage";
 import MockInterviewsPage from "./pages/MockInterviewsPage";
 import CodingInterviewsPage from "./pages/CodingInterviewsPage";
-import ResumeBuilderPage from "./pages/ResumeBuilderPage";
 
 const App = () => {
   return (
     <ErrorBoundary>
       <ThemeProvider>
         <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200 overflow-x-hidden">
+          <Toaster position="top-right" />
           <Navbar />
           <SubNavbar />
           <main className="pt-8 sm:pt-12">
@@ -58,7 +59,7 @@ const App = () => {
                 path="/coding-interviews"
                 element={<CodingInterviewsPage />}
               />
-              <Route path="/resume-builder" element={<ResumeBuilderPage />} />
+
               <Route path="/projects" element={<ProjectsPage />} />
               <Route
                 path="/projects/:projectId"

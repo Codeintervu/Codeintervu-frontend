@@ -122,65 +122,75 @@ const Navbar = ({ tutorials }) => {
               Interview Preparation <ChevronDown size={16} />
             </button>
             {isInterviewPrepOpen && (
-              <div className="absolute top-full left-0 mt-2 w-[600px] bg-white dark:bg-gray-700 rounded-md shadow-lg py-6 z-20">
+              <div className="absolute top-full left-0 mt-2 w-[800px] bg-white dark:bg-gray-700 rounded-md shadow-lg py-6 z-20">
                 <div className="grid grid-cols-3 gap-4 px-6">
                   <Link
                     to="/quiz"
-                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
+                    className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
                   >
                     <FaQuestionCircle className="w-6 h-6" />
-                    Quiz
+                    <span className="text-[16px] font-semibold">Quiz</span>
+                    <span className="text-xs text-gray-700 dark:text-gray-400">
+                      Test your knowledge
+                    </span>
                   </Link>
                   <Link
                     to="/interview-questions"
-                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
+                    className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
                   >
                     <FaClipboardList className="w-6 h-6" />
-                    Interview Questions
+                    <span className="text-[16px] font-semibold">Questions</span>
+                    <span className="text-xs text-gray-700 dark:text-gray-400">
+                      Practice common Q&A
+                    </span>
                   </Link>
                   <Link
                     to="/whiteboard"
-                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
+                    className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
                   >
                     <FaChalkboardTeacher className="w-6 h-6" />
-                    Whiteboard
+                    <span className="text-[16px] font-semibold">Whiteboard</span>
+                    <span className="text-xs text-gray-700 dark:text-gray-400">
+                      Draw & explain concepts
+                    </span>
                   </Link>
                   <Link
                     to="/mock-interviews"
-                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
+                    className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
                   >
                     <FaUser className="w-6 h-6" />
-                    Mock Interviews
+                    <span className="text-[16px] font-semibold">Mock Interviews</span>
+                    <span className="text-xs text-gray-700 dark:text-gray-400">
+                      Simulate real interviews
+                    </span>
                   </Link>
                   <Link
                     to="/coding-interviews"
-                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
+                    className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
                   >
                     <FaCode className="w-6 h-6" />
-                    Coding Interviews
-                  </Link>
-                  <Link
-                    to="/resume-builder"
-                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
-                    onClick={closeMenus}
-                  >
-                    <FaFileAlt className="w-6 h-6" />
-                    Resume Builder
+                    <span className="text-[16px] font-semibold">Coding</span>
+                    <span className="text-xs text-gray-700 dark:text-gray-400">
+                      Live coding sessions
+                    </span>
                   </Link>
                   <a
                     href="http://javabytrilochan.blogspot.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-5 py-4 text-base text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex items-center gap-3"
+                    className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
                   >
                     <FaBlog className="w-6 h-6" />
-                    Blog
+                    <span className="text-[16px] font-semibold">Blog</span>
+                    <span className="text-xs text-gray-700 dark:text-gray-400">
+                      Read latest insights
+                    </span>
                   </a>
                 </div>
               </div>
@@ -393,14 +403,7 @@ const Navbar = ({ tutorials }) => {
                       <FaCode className="w-4 h-4" />
                       Coding Interviews
                     </Link>
-                    <Link
-                      to="/resume-builder"
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
-                      onClick={closeMenus}
-                    >
-                      <FaFileAlt className="w-4 h-4" />
-                      Resume Builder
-                    </Link>
+
                     <a
                       href="http://javabytrilochan.blogspot.com"
                       target="_blank"

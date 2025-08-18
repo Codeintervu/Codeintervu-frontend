@@ -18,6 +18,19 @@ export default defineConfig({
       },
     },
   },
+  optimizeDeps: {
+    include: ['monaco-editor'],
+  },
+  define: {
+    global: 'globalThis',
+  },
+  resolve: {
+    alias: {
+      'path': 'path-browserify',
+      'fs': false,
+      'crypto': false,
+    }
+  },
   // Removed proxy configuration since we're using deployed backend
   // server: {
   //   proxy: {

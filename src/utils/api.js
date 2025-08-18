@@ -1,6 +1,6 @@
 import axios from "axios";
 
-// Direct backend URL configuration for production
+// Backend URL configuration
 const baseURL = "https://codeintervu-backend.onrender.com/api";
 console.log("Frontend API Base URL:", baseURL);
 
