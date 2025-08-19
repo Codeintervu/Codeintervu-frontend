@@ -124,7 +124,7 @@ ${
 
   // Use dynamic preview image from backend
   const previewImage = question._id
-    ? `${window.location.origin}/api/interview-questions/${question._id}/preview-image`
+    ? `https://codeintervu-backend.onrender.com/api/interview-questions/${question._id}/preview-image`
     : `${window.location.origin}/assets/images/logo.png`;
 
   const metaData = {
@@ -159,7 +159,7 @@ export const addStructuredData = (question, url) => {
 
   // Use dynamic preview image from backend
   const previewImage = question._id
-    ? `${window.location.origin}/api/interview-questions/${question._id}/preview-image`
+    ? `https://codeintervu-backend.onrender.com/api/interview-questions/${question._id}/preview-image`
     : `${window.location.origin}/assets/images/logo.png`;
 
   const structuredData = {
