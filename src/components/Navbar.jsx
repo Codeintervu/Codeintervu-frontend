@@ -141,7 +141,7 @@ const Navbar = ({ tutorials }) => {
                     onClick={closeMenus}
                   >
                     <FaClipboardList className="w-6 h-6" />
-                    <span className="text-[16px] font-semibold">Questions</span>
+                    <span className="text-[16px] font-semibold">Interview Questions</span>
                     <span className="text-xs text-gray-700 dark:text-gray-400">
                       Practice common Q&A
                     </span>
@@ -174,7 +174,7 @@ const Navbar = ({ tutorials }) => {
                     onClick={closeMenus}
                   >
                     <FaCode className="w-6 h-6" />
-                    <span className="text-[16px] font-semibold">Coding</span>
+                    <span className="text-[16px] font-semibold">Coding Practice</span>
                     <span className="text-xs text-gray-700 dark:text-gray-400">
                       Live coding sessions
                     </span>

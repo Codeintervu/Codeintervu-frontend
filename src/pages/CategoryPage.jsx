@@ -10,6 +10,7 @@ import { escapeHtml } from "../utils/escapeHtml";
 import { Helmet } from "react-helmet";
 import YouTubeVideo from "../components/YouTubeVideo";
 import api from "../utils/api";
+import Footer from "../components/Footer";
 
 const LoadingSpinner = () => (
   <div className="flex justify-center items-center h-64">
@@ -609,6 +610,7 @@ const CategoryPage = () => {
           </div>
         )}
       </div>
+      <Footer/>
     </>
   );
 };
