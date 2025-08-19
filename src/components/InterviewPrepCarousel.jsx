@@ -69,6 +69,14 @@ const InterviewPrepCarousel = () => {
       color: "bg-red-500",
     },
     {
+      id: "coding-practice",
+      title: "Coding Practice",
+      description: "Live coding sessions",
+      icon: <FaCode className="h-[16px] w-[16px] text-white" />,
+      link: "/coding-interviews",
+      color: "bg-yellow-500",
+    },
+    {
       id: "blog",
       title: "Blog",
       description: "Read latest insights and tips",
