@@ -25,7 +25,7 @@ const InterviewPrepCarousel = () => {
       title: "Programming Courses",
       description: "Learn programming languages with hands-on tutorials",
       icon: <FaGraduationCap className="h-[16px] w-[16px] text-white" />,
-      link: "/courses",
+      // link: "/courses",
       color: "bg-blue-500",
     },
     {
@@ -33,7 +33,7 @@ const InterviewPrepCarousel = () => {
       title: "Online Compilers",
       description: "Write, compile and run code in multiple languages",
       icon: <FaLaptopCode className="h-[16px] w-[16px] text-white" />,
-      link: "/compilers",
+      // link: "/compilers",
       color: "bg-green-500",
     },
     {
