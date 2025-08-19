@@ -2,7 +2,6 @@ import axios from "axios";
 
 // Backend URL configuration
 const baseURL = "https://codeintervu-backend.onrender.com/api";
-console.log("Frontend API Base URL:", baseURL);
 
 const api = axios.create({
   baseURL: baseURL,

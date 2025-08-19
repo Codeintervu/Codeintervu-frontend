@@ -141,7 +141,9 @@ const Navbar = ({ tutorials }) => {
                     onClick={closeMenus}
                   >
                     <FaClipboardList className="w-6 h-6" />
-                    <span className="text-[16px] font-semibold">Interview Questions</span>
+                    <span className="text-[16px] font-semibold">
+                      Interview Questions
+                    </span>
                     <span className="text-xs text-gray-700 dark:text-gray-400">
                       Practice common Q&A
                     </span>
@@ -152,7 +154,9 @@ const Navbar = ({ tutorials }) => {
                     onClick={closeMenus}
                   >
                     <FaChalkboardTeacher className="w-6 h-6" />
-                    <span className="text-[16px] font-semibold">Whiteboard</span>
+                    <span className="text-[16px] font-semibold">
+                      Whiteboard
+                    </span>
                     <span className="text-xs text-gray-700 dark:text-gray-400">
                       Draw & explain concepts
                     </span>
@@ -163,7 +167,9 @@ const Navbar = ({ tutorials }) => {
                     onClick={closeMenus}
                   >
                     <FaUser className="w-6 h-6" />
-                    <span className="text-[16px] font-semibold">Mock Interviews</span>
+                    <span className="text-[16px] font-semibold">
+                      Mock Interviews
+                    </span>
                     <span className="text-xs text-gray-700 dark:text-gray-400">
                       Simulate real interviews
                     </span>
@@ -174,7 +180,9 @@ const Navbar = ({ tutorials }) => {
                     onClick={closeMenus}
                   >
                     <FaCode className="w-6 h-6" />
-                    <span className="text-[16px] font-semibold">Coding Practice</span>
+                    <span className="text-[16px] font-semibold">
+                      Coding Practice
+                    </span>
                     <span className="text-xs text-gray-700 dark:text-gray-400">
                       Live coding sessions
                     </span>
@@ -301,147 +309,157 @@ const Navbar = ({ tutorials }) => {
       {isOpen && (
         <div className="md:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700 shadow-lg px-4 py-4">
           <nav className="flex flex-col gap-4">
-            {tutorials && tutorials.length > 0 ? (
-              <>
-                <div className="text-gray-700 dark:text-gray-200">
-                  <p className="font-bold mb-2">Tutorials</p>
-                  <div className="flex flex-col gap-2 pl-4">
-                    {tutorials.map((tutorial) => (
-                      <Link
-                        key={tutorial._id}
-                        to={`#${tutorial._id}`}
-                        className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                        onClick={closeMenus}
-                      >
-                        {tutorial.title}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-                {/* Compilers Dropdown for Mobile */}
-                <div className="text-gray-700 dark:text-gray-200 mt-4">
-                  <p className="font-bold mb-2">Compilers</p>
-                  <div className="flex flex-col gap-2 pl-4">
-                    <Link
-                      to="/compilers/java-compiler"
-                      className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                      onClick={closeMenus}
-                    >
-                      Java Compiler
-                    </Link>
-                    <Link
-                      to="/compilers/python-compiler"
-                      className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                      onClick={closeMenus}
-                    >
-                      Python Compiler
-                    </Link>
-                    <Link
-                      to="/compilers/javascript-compiler"
-                      className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                      onClick={closeMenus}
-                    >
-                      JavaScript Compiler
-                    </Link>
-                    <Link
-                      to="/compilers/c-compiler"
-                      className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                      onClick={closeMenus}
-                    >
-                      C Compiler
-                    </Link>
-                    <Link
-                      to="/compilers/cpp-compiler"
-                      className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                      onClick={closeMenus}
-                    >
-                      C++ Compiler
-                    </Link>
-                  </div>
-                </div>
-                {/* Interview Preparation Dropdown for Mobile */}
-                <div className="text-gray-700 dark:text-gray-200 mt-4">
-                  <p className="font-bold mb-2">Interview Preparation</p>
-                  <div className="flex flex-col gap-2 pl-4">
-                    <Link
-                      to="/quiz"
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
-                      onClick={closeMenus}
-                    >
-                      <FaQuestionCircle className="w-4 h-4" />
-                      Quiz
-                    </Link>
-                    <Link
-                      to="/interview-questions"
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
-                      onClick={closeMenus}
-                    >
-                      <FaClipboardList className="w-4 h-4" />
-                      Interview Questions
-                    </Link>
-                    <Link
-                      to="/whiteboard"
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
-                      onClick={closeMenus}
-                    >
-                      <FaChalkboardTeacher className="w-4 h-4" />
-                      Whiteboard
-                    </Link>
-                    <Link
-                      to="/mock-interviews"
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
-                      onClick={closeMenus}
-                    >
-                      <FaUser className="w-4 h-4" />
-                      Mock Interviews
-                    </Link>
-                    <Link
-                      to="/coding-interviews"
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
-                      onClick={closeMenus}
-                    >
-                      <FaCode className="w-4 h-4" />
-                      Coding Interviews
-                    </Link>
-
-                    <a
-                      href="http://javabytrilochan.blogspot.com"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
-                      onClick={closeMenus}
-                    >
-                      <FaBlog className="w-4 h-4" />
-                      Blog
-                    </a>
-                  </div>
-                </div>
-              </>
-            ) : (
-              // Fallback: show nav links if not on a tutorial/category page
-              navLinks.map((item) =>
-                item.external ? (
-                  <a
-                    key={item.name}
-                    href={item.path}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                  >
-                    {item.name}
-                  </a>
-                ) : (
-                  <Link
-                    key={item.name}
-                    to={item.path}
-                    onClick={closeMenus}
-                    className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                  >
-                    {item.name}
-                  </Link>
-                )
+            {/* Always show main navigation links */}
+            {navLinks.map((item) =>
+              item.external ? (
+                <a
+                  key={item.name}
+                  href={item.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+                >
+                  {item.name}
+                </a>
+              ) : (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  onClick={closeMenus}
+                  className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+                >
+                  {item.name}
+                </Link>
               )
             )}
+
+            {/* Projects Link */}
+            <Link
+              to="/projects"
+              onClick={closeMenus}
+              className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+            >
+              Projects
+            </Link>
+
+            {/* Tutorials Section (if available) */}
+            {tutorials && tutorials.length > 0 && (
+              <div className="text-gray-700 dark:text-gray-200">
+                <p className="font-bold mb-2">Tutorials</p>
+                <div className="flex flex-col gap-2 pl-4">
+                  {tutorials.map((tutorial) => (
+                    <Link
+                      key={tutorial._id}
+                      to={`#${tutorial._id}`}
+                      className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+                      onClick={closeMenus}
+                    >
+                      {tutorial.title}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Compilers Section for Mobile */}
+            <div className="text-gray-700 dark:text-gray-200">
+              <p className="font-bold mb-2">Compilers</p>
+              <div className="flex flex-col gap-2 pl-4">
+                <Link
+                  to="/compilers/java-compiler"
+                  className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+                  onClick={closeMenus}
+                >
+                  Java Compiler
+                </Link>
+                <Link
+                  to="/compilers/python-compiler"
+                  className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+                  onClick={closeMenus}
+                >
+                  Python Compiler
+                </Link>
+                <Link
+                  to="/compilers/javascript-compiler"
+                  className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+                  onClick={closeMenus}
+                >
+                  JavaScript Compiler
+                </Link>
+                <Link
+                  to="/compilers/c-compiler"
+                  className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+                  onClick={closeMenus}
+                >
+                  C Compiler
+                </Link>
+                <Link
+                  to="/compilers/cpp-compiler"
+                  className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
+                  onClick={closeMenus}
+                >
+                  C++ Compiler
+                </Link>
+              </div>
+            </div>
+
+            {/* Interview Preparation Section for Mobile */}
+            <div className="text-gray-700 dark:text-gray-200">
+              <p className="font-bold mb-2">Interview Preparation</p>
+              <div className="flex flex-col gap-2 pl-4">
+                <Link
+                  to="/quiz"
+                  className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
+                  onClick={closeMenus}
+                >
+                  <FaQuestionCircle className="w-4 h-4" />
+                  Quiz
+                </Link>
+                <Link
+                  to="/interview-questions"
+                  className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
+                  onClick={closeMenus}
+                >
+                  <FaClipboardList className="w-4 h-4" />
+                  Interview Questions
+                </Link>
+                <Link
+                  to="/whiteboard"
+                  className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
+                  onClick={closeMenus}
+                >
+                  <FaChalkboardTeacher className="w-4 h-4" />
+                  Whiteboard
+                </Link>
+                <Link
+                  to="/mock-interviews"
+                  className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
+                  onClick={closeMenus}
+                >
+                  <FaUser className="w-4 h-4" />
+                  Mock Interviews
+                </Link>
+                <Link
+                  to="/coding-interviews"
+                  className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
+                  onClick={closeMenus}
+                >
+                  <FaCode className="w-4 h-4" />
+                  Coding Interviews
+                </Link>
+
+                <a
+                  href="http://javabytrilochan.blogspot.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
+                  onClick={closeMenus}
+                >
+                  <FaBlog className="w-4 h-4" />
+                  Blog
+                </a>
+              </div>
+            </div>
           </nav>
         </div>
       )}
