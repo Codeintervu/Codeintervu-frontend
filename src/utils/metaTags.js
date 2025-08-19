@@ -67,6 +67,14 @@ export const updateMetaTags = (metaData) => {
 };
 
 export const resetMetaTags = () => {
+  // Remove structured data
+  const existingScript = document.querySelector(
+    'script[type="application/ld+json"]'
+  );
+  if (existingScript) {
+    existingScript.remove();
+  }
+
   const defaultMeta = {
     title: "CodeIntervu - Learn Programming & Crack Coding Interviews",
     description:
@@ -92,22 +100,108 @@ export const generateQuestionMetaTags = (question) => {
     .replace(/\s+/g, "-")
     .substring(0, 50)}`;
 
+  // Create a more engaging description for social sharing
+  const difficultyEmoji = {
+    Easy: "🟢",
+    Medium: "🟡",
+    Hard: "🔴",
+  };
+
+  const difficultyBadge = difficultyEmoji[question.difficulty] || "⚪";
+
+  // Create a rich description with difficulty, category, and answer preview
+  const description = `${difficultyBadge} ${question.difficulty} | ${
+    question.categoryName || question.category
+  }
+
+${
+  question.answer.length > 120
+    ? `${question.answer.substring(0, 120)}...`
+    : question.answer
+}
+
+💡 Learn more on CodeIntervu - Your ultimate programming interview prep platform!`;
+
+  // Use dynamic preview image from backend
+  const previewImage = question._id
+    ? `${window.location.origin}/api/interview-questions/${question._id}/preview-image`
+    : `${window.location.origin}/assets/images/logo.png`;
+
   const metaData = {
-    title: `${question.categoryName || question.category} Interview Question: ${
-      question.question
-    }`,
-    description:
-      question.answer.length > 150
-        ? `${question.answer.substring(0, 150)}...`
-        : question.answer,
-    image: `${window.location.origin}/assets/images/logo.png`,
+    title: `${question.question} - ${
+      question.categoryName || question.category
+    } Interview Question`,
+    description: description,
+    image: previewImage,
     url: shareUrl,
     type: "article",
     siteName: "CodeIntervu",
     tags: `${question.tags?.join(", ") || ""}, ${
       question.categoryName || question.category
-    }, interview questions, programming`,
+    }, interview questions, programming, ${question.difficulty.toLowerCase()}`,
   };
 
   updateMetaTags(metaData);
+
+  // Add structured data for better SEO and rich snippets
+  addStructuredData(question, shareUrl);
+};
+
+// Add structured data (JSON-LD) for better SEO
+export const addStructuredData = (question, url) => {
+  // Remove existing structured data
+  const existingScript = document.querySelector(
+    'script[type="application/ld+json"]'
+  );
+  if (existingScript) {
+    existingScript.remove();
+  }
+
+  // Use dynamic preview image from backend
+  const previewImage = question._id
+    ? `${window.location.origin}/api/interview-questions/${question._id}/preview-image`
+    : `${window.location.origin}/assets/images/logo.png`;
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: question.question,
+    description:
+      question.answer.length > 200
+        ? `${question.answer.substring(0, 200)}...`
+        : question.answer,
+    image: previewImage,
+    url: url,
+    author: {
+      "@type": "Organization",
+      name: "CodeIntervu",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "CodeIntervu",
+      logo: {
+        "@type": "ImageObject",
+        url: `${window.location.origin}/assets/images/logo.png`,
+      },
+    },
+    datePublished: question.createdAt || new Date().toISOString(),
+    dateModified: question.updatedAt || new Date().toISOString(),
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+    keywords: `${question.tags?.join(", ") || ""}, ${
+      question.categoryName || question.category
+    }, interview questions, programming, ${question.difficulty.toLowerCase()}`,
+    articleSection: question.categoryName || question.category,
+    articleBody: question.answer,
+    educationalLevel: "Intermediate",
+    learningResourceType: "Question",
+    educationalUse: "Interview Preparation",
+  };
+
+  const script = document.createElement("script");
+  script.type = "application/ld+json";
+  script.textContent = JSON.stringify(structuredData);
+  document.head.appendChild(script);
 };
