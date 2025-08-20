@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../utils/api";
+import { Helmet } from "react-helmet";
+import Breadcrumb from "../components/Breadcrumb";
 
 const SECTION_SIZE = 5;
 
@@ -57,58 +59,71 @@ const QuizListPage = () => {
   }, [quizzes]);
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8 text-center dark:text-white">
-        Quizzes
-      </h1>
-      {loading ? (
-        <div className="text-center">Loading...</div>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {quizzes.length === 0 ? (
-            <div className="col-span-full text-center text-gray-500">
-              No quizzes available.
-            </div>
-          ) : (
-            quizzes.map((quiz) => {
-              const count = questionCounts[quiz._id] || 0;
-              const numSections = Math.ceil(count / SECTION_SIZE);
-              return (
-                <div
-                  key={quiz._id}
-                  className="rounded-lg shadow p-8 flex flex-col items-center bg-teal-200 dark:bg-blue-950"
-                >
-                  <h2 className="text-2xl font-bold mb-4 dark:text-white">
-                    {quiz.name}
-                  </h2>
-                  {quiz.description && quiz.description.trim() !== "" && (
-                    <p className="mb-6 text-center dark:text-blue-100">
-                      {quiz.description}
-                    </p>
-                  )}
-                  <div className="mb-4 text-sm font-semibold text-gray-700 dark:text-blue-200">
-                    {count > 0 ? (
-                      <>
-                        {count} question{count !== 1 ? "s" : ""} &bull;{" "}
-                        {numSections} section{numSections !== 1 ? "s" : ""}
-                      </>
-                    ) : (
-                      <>No questions</>
-                    )}
-                  </div>
-                  <Link
-                    to={`/quiz/${quiz.slug}`}
-                    className="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-full transition"
+    <>
+      <Helmet>
+        <title>Quiz Categories - CodeIntervu</title>
+        <meta
+          name="description"
+          content="Test your programming knowledge with our interactive quizzes. Practice coding concepts and prepare for technical interviews."
+        />
+      </Helmet>
+
+      {/* Breadcrumb Navigation */}
+      <Breadcrumb />
+
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-8 text-center dark:text-white">
+          Quizzes
+        </h1>
+        {loading ? (
+          <div className="text-center">Loading...</div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {quizzes.length === 0 ? (
+              <div className="col-span-full text-center text-gray-500">
+                No quizzes available.
+              </div>
+            ) : (
+              quizzes.map((quiz) => {
+                const count = questionCounts[quiz._id] || 0;
+                const numSections = Math.ceil(count / SECTION_SIZE);
+                return (
+                  <div
+                    key={quiz._id}
+                    className="rounded-lg shadow p-8 flex flex-col items-center bg-teal-200 dark:bg-blue-950"
                   >
-                    Start Quiz
-                  </Link>
-                </div>
-              );
-            })
-          )}
-        </div>
-      )}
-    </div>
+                    <h2 className="text-2xl font-bold mb-4 dark:text-white">
+                      {quiz.name}
+                    </h2>
+                    {quiz.description && quiz.description.trim() !== "" && (
+                      <p className="mb-6 text-center dark:text-blue-100">
+                        {quiz.description}
+                      </p>
+                    )}
+                    <div className="mb-4 text-sm font-semibold text-gray-700 dark:text-blue-200">
+                      {count > 0 ? (
+                        <>
+                          {count} question{count !== 1 ? "s" : ""} &bull;{" "}
+                          {numSections} section{numSections !== 1 ? "s" : ""}
+                        </>
+                      ) : (
+                        <>No questions</>
+                      )}
+                    </div>
+                    <Link
+                      to={`/quiz/${quiz.slug}`}
+                      className="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-2 rounded-full transition"
+                    >
+                      Start Quiz
+                    </Link>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        )}
+      </div>
+    </>
   );
 };
 

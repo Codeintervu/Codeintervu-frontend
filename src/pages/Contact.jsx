@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet";
+import Breadcrumb from "../components/Breadcrumb";
 import {
   FaMapMarkerAlt,
   FaPhone,
@@ -20,6 +22,17 @@ const Contact = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Contact Us - CodeIntervu</title>
+        <meta
+          name="description"
+          content="Get in touch with CodeIntervu. We're here to help with your programming and interview preparation questions."
+        />
+      </Helmet>
+
+      {/* Breadcrumb Navigation */}
+      <Breadcrumb />
+
       <section className="pt-32 px-4 min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 transition-colors duration-300 pb-20">
         <div className="max-w-6xl mx-auto">
           {/* Header */}

@@ -34,6 +34,48 @@ const Home = () => {
             }
           `}
         </script>
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              "mainEntity": [
+                {
+                  "@type": "Question",
+                  "name": "What is CodeIntervu?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "CodeIntervu is a comprehensive platform for learning programming, practicing coding problems, and preparing for technical interviews. It offers tutorials, online compilers, interview questions, and mock interviews."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "What programming languages are supported?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "CodeIntervu supports multiple programming languages including Java, Python, JavaScript, C, C++, and more through our online compilers and tutorials."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "Is CodeIntervu free to use?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes, CodeIntervu offers free access to tutorials, online compilers, interview questions, and basic features. Some advanced features may require registration."
+                  }
+                },
+                {
+                  "@type": "Question",
+                  "name": "How can I prepare for coding interviews?",
+                  "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Use our comprehensive interview preparation tools including practice questions, mock interviews, coding challenges, and whiteboard sessions to improve your skills."
+                  }
+                }
+              ]
+            }
+          `}
+        </script>
       </Helmet>
       <div>
         <Hero />
