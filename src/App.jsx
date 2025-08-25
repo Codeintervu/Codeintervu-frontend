@@ -4,10 +4,12 @@ import { ThemeProvider } from "./context/ThemeContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
-import SubNavbar from "./components/SubNavbar";
+
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Support from "./pages/Support";
+import Course from "./pages/Course";
 import CategoryPage from "./pages/CategoryPage";
 import JavaCompiler from "./compilers/JavaCompiler";
 import PythonCompiler from "./compilers/PythonCompiler";
@@ -32,12 +34,13 @@ const App = () => {
         <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200 overflow-x-hidden">
           <Toaster position="top-right" />
           <Navbar />
-          <SubNavbar />
           <main className="pt-8 sm:pt-12">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/support" element={<Support />} />
+              <Route path="/course" element={<Course />} />
               <Route path="/quiz" element={<QuizListPage />} />
               <Route path="/quiz/:slug" element={<QuizMCQPage />} />
               <Route

@@ -1,99 +1,74 @@
 import { ArrowRight } from "lucide-react";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
-    <div>
-      <section
-        id="home"
-        className="pt-32 pb-20 bg-[url('/assets/images/hero-bg.svg')] dark:bg-[url('/assets/images/hero-bg-dark.svg')] bg-cover bg-center"
-      >
-        <div className="container mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center gap-8">
-          {/* Left Text Content */}
-          <div className="md:w-1/2 animate-slide-left space-y-6">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold font-league-spartan leading-tight text-gray-800 dark:text-white">
-              Learn to Code.
-              <br />
-              Build Cool Stuff.
-              <br />
-              <span className="text-kappel dark:text-teal-400">Get Hired.</span>
-            </h1>
-            <p className="text-lg text-gray-800 dark:text-gray-100">
-              Bite-sized tutorials, real projects, and expert guidance — all in
-              one platform. From basics to building full-stack apps , we've got
-              your back.
-            </p>
+    <section className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 px-6">
+      <div className="max-w-4xl mx-auto text-center">
+        {/* Simple Badge */}
+        {/* <div className="inline-block px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 text-sm font-medium rounded-full mb-12">
+          AI-Powered Learning
+        </div> */}
 
-            <div>
-              <span className="inline-flex items-center gap-2 bg-kappel dark:bg-teal-600 text-white px-6 py-3 rounded-md font-medium hover:bg-opacity-90 transition-all duration-300 hover:scale-105 shadow-lg text-lg">
-                Start Your First Lesson Now – It's 100% Free!
-              </span>
-            </div>
-          </div>
+        {/* Main Headline */}
+        <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-8 leading-tight">
+          Learn to Code Smarter,
+          <br />
+          <span className="text-teal-600 dark:text-teal-400">
+            Master Skills{" "}
+          </span>
+          and Ace Your Interviews
+        </h1>
 
-          {/* Right Banner Images */}
-          <div className="md:w-1/2 grid grid-cols-2 gap-6 relative animate-slide-right">
-            <div className="rounded-tr-[70px] rounded-bl-[110px] overflow-hidden transform hover:scale-105 transition duration-500">
-              <img
-                src="/assets/images/hero-banner-1.jpg"
-                alt="Hero banner"
-                className="w-4/5 h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-            <div className="rounded-tl-[50px] rounded-br-[90px] overflow-hidden mt-16 transform hover:scale-105 transition duration-500">
-              <img
-                src="/assets/images/hero-banner-2.jpg"
-                alt="Hero banner"
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </div>
-            {/* <img
-              src="/assets/images/hero-shape-1.svg"
-              alt=""
-              className="absolute -bottom-10 -left-10 z-10 hidden lg:block animate-fade-in dark:opacity-50"
-            /> */}
-            <img
-              src="/assets/images/hero-shape-2.png"
-              alt=""
-              className="absolute -top-20 -right-20 z-0 hidden lg:block animate-fade-in delay-200 dark:opacity-50"
-              loading="lazy"
-            />
-          </div>
+        {/* Description */}
+        <p className="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
+          Gain confidence with structured lessons, real-world projects, and
+          AI-powered feedback. Build job-ready coding skills that prepare you
+          for interviews at top companies.
+        </p>
+
+        {/* CTA Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20">
+          <Link
+            to="/course"
+            className="px-8 py-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-lg rounded-lg transition-colors duration-200 flex items-center gap-2"
+          >
+            Start Learning Free
+            <ArrowRight className="w-5 h-5" />
+          </Link>
+
+          <Link
+            to="/course"
+            className="px-8 py-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-lg rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+          >
+            Browse Courses
+          </Link>
         </div>
-      </section>
 
-      {/* Animation Styles */}
-      <style>{`
-        .animate-slide-left {
-          animation: slideLeft 1s ease-out;
-        }
-
-        .animate-slide-right {
-          animation: slideRight 1s ease-out;
-        }
-
-        .animate-fade-in {
-          animation: fadeIn 1.2s ease-out forwards;
-        }
-
-        @keyframes slideLeft {
-          from { opacity: 0; transform: translateX(-50px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes slideRight {
-          from { opacity: 0; transform: translateX(50px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-      `}</style>
-    </div>
+        {/* Simple Stats */}
+        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+          <div>
+            <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+              50+
+            </div>
+            <div className="text-gray-600 dark:text-gray-400">Languages</div>
+          </div>
+          <div>
+            <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+              1,000+
+            </div>
+            <div className="text-gray-600 dark:text-gray-400">Lessons</div>
+          </div>
+          <div>
+            <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+              24/7
+            </div>
+            <div className="text-gray-600 dark:text-gray-400">Support</div>
+          </div>
+        </div> */}
+      </div>
+    </section>
   );
 };
 

@@ -103,7 +103,7 @@ const About = () => {
       {/* Breadcrumb Navigation */}
       <Breadcrumb />
 
-      <section className="pt-32 pb-20 px-4 min-h-[80vh] flex items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
+        <section className="pt-32 pb-20 px-4 min-h-[80vh] flex items-center justify-center bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
         <div className="max-w-5xl w-full mx-auto flex flex-col md:flex-row items-center md:items-start gap-10">
           <div className="md:w-2/3">
             <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 dark:text-white mb-6 leading-tight">

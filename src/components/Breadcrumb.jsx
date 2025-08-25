@@ -19,10 +19,19 @@ const Breadcrumb = ({ items = [] }) => {
     let currentPath = "";
     pathSegments.forEach((segment, index) => {
       currentPath += `/${segment}`;
-      const name = segment
-        .split("-")
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(" ");
+
+      // Custom name mapping for specific routes
+      let name;
+      if (segment === "contact") {
+        name = "Support";
+      } else if (segment === "support") {
+        name = "Support";
+      } else {
+        name = segment
+          .split("-")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ");
+      }
 
       breadcrumbs.push({
         name,
@@ -37,7 +46,7 @@ const Breadcrumb = ({ items = [] }) => {
   const breadcrumbItems = generateBreadcrumbs();
 
   return (
-    <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 py-3 mt-4 px-4">
+    <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 py-3 pt-8 sm:pt-12 px-4">
       <div className="container mx-auto">
         <ol className="flex items-center space-x-2 text-sm">
           {breadcrumbItems.map((item, index) => (

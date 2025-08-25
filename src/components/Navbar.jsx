@@ -74,8 +74,9 @@ const Navbar = ({ tutorials }) => {
 
   const navLinks = [
     // { name: "Home", path: "/" }, // Removed Home
+    { name: "Course", path: "/course" },
     { name: "About", path: "/about" },
-    { name: "Contact", path: "/contact" },
+    { name: "Support", path: "/support" },
   ];
 
   return (
@@ -119,17 +120,17 @@ const Navbar = ({ tutorials }) => {
               onClick={() => setIsInterviewPrepOpen((open) => !open)}
               type="button"
             >
-              Interview Preparation <ChevronDown size={16} />
+              Product <ChevronDown size={16} />
             </button>
             {isInterviewPrepOpen && (
-              <div className="absolute top-full left-0 mt-2 w-[800px] bg-white dark:bg-gray-700 rounded-md shadow-lg py-6 z-20">
-                <div className="grid grid-cols-3 gap-4 px-6">
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[800px] bg-white dark:bg-gray-700 rounded-md shadow-lg py-6 z-20">
+                <div className="grid grid-cols-3 gap-6 px-6">
                   <Link
                     to="/quiz"
                     className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
                   >
-                    <FaQuestionCircle className="w-6 h-6" />
+                    <FaQuestionCircle className="w-6 h-6 text-teal-600 dark:text-teal-400" />
                     <span className="text-[16px] font-semibold">Quiz</span>
                     <span className="text-xs text-gray-700 dark:text-gray-400">
                       Test your knowledge
@@ -140,7 +141,7 @@ const Navbar = ({ tutorials }) => {
                     className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
                   >
-                    <FaClipboardList className="w-6 h-6" />
+                    <FaClipboardList className="w-6 h-6 text-teal-600 dark:text-teal-400" />
                     <span className="text-[16px] font-semibold">
                       Interview Questions
                     </span>
@@ -153,7 +154,7 @@ const Navbar = ({ tutorials }) => {
                     className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
                   >
-                    <FaChalkboardTeacher className="w-6 h-6" />
+                    <FaChalkboardTeacher className="w-6 h-6 text-teal-600 dark:text-teal-400" />
                     <span className="text-[16px] font-semibold">
                       Whiteboard
                     </span>
@@ -166,7 +167,7 @@ const Navbar = ({ tutorials }) => {
                     className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
                   >
-                    <FaUser className="w-6 h-6" />
+                    <FaUser className="w-6 h-6 text-teal-600 dark:text-teal-400" />
                     <span className="text-[16px] font-semibold">
                       Mock Interviews
                     </span>
@@ -179,7 +180,7 @@ const Navbar = ({ tutorials }) => {
                     className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
                   >
-                    <FaCode className="w-6 h-6" />
+                    <FaCode className="w-6 h-6 text-teal-600 dark:text-teal-400" />
                     <span className="text-[16px] font-semibold">
                       Coding Practice
                     </span>
@@ -194,12 +195,23 @@ const Navbar = ({ tutorials }) => {
                     className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
                   >
-                    <FaBlog className="w-6 h-6" />
+                    <FaBlog className="w-6 h-6 text-teal-600 dark:text-teal-400" />
                     <span className="text-[16px] font-semibold">Blog</span>
                     <span className="text-xs text-gray-700 dark:text-gray-400">
                       Read latest insights
                     </span>
                   </a>
+                  <Link
+                    to="/projects"
+                    className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
+                    onClick={closeMenus}
+                  >
+                    <FaFileAlt className="w-6 h-6 text-teal-600 dark:text-teal-400" />
+                    <span className="text-[16px] font-semibold">Projects</span>
+                    <span className="text-xs text-gray-700 dark:text-gray-400">
+                      Build real applications
+                    </span>
+                  </Link>
                 </div>
               </div>
             )}
@@ -226,13 +238,7 @@ const Navbar = ({ tutorials }) => {
               </Link>
             )
           )}
-          {/* Projects Link */}
-          <Link
-            to="/projects"
-            className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors whitespace-nowrap"
-          >
-            Projects
-          </Link>
+
           {/* Compilers Dropdown */}
           <div className="relative" ref={compilersRef}>
             <button
