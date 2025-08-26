@@ -228,6 +228,11 @@ const InterviewQuestionDetailPage = () => {
             <span className="text-gray-600 dark:text-gray-400 font-medium">
               {question.categoryName}
             </span>
+            {question.company && (
+              <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-sm font-medium">
+                {question.company}
+              </span>
+            )}
           </div>
 
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">

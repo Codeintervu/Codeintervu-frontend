@@ -15,6 +15,7 @@ const InterviewQuestionsPage = () => {
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState("all");
+  const [selectedCompany, setSelectedCompany] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +27,9 @@ const InterviewQuestionsPage = () => {
   });
   const [categoryCounts, setCategoryCounts] = useState({});
   const [difficultyCounts, setDifficultyCounts] = useState({});
+  const [companyCounts, setCompanyCounts] = useState({});
   const [categories, setCategories] = useState([]);
+  const [companies, setCompanies] = useState([]);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,7 +65,7 @@ const InterviewQuestionsPage = () => {
 
   useEffect(() => {
     setCurrentPage(1); // Reset to first page when filters change
-  }, [selectedCategory, selectedDifficulty, searchQuery]);
+  }, [selectedCategory, selectedDifficulty, selectedCompany, searchQuery]);
 
   useEffect(() => {
     fetchQuestions();
@@ -70,6 +73,7 @@ const InterviewQuestionsPage = () => {
   }, [
     selectedCategory,
     selectedDifficulty,
+    selectedCompany,
     searchQuery,
     currentPage,
     categories,
@@ -115,6 +119,7 @@ const InterviewQuestionsPage = () => {
         params.append("category", selectedCategory);
       if (selectedDifficulty !== "all")
         params.append("difficulty", selectedDifficulty);
+      if (selectedCompany !== "all") params.append("company", selectedCompany);
 
       // Add pagination parameters
       params.append("page", currentPage.toString());
@@ -166,6 +171,12 @@ const InterviewQuestionsPage = () => {
         }
       });
       setDifficultyCounts(updatedDifficultyCounts);
+
+      // Update company counts and populate companies list
+      if (statsData.byCompany) {
+        setCompanyCounts(statsData.byCompany);
+        setCompanies(Object.keys(statsData.byCompany).sort());
+      }
     } catch (error) {
       console.error("Error fetching stats:", error);
     }
@@ -225,10 +236,12 @@ const InterviewQuestionsPage = () => {
 
   const handleShare = (question) => {
     const shareText = `${question.categoryName} Interview Question: ${question.question}`;
-    const shareUrl = `${window.location.origin}/interview-questions/${question.category}/${question.question
+    const shareUrl = `${window.location.origin}/interview-questions/${
+      question.category
+    }/${question.question
       .toLowerCase()
-      .replace(/[^a-z0-9\s]/g, '')
-      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9\s]/g, "")
+      .replace(/\s+/g, "-")
       .substring(0, 50)}`;
 
     if (navigator.share) {
@@ -394,6 +407,23 @@ const InterviewQuestionsPage = () => {
                 ))}
               </select>
             </div>
+
+            {/* Company Filter */}
+            <div className="flex items-center gap-2">
+              <FaFilter className="text-gray-400" />
+              <select
+                value={selectedCompany}
+                onChange={(e) => setSelectedCompany(e.target.value)}
+                className="px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+              >
+                <option value="all">All Companies</option>
+                {companies.map((company) => (
+                  <option key={company} value={company}>
+                    {company} ({companyCounts[company] || 0})
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         </div>
 
@@ -502,6 +532,11 @@ const InterviewQuestionsPage = () => {
                           <span className="text-sm text-gray-500 dark:text-gray-400">
                             {question.categoryName}
                           </span>
+                          {question.company && (
+                            <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-xs font-medium">
+                              {question.company}
+                            </span>
+                          )}
                           {isBookmarked(question._id) && (
                             <span className="flex items-center gap-1 text-xs text-yellow-600 dark:text-yellow-400">
                               <FaBookmarkSolid className="w-3 h-3" />
