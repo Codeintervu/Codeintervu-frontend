@@ -228,10 +228,17 @@ const InterviewQuestionDetailPage = () => {
             <span className="text-gray-600 dark:text-gray-400 font-medium">
               {question.categoryName}
             </span>
-            {question.company && (
-              <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-sm font-medium">
-                {question.company}
-              </span>
+            {question.companies && question.companies.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {question.companies.map((company, index) => (
+                  <span
+                    key={index}
+                    className="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-sm font-medium"
+                  >
+                    {company}
+                  </span>
+                ))}
+              </div>
             )}
           </div>
 

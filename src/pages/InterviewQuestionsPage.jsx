@@ -532,11 +532,19 @@ const InterviewQuestionsPage = () => {
                           <span className="text-sm text-gray-500 dark:text-gray-400">
                             {question.categoryName}
                           </span>
-                          {question.company && (
-                            <span className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-xs font-medium">
-                              {question.company}
-                            </span>
-                          )}
+                          {question.companies &&
+                            question.companies.length > 0 && (
+                              <div className="flex flex-wrap gap-1">
+                                {question.companies.map((company, index) => (
+                                  <span
+                                    key={index}
+                                    className="px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 rounded-full text-xs font-medium"
+                                  >
+                                    {company}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
                           {isBookmarked(question._id) && (
                             <span className="flex items-center gap-1 text-xs text-yellow-600 dark:text-yellow-400">
                               <FaBookmarkSolid className="w-3 h-3" />
