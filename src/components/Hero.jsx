@@ -1,8 +1,19 @@
-import { ArrowRight } from "lucide-react";
-import React from "react";
+import { ArrowRight, Play, BookOpen } from "lucide-react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import AuthModals from "./AuthModals";
 
 const Hero = () => {
+  const { user } = useAuth();
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  const handleGetStarted = () => {
+    if (!user) {
+      setIsAuthModalOpen(true);
+    }
+  };
+
   return (
     <section className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 px-6">
       <div className="max-w-4xl mx-auto text-center">
@@ -30,20 +41,44 @@ const Hero = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20">
-          <Link
-            to="/course"
-            className="px-8 py-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-lg rounded-lg transition-colors duration-200 flex items-center gap-2"
-          >
-            Start Learning Free
-            <ArrowRight className="w-5 h-5" />
-          </Link>
+          {user ? (
+            // Logged in user - show learning options
+            <>
+              <Link
+                to="/course"
+                className="px-8 py-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-lg rounded-lg transition-colors duration-200 flex items-center gap-2"
+              >
+                Continue Learning
+                <Play className="w-5 h-5" />
+              </Link>
 
-          <Link
-            to="/course"
-            className="px-8 py-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-lg rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
-          >
-            Browse Courses
-          </Link>
+              <Link
+                to="/projects"
+                className="px-8 py-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-lg rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 flex items-center gap-2"
+              >
+                View Projects
+                <BookOpen className="w-5 h-5" />
+              </Link>
+            </>
+          ) : (
+            // Not logged in - show registration options
+            <>
+              <button
+                onClick={handleGetStarted}
+                className="px-8 py-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-lg rounded-lg transition-colors duration-200 flex items-center gap-2"
+              >
+                Start Learning Free
+                <ArrowRight className="w-5 h-5" />
+              </button>
+
+              <Link
+                to="/course"
+                className="px-8 py-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-lg rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+              >
+                Browse Courses
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Simple Stats */}
@@ -68,6 +103,13 @@ const Hero = () => {
           </div>
         </div> */}
       </div>
+
+      {/* Authentication Modal */}
+      <AuthModals
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        initialMode="login"
+      />
     </section>
   );
 };

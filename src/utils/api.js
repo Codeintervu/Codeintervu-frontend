@@ -1,8 +1,9 @@
 import axios from "axios";
 
 // Backend URL configuration
-const baseURL = "https://codeintervu-backend.onrender.com/api";
-// const baseURL = "http://localhost:5000/api";
+const baseURL =
+  import.meta.env.VITE_API_BASE_URL ||
+  "https://codeintervu-backend.onrender.com/api";
 
 const api = axios.create({
   baseURL: baseURL,
@@ -15,7 +16,7 @@ const api = axios.create({
 // Request interceptor to add auth token if available
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("adminToken");
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -36,9 +37,13 @@ api.interceptors.response.use(
 
     // Handle specific error cases
     if (error.response?.status === 401) {
-      // Unauthorized - clear token and redirect to login
-      localStorage.removeItem("adminToken");
-      window.location.href = "/admin/login";
+      // Don't redirect for profile update requests
+      const isProfileUpdate = error.config?.url?.includes("/auth/profile");
+      if (!isProfileUpdate) {
+        // Unauthorized - clear token and redirect to login
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+      }
     }
 
     return Promise.reject(error);

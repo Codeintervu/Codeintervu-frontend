@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "motion/react";
 import { Helmet } from "react-helmet";
+import { useNavigate } from "react-router-dom";
 import {
   BookOpen,
   Clock,
@@ -23,6 +24,7 @@ import Footer from "../components/Footer";
 
 const Course = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const navigate = useNavigate();
 
   const courseOptions = [
     {
@@ -452,7 +454,10 @@ const Course = () => {
                           /course
                         </span>
                       </div>
-                      <button className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2">
+                      <button
+                        onClick={() => navigate(`/course/${course.value}`)}
+                        className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
+                      >
                         <Play className="w-4 h-4" />
                         Enroll Now
                       </button>

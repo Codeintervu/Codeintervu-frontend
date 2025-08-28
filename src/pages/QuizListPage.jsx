@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../utils/api";
 import { Helmet } from "react-helmet";
 import Breadcrumb from "../components/Breadcrumb";
+import ProgressDashboard from "../components/ProgressDashboard";
+import { BarChart3 } from "lucide-react";
 
 const SECTION_SIZE = 5;
 
@@ -22,6 +24,7 @@ const QuizListPage = () => {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [questionCounts, setQuestionCounts] = useState({});
+  const [showProgressDashboard, setShowProgressDashboard] = useState(false);
 
   useEffect(() => {
     const fetchQuizzes = async () => {
@@ -72,9 +75,16 @@ const QuizListPage = () => {
       <Breadcrumb />
 
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8 text-center dark:text-white">
-          Quizzes
-        </h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold dark:text-white">Quizzes</h1>
+          <button
+            onClick={() => setShowProgressDashboard(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg transition-colors"
+          >
+            <BarChart3 className="w-4 h-4" />
+            View Progress
+          </button>
+        </div>
         {loading ? (
           <div className="text-center">Loading...</div>
         ) : (
@@ -123,6 +133,13 @@ const QuizListPage = () => {
           </div>
         )}
       </div>
+
+      {/* Progress Dashboard Modal (compact) */}
+      <ProgressDashboard
+        variant="compact"
+        isOpen={showProgressDashboard}
+        onClose={() => setShowProgressDashboard(false)}
+      />
     </>
   );
 };

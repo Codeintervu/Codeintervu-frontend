@@ -2,6 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X, Sun, Moon, ChevronDown } from "lucide-react";
 import { useTheme } from "../context/ThemeContext";
+import { useAuth } from "../context/AuthContext";
+import AuthModals from "./AuthModals";
+import toast from "react-hot-toast";
 import api from "../utils/api";
 import { formatCategoryPath } from "../utils/pathUtils";
 import {
@@ -20,9 +23,14 @@ const Navbar = ({ tutorials }) => {
   const [isTutorialsOpen, setIsTutorialsOpen] = useState(false);
   const [isCompilersOpen, setIsCompilersOpen] = useState(false);
   const [isInterviewPrepOpen, setIsInterviewPrepOpen] = useState(false); // NEW
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState("login");
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const compilersRef = useRef(null);
   const interviewPrepRef = useRef(null); // NEW
+  const userDropdownRef = useRef(null);
   const { isDarkMode, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
   const [categories, setCategories] = useState([]);
   const closeTimeout = React.useRef(null);
 
@@ -53,8 +61,14 @@ const Navbar = ({ tutorials }) => {
       ) {
         setIsInterviewPrepOpen(false);
       }
+      if (
+        userDropdownRef.current &&
+        !userDropdownRef.current.contains(event.target)
+      ) {
+        setIsUserDropdownOpen(false);
+      }
     };
-    if (isCompilersOpen || isInterviewPrepOpen) {
+    if (isCompilersOpen || isInterviewPrepOpen || isUserDropdownOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -62,7 +76,7 @@ const Navbar = ({ tutorials }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isCompilersOpen, isInterviewPrepOpen]);
+  }, [isCompilersOpen, isInterviewPrepOpen, isUserDropdownOpen]);
 
   const toggleNav = () => setIsOpen(!isOpen);
 
@@ -70,6 +84,17 @@ const Navbar = ({ tutorials }) => {
     setIsOpen(false);
     setIsTutorialsOpen(false);
     setIsInterviewPrepOpen(false);
+    setIsUserDropdownOpen(false);
+  };
+
+  const handleAuthClick = (mode) => {
+    setAuthMode(mode);
+    setIsAuthModalOpen(true);
+  };
+
+  const handleLogout = () => {
+    logout();
+    toast.success("Logged out successfully");
   };
 
   const navLinks = [
@@ -97,7 +122,7 @@ const Navbar = ({ tutorials }) => {
             onClick={closeMenus}
           >
             <img
-              src="/assets/images/logo.png"
+              src="/assets/images/Logo.svg"
               alt="CodeIntervu Logo"
               className="h-8 w-8 md:h-10 md:w-10 object-contain"
               style={{ borderRadius: "50%" }}
@@ -291,8 +316,65 @@ const Navbar = ({ tutorials }) => {
           </div>
         </nav>
 
-        {/* Right Section: Theme Toggle + Mobile Theme Toggle */}
+        {/* Right Section: Auth + Theme Toggle */}
         <div className="flex items-center gap-4 flex-shrink-0">
+          {/* Authentication Section */}
+          {user ? (
+            <div className="relative" ref={userDropdownRef}>
+              <button
+                onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+                className="hidden md:flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 transition-colors rounded-md hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                <div className="w-8 h-8 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
+                  <FaUser className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                </div>
+                <span>{user.fullName}</span>
+                <ChevronDown
+                  size={16}
+                  className={`transition-transform ${
+                    isUserDropdownOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {isUserDropdownOpen && (
+                <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg py-2 z-20 border border-gray-200 dark:border-gray-600">
+                  <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-600">
+                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                      {user.fullName}
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      {user.email}
+                    </p>
+                  </div>
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                    onClick={() => setIsUserDropdownOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      setIsUserDropdownOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => handleAuthClick("login")}
+              className="hidden md:block px-4 py-2 text-sm font-medium bg-teal-600 hover:bg-teal-700 text-white rounded-md transition-colors"
+            >
+              Get Started
+            </button>
+          )}
+
           {/* Mobile Theme Toggle */}
           <button
             className="md:hidden p-2 text-gray-700 dark:text-gray-200"
@@ -409,6 +491,55 @@ const Navbar = ({ tutorials }) => {
               </div>
             </div>
 
+            {/* Authentication Section for Mobile */}
+            <div className="text-gray-700 dark:text-gray-200">
+              <p className="font-bold mb-2">Account</p>
+              <div className="flex flex-col gap-2 pl-4">
+                {user ? (
+                  <>
+                    <div className="flex items-center gap-2 py-1">
+                      <div className="w-6 h-6 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
+                        <FaUser className="w-3 h-3 text-teal-600 dark:text-teal-400" />
+                      </div>
+                      <span className="text-sm text-gray-700 dark:text-gray-200">
+                        {user.fullName}
+                      </span>
+                    </div>
+                    <Link
+                      to="/profile"
+                      onClick={closeMenus}
+                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 text-left flex items-center gap-2"
+                    >
+                      <span className="w-4"></span>
+                      Profile
+                    </Link>
+                    <button
+                      onClick={handleLogout}
+                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 text-left flex items-center gap-2"
+                    >
+                      <span className="w-4"></span>
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => handleAuthClick("login")}
+                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 text-left"
+                    >
+                      Sign In
+                    </button>
+                    <button
+                      onClick={() => handleAuthClick("register")}
+                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 text-left"
+                    >
+                      Create Account
+                    </button>
+                  </>
+                )}
+              </div>
+            </div>
+
             {/* Interview Preparation Section for Mobile */}
             <div className="text-gray-700 dark:text-gray-200">
               <p className="font-bold mb-2">Interview Preparation</p>
@@ -469,6 +600,13 @@ const Navbar = ({ tutorials }) => {
           </nav>
         </div>
       )}
+
+      {/* Authentication Modals */}
+      <AuthModals
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        initialMode={authMode}
+      />
     </header>
   );
 };

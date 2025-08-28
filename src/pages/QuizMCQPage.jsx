@@ -1,6 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import api from "../utils/api";
+import progressTracker from "../utils/progressTracker";
+import ProgressDashboard from "../components/ProgressDashboard";
+import { useAuth } from "../context/AuthContext";
+import Breadcrumb from "../components/Breadcrumb";
+import BookmarkButton from "../components/BookmarkButton";
+import { BarChart3 } from "lucide-react";
+import {
+  updateResume as updateResumeApi,
+  getResume as getResumeApi,
+  saveSectionResult as saveSectionResultApi,
+} from "../utils/progressApi";
 
 const SECTION_SIZE = 5;
 
@@ -24,6 +35,11 @@ const QuizMCQPage = () => {
   const [reviewIdx, setReviewIdx] = useState(0);
   const [sectionReviewOpen, setSectionReviewOpen] = useState(false);
   const [sectionReviewIdx, setSectionReviewIdx] = useState(0);
+  const [quizStartTime, setQuizStartTime] = useState(null);
+  const [showProgressDashboard, setShowProgressDashboard] = useState(false);
+  const savedSectionsRef = useRef(new Set());
+  const { isAuthenticated, user } = useAuth();
+  const userId = user?.id || user?._id || null;
 
   // Split questions into sections
   const sections = [];
@@ -44,6 +60,41 @@ const QuizMCQPage = () => {
           `/quiz/categories/${quizData._id}/questions`
         );
         setQuestions(Array.isArray(questionsData) ? questionsData : []);
+
+        // Start tracking quiz progress
+        setQuizStartTime(Date.now());
+
+        // Initialize/resume progress
+        if (isAuthenticated) {
+          // Try server resume first
+          try {
+            const res = await getResumeApi(quizData._id);
+            if (res) {
+              setSectionIdx(res.currentSection || 0);
+              setCurrent(res.currentQuestion || 0);
+            }
+          } catch (_) {}
+          // Also seed local persistent cache
+          progressTracker.savePersistentProgress(userId, quizData._id, {
+            quizName: quizData.name,
+            currentSection: 0,
+            currentQuestion: 0,
+            totalQuestions: questionsData.length,
+            timeSpent: 0,
+            score: 0,
+          });
+        } else {
+          // Guest: session-only progress
+          progressTracker.saveCurrentQuizProgress({
+            quizId: quizData._id,
+            quizName: quizData.name,
+            currentSection: 0,
+            currentQuestion: 0,
+            totalQuestions: questionsData.length,
+            timeSpent: 0,
+            score: 0,
+          });
+        }
       } catch (err) {
         setError("Failed to load quiz or MCQs for this quiz category.");
       } finally {
@@ -51,7 +102,7 @@ const QuizMCQPage = () => {
       }
     }
     fetchQuizAndQuestions();
-  }, [slug]);
+  }, [slug, isAuthenticated, userId]);
 
   useEffect(() => {
     // Reset section state when section changes
@@ -63,6 +114,62 @@ const QuizMCQPage = () => {
     setShowReview(false);
     setShowHints({});
   }, [sectionIdx]);
+
+  // Save section-level result when a section is completed so analytics shows immediately
+  useEffect(() => {
+    if (!sectionCompleted) return;
+    if (!quiz) return;
+    if (!isAuthenticated) return;
+    if (savedSectionsRef.current.has(sectionIdx)) return;
+
+    const right = sectionAnswers.filter((a) => a && a.correct).length;
+    const total = sectionAnswers.length;
+    const accuracy = total > 0 ? Math.round((right / total) * 100) : 0;
+    const timeSpent = quizStartTime
+      ? Math.floor((Date.now() - quizStartTime) / 1000)
+      : 0;
+
+    progressTracker.saveQuizResult({
+      quizId: quiz._id,
+      quizName: `${quiz.name} - Section ${sectionIdx + 1}`,
+      score: accuracy,
+      totalQuestions: total,
+      correctAnswers: right,
+      timeSpent: timeSpent,
+      accuracy: accuracy,
+      type: "section",
+      sectionIndex: sectionIdx,
+    });
+    progressTracker.updateStudyStats({
+      quizId: quiz._id,
+      quizName: `${quiz.name} - Section ${sectionIdx + 1}`,
+      totalQuestions: total,
+      correctAnswers: right,
+      timeSpent: timeSpent,
+      accuracy: accuracy,
+    });
+
+    // Persist current position for resume
+    progressTracker.updatePersistentProgress(userId, quiz._id, {
+      currentSection: sectionIdx,
+      currentQuestion: current,
+      timeSpent,
+    });
+
+    // Save to server
+    saveSectionResultApi({
+      quizId: quiz._id,
+      quizName: quiz.name,
+      sectionIndex: sectionIdx,
+      score: accuracy,
+      totalQuestions: total,
+      correctAnswers: right,
+      timeSpent: timeSpent,
+      accuracy: accuracy,
+    }).catch(() => {});
+
+    savedSectionsRef.current.add(sectionIdx);
+  }, [sectionCompleted, sectionAnswers, sectionIdx, quiz, quizStartTime]);
 
   useEffect(() => {
     // Reset selection and feedback when question changes
@@ -88,6 +195,28 @@ const QuizMCQPage = () => {
     const isCorrect = selected === q.correctOption;
     if (sectionAnswers.length === current) {
       setSectionAnswers([...sectionAnswers, { selected, correct: isCorrect }]);
+    }
+
+    // Update progress tracking
+    const timeSpent = Math.floor((Date.now() - quizStartTime) / 1000);
+    if (isAuthenticated) {
+      updateResumeApi({
+        quizId: quiz?._id,
+        currentSection: sectionIdx,
+        currentQuestion: current,
+        timeSpent,
+      }).catch(() => {});
+      progressTracker.updatePersistentProgress(userId, quiz?._id, {
+        currentSection: sectionIdx,
+        currentQuestion: current,
+        timeSpent,
+      });
+    } else {
+      progressTracker.updateCurrentQuizProgress({
+        currentSection: sectionIdx,
+        currentQuestion: current,
+        timeSpent,
+      });
     }
   };
 
@@ -163,14 +292,17 @@ const QuizMCQPage = () => {
 
   if (questions.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-6 text-center dark:text-white">
-          Quiz MCQs
-        </h1>
-        <div className="text-center text-gray-500">
-          No MCQs found for this quiz category.
+      <>
+        <Breadcrumb />
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-2xl font-bold mb-6 text-center dark:text-white">
+            Quiz MCQs
+          </h1>
+          <div className="text-center text-gray-500">
+            No MCQs found for this quiz category.
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -275,14 +407,38 @@ const QuizMCQPage = () => {
     const wrong = answers.filter((a) => a && !a.correct).length;
     const accuracy =
       questions.length > 0 ? Math.round((right / questions.length) * 100) : 0;
+    const timeSpent = Math.floor((Date.now() - quizStartTime) / 1000);
+
     let message = "Good job!";
     if (accuracy === 100) message = "🏆 Perfect! You're a quiz master!";
     else if (accuracy >= 80) message = "🎉 Excellent work!";
     else if (accuracy >= 60) message = "👏 Nice effort!";
     else message = "Keep practicing!";
+
+    // Save quiz result to progress tracker
+    const quizResult = {
+      quizId: quiz._id,
+      quizName: quiz.name,
+      score: accuracy,
+      totalQuestions: questions.length,
+      correctAnswers: right,
+      timeSpent: timeSpent,
+      accuracy: accuracy,
+    };
+
+    if (isAuthenticated) {
+      progressTracker.saveQuizResult(quizResult);
+      progressTracker.updateStudyStats(quizResult);
+      progressTracker.clearCurrentQuizProgress();
+      // Persist quiz completion state
+      progressTracker.updatePersistentProgress("authed", quiz._id, {
+        currentSection: sections.length - 1,
+        currentQuestion: (sections[sections.length - 1] || []).length - 1,
+      });
+    }
     return (
       <div className="container mx-auto px-4 py-12 flex flex-col items-center">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-center text-white flex items-center justify-center gap-2">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-center text-gray-900 dark:text-white flex items-center justify-center gap-2">
           {accuracy === 100 && (
             <span className="text-yellow-400 text-3xl">🏆</span>
           )}
@@ -330,6 +486,12 @@ const QuizMCQPage = () => {
           onClick={() => setShowFullReview(true)}
         >
           Review Quiz
+        </button>
+        <button
+          className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-2 rounded shadow font-semibold mt-4"
+          onClick={() => setShowProgressDashboard(true)}
+        >
+          View Progress Dashboard
         </button>
       </div>
     );
@@ -448,7 +610,7 @@ const QuizMCQPage = () => {
     else message = "Keep practicing!";
     return (
       <div className="container mx-auto px-4 py-12 flex flex-col items-center">
-        <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-center text-white flex items-center justify-center gap-2">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-4 text-center text-gray-900 dark:text-white flex items-center justify-center gap-2">
           {accuracy === 100 && (
             <span className="text-yellow-400 text-3xl">🏆</span>
           )}
@@ -517,96 +679,121 @@ const QuizMCQPage = () => {
   const prevAnswer = hasAnswered ? sectionAnswers[current] : null;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6 text-center dark:text-white">
-        Quiz MCQs
-      </h1>
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 max-w-xl mx-auto">
-        <div className="font-semibold mb-2 dark:text-white">
-          Section {sectionIdx + 1} &mdash; Q{current + 1}:{" "}
-          <span className="whitespace-pre-line">{q.question}</span>
+    <>
+      <Breadcrumb />
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold dark:text-white">Quiz MCQs</h1>
+          <button
+            onClick={() => setShowProgressDashboard(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white rounded-lg transition-colors"
+          >
+            <BarChart3 className="w-4 h-4" />
+            View Progress
+          </button>
         </div>
-        {q.hint && (
-          <div className="mb-3">
-            <button
-              onClick={() => toggleHint(q._id)}
-              className="text-blue-600 hover:text-blue-800 text-sm font-medium dark:text-blue-400 dark:hover:text-blue-300"
-            >
-              {showHints[q._id] ? "Hide Hint" : "Show Hint"}
-            </button>
-            {showHints[q._id] && (
-              <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md dark:bg-blue-900 dark:border-blue-700">
-                <span className="text-blue-800 text-sm dark:text-blue-200">
-                  💡 Hint: {q.hint}
-                </span>
-              </div>
-            )}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 max-w-xl mx-auto">
+          <div className="flex justify-between items-start mb-2">
+            <div className="font-semibold dark:text-white flex-1">
+              Section {sectionIdx + 1} &mdash; Q{current + 1}:{" "}
+              <span className="whitespace-pre-line">{q.question}</span>
+            </div>
+            <BookmarkButton
+              question={q}
+              quizId={quiz._id}
+              quizName={quiz.name}
+            />
           </div>
-        )}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
-        >
-          <ul className="space-y-2 mb-4">
-            {q.options.map((opt, i) => (
-              <li key={i} className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="option"
-                  id={`option-${i}`}
-                  value={i}
-                  checked={selected === i}
-                  disabled={showFeedback || hasAnswered}
-                  onChange={() => handleSelect(i)}
-                  className="accent-blue-600"
-                />
-                <label
-                  htmlFor={`option-${i}`}
-                  className={
-                    showFeedback || hasAnswered
-                      ? i === q.correctOption
-                        ? "font-bold text-green-600 dark:text-green-400"
-                        : selected === i && selected !== q.correctOption
-                        ? "font-bold text-red-600 dark:text-red-400"
-                        : "text-gray-700 dark:text-gray-200"
-                      : "text-gray-700 dark:text-gray-200"
-                  }
-                >
-                  {String.fromCharCode(65 + i)}. {renderOption(opt)}
-                </label>
-              </li>
-            ))}
-          </ul>
-          {!showFeedback && !hasAnswered && (
-            <button
-              type="submit"
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow"
-              disabled={selected === null}
-            >
-              Submit
-            </button>
+          {q.hint && (
+            <div className="mb-3">
+              <button
+                onClick={() => toggleHint(q._id)}
+                className="text-blue-600 hover:text-blue-800 text-sm font-medium dark:text-blue-400 dark:hover:text-blue-300"
+              >
+                {showHints[q._id] ? "Hide Hint" : "Show Hint"}
+              </button>
+              {showHints[q._id] && (
+                <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-md dark:bg-blue-900 dark:border-blue-700">
+                  <span className="text-blue-800 text-sm dark:text-blue-200">
+                    💡 Hint: {q.hint}
+                  </span>
+                </div>
+              )}
+            </div>
           )}
-        </form>
-        {(showFeedback || hasAnswered) && (
-          <div className="mt-4 flex justify-end">
-            <button
-              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow font-semibold"
-              onClick={handleNext}
-            >
-              {current === currentSection.length - 1
-                ? "Finish Section"
-                : "Next"}
-            </button>
-          </div>
-        )}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+          >
+            <ul className="space-y-2 mb-4">
+              {q.options.map((opt, i) => (
+                <li key={i} className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="option"
+                    id={`option-${i}`}
+                    value={i}
+                    checked={selected === i}
+                    disabled={showFeedback || hasAnswered}
+                    onChange={() => handleSelect(i)}
+                    className="accent-blue-600"
+                  />
+                  <label
+                    htmlFor={`option-${i}`}
+                    className={
+                      showFeedback || hasAnswered
+                        ? i === q.correctOption
+                          ? "font-bold text-green-600 dark:text-green-400"
+                          : selected === i && selected !== q.correctOption
+                          ? "font-bold text-red-600 dark:text-red-400"
+                          : "text-gray-700 dark:text-gray-200"
+                        : "text-gray-700 dark:text-gray-200"
+                    }
+                  >
+                    {String.fromCharCode(65 + i)}. {renderOption(opt)}
+                  </label>
+                </li>
+              ))}
+            </ul>
+            {!showFeedback && !hasAnswered && (
+              <button
+                type="submit"
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow"
+                disabled={selected === null}
+              >
+                Submit
+              </button>
+            )}
+          </form>
+          {(showFeedback || hasAnswered) && (
+            <div className="mt-4 flex justify-end">
+              <button
+                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow font-semibold"
+                onClick={handleNext}
+              >
+                {current === currentSection.length - 1
+                  ? "Finish Section"
+                  : "Next"}
+              </button>
+            </div>
+          )}
+        </div>
+        <div className="text-center text-sm text-gray-500 mt-4 dark:text-gray-300">
+          Section {sectionIdx + 1} &mdash; Question {current + 1} of{" "}
+          {currentSection.length}
+        </div>
+
+        {/* Progress Dashboard Modal (full per-quiz) */}
+        <ProgressDashboard
+          variant="full"
+          quizId={quiz?._id}
+          isOpen={showProgressDashboard}
+          onClose={() => setShowProgressDashboard(false)}
+        />
       </div>
-      <div className="text-center text-sm text-gray-500 mt-4 dark:text-gray-300">
-        Section {sectionIdx + 1} &mdash; Question {current + 1} of{" "}
-        {currentSection.length}
-      </div>
-    </div>
+    </>
   );
 };
 
