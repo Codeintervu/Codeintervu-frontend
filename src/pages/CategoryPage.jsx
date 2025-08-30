@@ -277,6 +277,8 @@ const CategoryPage = () => {
   const [error, setError] = useState(null);
   const [activeTutorial, setActiveTutorial] = useState(null);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [categoryAdImage, setCategoryAdImage] = useState(null);
+  const [topBannerAdImage, setTopBannerAdImage] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -299,6 +301,28 @@ const CategoryPage = () => {
           `/tutorials?category=${currentCategory._id}`
         );
         setTutorials(tutorialsRes.data);
+
+        // Fetch category ad image
+        try {
+          const adRes = await api.get(`/categories/${currentCategory._id}/ad`);
+          if (adRes.data && adRes.data.adImageUrl) {
+            setCategoryAdImage(adRes.data.adImageUrl);
+          }
+        } catch (adErr) {
+          // No ad image exists for this category, which is fine
+        }
+
+        // Fetch top banner ad image
+        try {
+          const topBannerRes = await api.get(
+            `/categories/${currentCategory._id}/top-banner-ad`
+          );
+          if (topBannerRes.data && topBannerRes.data.adImageUrl) {
+            setTopBannerAdImage(topBannerRes.data.adImageUrl);
+          }
+        } catch (topBannerErr) {
+          // No top banner ad image exists for this category, which is fine
+        }
       } catch (err) {
         setError("Failed to load tutorial data. Please try again.");
         console.error("Error fetching category page data:", err);
@@ -483,6 +507,20 @@ const CategoryPage = () => {
               </nav>
             </aside>
             <main className="w-full md:flex-1 max-w-4xl mx-auto px-4 min-w-0">
+              {/* Top Banner Ad - positioned at the top of main content area */}
+              {topBannerAdImage && (
+                <div className="mb-6">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4">
+                    <img
+                      src={topBannerAdImage}
+                      alt="Top Banner Advertisement"
+                      className="w-full h-auto max-h-[120px] object-contain rounded-lg"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              )}
+
               {activeTutorial ? (
                 <>
                   {/* Tutorial Navigation Bar (Top) */}
@@ -597,8 +635,27 @@ const CategoryPage = () => {
                 </div>
               )}
             </main>
-            <aside className="w-full md:w-64 order-3 md:order-none mt-8 md:mt-0 flex-shrink-0">
-              {/* Blank space for organic ad area, no visible content or border */}
+            <aside className="w-full md:w-[250px] order-3 md:order-none mt-8 md:mt-0 flex-shrink-0">
+              {/* Ad Space */}
+              {categoryAdImage ? (
+                <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 h-full">
+                  <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
+                    Advertisement
+                  </h3>
+                  <img
+                    src={categoryAdImage}
+                    alt="Advertisement"
+                    className="w-full rounded-lg shadow-sm object-contain mt-4"
+                    loading="lazy"
+                  />
+                </div>
+              ) : (
+                <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center h-full">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
+                    Ad Space Available
+                  </p>
+                </div>
+              )}
             </aside>
           </div>
         ) : (
@@ -610,7 +667,7 @@ const CategoryPage = () => {
           </div>
         )}
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

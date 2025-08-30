@@ -1,9 +1,9 @@
 import axios from "axios";
+import { measureAPI } from "./performance";
 
 // Backend URL configuration
-const baseURL =
-  import.meta.env.VITE_API_BASE_URL ||
-  "https://codeintervu-backend.onrender.com/api";
+const baseURL = "https://codeintervu-backend.onrender.com/api";
+// const baseURL = "http://localhost:5000/api";
 
 const api = axios.create({
   baseURL: baseURL,
@@ -20,6 +20,10 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // Add performance measurement start time
+    config.metadata = { startTime: performance.now() };
+
     return config;
   },
   (error) => {
@@ -30,10 +34,18 @@ api.interceptors.request.use(
 // Response interceptor to handle common errors
 api.interceptors.response.use(
   (response) => {
+    // Measure API performance
+    if (response.config?.metadata?.startTime) {
+      measureAPI(response.config.url, response.config.metadata.startTime);
+    }
+
     return response;
   },
   (error) => {
-    console.error("API Error:", error);
+    // Measure API performance for errors too
+    if (error.config?.metadata?.startTime) {
+      measureAPI(error.config.url, error.config.metadata.startTime);
+    }
 
     // Handle specific error cases
     if (error.response?.status === 401) {

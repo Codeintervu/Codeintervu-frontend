@@ -1,10 +1,12 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { Toaster } from "react-hot-toast";
 import Navbar from "./components/Navbar";
+import { initGA, trackPageView } from "./utils/analytics";
+import performanceMonitor from "./utils/performance";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -30,83 +32,92 @@ import MockInterviewsPage from "./pages/MockInterviewsPage";
 import CodingInterviewsPage from "./pages/CodingInterviewsPage";
 import Profile from "./pages/Profile";
 
+const AppContent = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    // Initialize Google Analytics
+    initGA();
+
+    // Track page view on route change
+    trackPageView(location.pathname);
+
+    // Initialize performance monitoring
+    performanceMonitor.measureBundleSize();
+
+    // Check performance budget after page load
+    setTimeout(() => {
+      performanceMonitor.checkPerformanceBudget();
+    }, 5000);
+  }, [location.pathname]);
+
+  return (
+    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200 overflow-x-hidden">
+      <Toaster position="top-right" />
+      <Navbar />
+      <main className="pt-8 sm:pt-12">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/course" element={<Course />} />
+          <Route
+            path="/course/java-programming"
+            element={<JavaProgrammingCourse />}
+          />
+          <Route path="/quiz" element={<QuizListPage />} />
+          <Route path="/quiz/:slug" element={<QuizMCQPage />} />
+          <Route
+            path="/interview-questions"
+            element={<InterviewQuestionsPage />}
+          />
+          <Route
+            path="/interview-questions/:category/:slug"
+            element={<InterviewQuestionDetailPage />}
+          />
+          <Route
+            path="/bookmarked-questions"
+            element={<BookmarkedQuestionsPage />}
+          />
+          <Route path="/mock-interviews" element={<MockInterviewsPage />} />
+          <Route path="/coding-interviews" element={<CodingInterviewsPage />} />
+
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/projects/:projectId" element={<ProjectDetailPage />} />
+          <Route path="/whiteboard" element={<TldrawWhiteboard />} />
+          <Route path="/compilers/java-compiler" element={<JavaCompiler />} />
+          <Route
+            path="/compilers/python-compiler"
+            element={<PythonCompiler />}
+          />
+          <Route
+            path="/compilers/javascript-compiler"
+            element={<JavaScriptCompiler />}
+          />
+          <Route path="/compilers/c-compiler" element={<CCompiler />} />
+          <Route path="/compilers/cpp-compiler" element={<CppCompiler />} />
+
+          {/* Pretty URL for tutorials: /categoryPath/tutorialSlug */}
+          <Route
+            path="/:categoryPath/:tutorialSlug"
+            element={<CategoryPage />}
+          />
+          {/* Fallback for category page without a tutorial selected */}
+          <Route path="/:categoryPath" element={<CategoryPage />} />
+        </Routes>
+      </main>
+    </div>
+  );
+};
+
 const App = () => {
   return (
     <ErrorBoundary>
       <ThemeProvider>
         <AuthProvider>
-          <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200 overflow-x-hidden">
-            <Toaster position="top-right" />
-            <Navbar />
-            <main className="pt-8 sm:pt-12">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/support" element={<Support />} />
-                <Route path="/course" element={<Course />} />
-                <Route
-                  path="/course/java-programming"
-                  element={<JavaProgrammingCourse />}
-                />
-                <Route path="/quiz" element={<QuizListPage />} />
-                <Route path="/quiz/:slug" element={<QuizMCQPage />} />
-                <Route
-                  path="/interview-questions"
-                  element={<InterviewQuestionsPage />}
-                />
-                <Route
-                  path="/interview-questions/:category/:slug"
-                  element={<InterviewQuestionDetailPage />}
-                />
-                <Route
-                  path="/bookmarked-questions"
-                  element={<BookmarkedQuestionsPage />}
-                />
-                <Route
-                  path="/mock-interviews"
-                  element={<MockInterviewsPage />}
-                />
-                <Route
-                  path="/coding-interviews"
-                  element={<CodingInterviewsPage />}
-                />
-
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/projects" element={<ProjectsPage />} />
-                <Route
-                  path="/projects/:projectId"
-                  element={<ProjectDetailPage />}
-                />
-                <Route path="/whiteboard" element={<TldrawWhiteboard />} />
-                <Route
-                  path="/compilers/java-compiler"
-                  element={<JavaCompiler />}
-                />
-                <Route
-                  path="/compilers/python-compiler"
-                  element={<PythonCompiler />}
-                />
-                <Route
-                  path="/compilers/javascript-compiler"
-                  element={<JavaScriptCompiler />}
-                />
-                <Route path="/compilers/c-compiler" element={<CCompiler />} />
-                <Route
-                  path="/compilers/cpp-compiler"
-                  element={<CppCompiler />}
-                />
-
-                {/* Pretty URL for tutorials: /categoryPath/tutorialSlug */}
-                <Route
-                  path="/:categoryPath/:tutorialSlug"
-                  element={<CategoryPage />}
-                />
-                {/* Fallback for category page without a tutorial selected */}
-                <Route path="/:categoryPath" element={<CategoryPage />} />
-              </Routes>
-            </main>
-          </div>
+          <AppContent />
         </AuthProvider>
       </ThemeProvider>
     </ErrorBoundary>

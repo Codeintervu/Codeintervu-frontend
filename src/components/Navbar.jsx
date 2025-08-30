@@ -8,6 +8,11 @@ import toast from "react-hot-toast";
 import api from "../utils/api";
 import { formatCategoryPath } from "../utils/pathUtils";
 import {
+  calculateProfileCompletion,
+  getCompletionColor,
+  getCompletionEmoji,
+} from "../utils/profileCompletion";
+import {
   FaQuestionCircle,
   FaClipboardList,
   FaChalkboardTeacher,
@@ -338,14 +343,58 @@ const Navbar = ({ tutorials }) => {
               </button>
 
               {isUserDropdownOpen && (
-                <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg py-2 z-20 border border-gray-200 dark:border-gray-600">
-                  <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-600">
+                <div className="absolute top-full right-0 mt-2 w-64 bg-white dark:bg-gray-700 rounded-md shadow-lg py-2 z-20 border border-gray-200 dark:border-gray-600">
+                  <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-600">
                     <p className="text-sm font-medium text-gray-900 dark:text-white">
                       {user.fullName}
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">
                       {user.email}
                     </p>
+
+                    {/* Profile Completion Status */}
+                    {(() => {
+                      const completionPercentage =
+                        calculateProfileCompletion(user);
+                      return (
+                        <div className="mt-3">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs text-gray-600 dark:text-gray-400">
+                              Profile Completion
+                            </span>
+                            <span
+                              className={`text-xs font-medium ${getCompletionColor(
+                                completionPercentage
+                              )}`}
+                            >
+                              {completionPercentage}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
+                            <div
+                              className={`h-2 rounded-full transition-all duration-300 ${getCompletionColor(
+                                completionPercentage
+                              ).replace("text-", "bg-")}`}
+                              style={{ width: `${completionPercentage}%` }}
+                            ></div>
+                          </div>
+                          <div className="flex items-center justify-between mt-1">
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                              {getCompletionEmoji(completionPercentage)}
+                            </span>
+                            {completionPercentage < 100 && (
+                              <Link
+                                to="/profile"
+                                className="text-xs text-teal-600 dark:text-teal-400 hover:underline"
+                                onClick={() => setIsUserDropdownOpen(false)}
+                              >
+                                Complete Profile
+                              </Link>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
                   <Link
                     to="/profile"

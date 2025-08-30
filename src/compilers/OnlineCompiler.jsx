@@ -185,7 +185,6 @@ const OnlineCompiler = ({ language }) => {
       };
 
       if (import.meta.env.DEV) {
-        console.log("Submitting to Judge0:", submissionData);
       }
 
       // Submit code to Judge0
@@ -204,7 +203,6 @@ const OnlineCompiler = ({ language }) => {
 
       const { token } = response.data;
       if (import.meta.env.DEV) {
-        console.log("Code submitted successfully. Token:", token);
       }
 
       // Wait for result
@@ -227,11 +225,7 @@ const OnlineCompiler = ({ language }) => {
 
           const submission = statusResponse.data;
           if (import.meta.env.DEV) {
-            console.log(
-              `Status check ${attempts + 1}: ${
-                submission.status?.description || "Unknown"
-              }`
-            );
+            // Status check logging removed for production
           }
 
           if (submission.status && submission.status.id > 2) {
@@ -319,10 +313,7 @@ const OnlineCompiler = ({ language }) => {
         timeout: 10000,
       });
       if (import.meta.env.DEV) {
-        console.log(
-          "✅ Judge0 API connection successful, languages:",
-          response.data.length
-        );
+        // Judge0 API connection logging removed for production
       }
       return true;
     } catch (error) {

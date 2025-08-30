@@ -3,6 +3,16 @@ import { useAuth } from "../context/AuthContext";
 import api from "../utils/api";
 import toast from "react-hot-toast";
 import {
+  calculateProfileCompletion,
+  getCompletionColor,
+  getCompletionEmoji,
+  getCompletionMessage,
+} from "../utils/profileCompletion";
+import {
+  trackProfileCompletion,
+  trackUserInteraction,
+} from "../utils/analytics";
+import {
   User,
   Edit3,
   Save,
@@ -16,6 +26,15 @@ import {
   Twitter,
   Globe,
   ExternalLink,
+  Trophy,
+  Star,
+  Target,
+  TrendingUp,
+  CheckCircle,
+  AlertCircle,
+  Info,
+  Award,
+  Zap,
 } from "lucide-react";
 
 const Profile = () => {
@@ -26,6 +45,8 @@ const Profile = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [lastSaved, setLastSaved] = useState(null);
+  const [autoSaveTimer, setAutoSaveTimer] = useState(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -35,6 +56,8 @@ const Profile = () => {
     socialLinks: {
       github: "",
       linkedin: "",
+      instagram: "",
+      twitter: "",
       portfolio: "",
       website: "",
     },
@@ -56,6 +79,104 @@ const Profile = () => {
     newPassword: "",
     confirmPassword: "",
   });
+
+  // Profile completion calculation using shared utility
+  const calculateProfileCompletionLocal = () => {
+    const fields = [
+      { value: formData.fullName, weight: 20, required: true },
+      { value: formData.email, weight: 15, required: true },
+      { value: formData.phoneNumber, weight: 10, required: false },
+      { value: formData.bio, weight: 15, required: false },
+      { value: formData.socialLinks.github, weight: 8, required: false },
+      { value: formData.socialLinks.linkedin, weight: 8, required: false },
+      { value: formData.socialLinks.portfolio, weight: 7, required: false },
+      { value: formData.socialLinks.website, weight: 7, required: false },
+      { value: formData.socialLinks.instagram, weight: 5, required: false },
+      { value: formData.socialLinks.twitter, weight: 5, required: false },
+    ];
+
+    let totalWeight = 0;
+    let completedWeight = 0;
+
+    fields.forEach((field) => {
+      totalWeight += field.weight;
+      if (field.value && field.value.trim() !== "") {
+        completedWeight += field.weight;
+      }
+    });
+
+    return Math.round((completedWeight / totalWeight) * 100);
+  };
+
+  // Profile strength calculation
+  const calculateProfileStrength = () => {
+    const completion = calculateProfileCompletion();
+    if (completion < 30)
+      return { level: "Basic", color: "text-red-500", icon: AlertCircle };
+    if (completion < 60)
+      return { level: "Good", color: "text-yellow-500", icon: Star };
+    if (completion < 90)
+      return { level: "Strong", color: "text-blue-500", icon: TrendingUp };
+    return { level: "Excellent", color: "text-green-500", icon: Trophy };
+  };
+
+  // Get next recommended fields
+  const getNextRecommendations = () => {
+    const recommendations = [];
+    if (!formData.phoneNumber)
+      recommendations.push({
+        field: "Phone Number",
+        impact: "+10%",
+        priority: "high",
+      });
+    if (!formData.bio)
+      recommendations.push({ field: "Bio", impact: "+15%", priority: "high" });
+    if (!formData.socialLinks.github)
+      recommendations.push({
+        field: "GitHub",
+        impact: "+8%",
+        priority: "medium",
+      });
+    if (!formData.socialLinks.linkedin)
+      recommendations.push({
+        field: "LinkedIn",
+        impact: "+8%",
+        priority: "medium",
+      });
+    if (!formData.socialLinks.portfolio)
+      recommendations.push({
+        field: "Portfolio",
+        impact: "+7%",
+        priority: "medium",
+      });
+    if (!formData.socialLinks.website)
+      recommendations.push({
+        field: "Website",
+        impact: "+7%",
+        priority: "medium",
+      });
+
+    return recommendations.slice(0, 3); // Show top 3
+  };
+
+  // Auto-save functionality
+  const scheduleAutoSave = () => {
+    if (autoSaveTimer) clearTimeout(autoSaveTimer);
+    const timer = setTimeout(() => {
+      handleAutoSave();
+    }, 2000); // Auto-save after 2 seconds of inactivity
+    setAutoSaveTimer(timer);
+  };
+
+  const handleAutoSave = async () => {
+    try {
+      await api.put("/auth/profile", formData);
+      setLastSaved(new Date());
+      toast.success("Profile auto-saved!", { duration: 2000 });
+    } catch (error) {
+      console.error("Auto-save failed:", error);
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -97,6 +218,7 @@ const Profile = () => {
       ...prev,
       [name]: value,
     }));
+    scheduleAutoSave();
   };
 
   const handleSocialLinkChange = (platform, value) => {
@@ -107,13 +229,14 @@ const Profile = () => {
         [platform]: value,
       },
     }));
+    scheduleAutoSave();
   };
 
   const handleSaveProfile = async () => {
     try {
       setLoading(true);
+      if (autoSaveTimer) clearTimeout(autoSaveTimer);
 
-      // Validate form data
       if (!formData.fullName || formData.fullName.trim() === "") {
         toast.error("Full name is required");
         return;
@@ -122,27 +245,29 @@ const Profile = () => {
       const response = await api.put("/auth/profile", formData);
 
       if (response.data && response.data.user) {
-        // Ensure the user object has the correct ID field
         const updatedUser = {
           ...response.data.user,
           _id: response.data.user.id || response.data.user._id,
         };
         setUser(updatedUser);
+        setLastSaved(new Date());
+
+        // Track profile completion
+        const completionPercentage = calculateProfileCompletionLocal();
+        trackProfileCompletion(completionPercentage);
+        trackUserInteraction("Profile", "Save");
+
         toast.success("Profile updated successfully!");
         setIsEditing(false);
       } else {
         toast.error("Profile updated but response format is invalid");
       }
     } catch (error) {
-      // Check if it's actually a network error vs server error
       if (error.response) {
-        // Server responded with error status
         toast.error(error.response.data?.message || "Failed to update profile");
       } else if (error.request) {
-        // Network error
         toast.error("Network error. Please check your connection.");
       } else {
-        // Other error
         toast.error("An unexpected error occurred");
       }
     } finally {
@@ -188,9 +313,91 @@ const Profile = () => {
     );
   }
 
+  const completionPercentage = calculateProfileCompletionLocal();
+  const profileStrength = calculateProfileStrength();
+  const recommendations = getNextRecommendations();
+  const StrengthIcon = profileStrength.icon;
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4">
+        {/* Profile Completion Header */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center space-x-3">
+              <div className="text-3xl">
+                {getCompletionEmoji(completionPercentage)}
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  Profile Completion
+                </h1>
+                <p className="text-gray-600 dark:text-gray-400">
+                  {getCompletionMessage(completionPercentage)}{" "}
+                  {getCompletionEmoji(completionPercentage)}
+                </p>
+              </div>
+            </div>
+            <div className="text-right">
+              <div className="text-3xl font-bold text-teal-600">
+                {completionPercentage}%
+              </div>
+              <div className="text-sm text-gray-500">Complete</div>
+            </div>
+          </div>
+
+          {/* Progress Bar */}
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mb-4">
+            <div
+              className={`h-3 rounded-full transition-all duration-500 ${getCompletionColor(
+                completionPercentage
+              ).replace("text-", "bg-")}`}
+              style={{ width: `${completionPercentage}%` }}
+            ></div>
+          </div>
+
+          {/* Profile Strength Indicator */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <StrengthIcon className={`w-5 h-5 ${profileStrength.color}`} />
+              <span className={`font-medium ${profileStrength.color}`}>
+                Profile Strength: {profileStrength.level}
+              </span>
+            </div>
+            {lastSaved && (
+              <div className="text-sm text-gray-500">
+                Last saved: {lastSaved.toLocaleTimeString()}
+              </div>
+            )}
+          </div>
+
+          {/* Quick Recommendations */}
+          {recommendations.length > 0 && (
+            <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+              <div className="flex items-center space-x-2 mb-2">
+                <Target className="w-4 h-4 text-blue-600" />
+                <span className="font-medium text-blue-800 dark:text-blue-200">
+                  Quick Wins
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {recommendations.map((rec, index) => (
+                  <div
+                    key={index}
+                    className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      rec.priority === "high"
+                        ? "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200"
+                        : "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200"
+                    }`}
+                  >
+                    {rec.field} {rec.impact}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
         {/* Header */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between">
@@ -199,9 +406,9 @@ const Profile = () => {
                 <User className="w-8 h-8 text-teal-600 dark:text-teal-400" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                   {user.fullName}
-                </h1>
+                </h2>
                 <p className="text-gray-600 dark:text-gray-400">{user.email}</p>
                 {/* Social Links Display */}
                 {(user.socialLinks?.github ||
@@ -292,15 +499,35 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Profile Form */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-            Personal Information
-          </h2>
+        {/* Personal Information Section */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+              <User className="w-5 h-5 mr-2" />
+              Personal Information
+            </h3>
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1">
+                <CheckCircle className="w-4 h-4 text-green-500" />
+                <span className="text-sm text-gray-500">
+                  {
+                    [
+                      formData.fullName,
+                      formData.email,
+                      formData.phoneNumber,
+                      formData.bio,
+                    ].filter(Boolean).length
+                  }
+                  /4
+                </span>
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Full Name
+                Full Name <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -313,7 +540,7 @@ const Profile = () => {
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Email
+                Email <span className="text-red-500">*</span>
               </label>
               <input
                 type="email"
@@ -329,6 +556,11 @@ const Profile = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Phone Number
+                {!formData.phoneNumber && (
+                  <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                    +10% completion
+                  </span>
+                )}
               </label>
               <input
                 type="tel"
@@ -342,6 +574,11 @@ const Profile = () => {
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Bio
+                {!formData.bio && (
+                  <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                    +15% completion
+                  </span>
+                )}
               </label>
               <textarea
                 name="bio"
@@ -361,16 +598,32 @@ const Profile = () => {
         </div>
 
         {/* Social Links Section */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mt-6">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
-            <Globe className="w-5 h-5 mr-2" />
-            Social Links
-          </h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+              <Globe className="w-5 h-5 mr-2" />
+              Social Links
+            </h3>
+            <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1">
+                <CheckCircle className="w-4 h-4 text-green-500" />
+                <span className="text-sm text-gray-500">
+                  {Object.values(formData.socialLinks).filter(Boolean).length}/6
+                </span>
+              </div>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
                 <Github className="w-4 h-4 mr-2" />
                 GitHub
+                {!formData.socialLinks.github && (
+                  <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                    +8% completion
+                  </span>
+                )}
               </label>
               <input
                 type="url"
@@ -387,6 +640,11 @@ const Profile = () => {
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
                 <Linkedin className="w-4 h-4 mr-2" />
                 LinkedIn
+                {!formData.socialLinks.linkedin && (
+                  <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                    +8% completion
+                  </span>
+                )}
               </label>
               <input
                 type="url"
@@ -403,6 +661,11 @@ const Profile = () => {
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
                 <Instagram className="w-4 h-4 mr-2" />
                 Instagram
+                {!formData.socialLinks.instagram && (
+                  <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                    +5% completion
+                  </span>
+                )}
               </label>
               <input
                 type="url"
@@ -419,6 +682,11 @@ const Profile = () => {
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
                 <Twitter className="w-4 h-4 mr-2" />
                 Twitter/X
+                {!formData.socialLinks.twitter && (
+                  <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                    +5% completion
+                  </span>
+                )}
               </label>
               <input
                 type="url"
@@ -435,6 +703,11 @@ const Profile = () => {
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
                 <ExternalLink className="w-4 h-4 mr-2" />
                 Portfolio
+                {!formData.socialLinks.portfolio && (
+                  <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                    +7% completion
+                  </span>
+                )}
               </label>
               <input
                 type="url"
@@ -451,6 +724,11 @@ const Profile = () => {
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center">
                 <Globe className="w-4 h-4 mr-2" />
                 Website
+                {!formData.socialLinks.website && (
+                  <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+                    +7% completion
+                  </span>
+                )}
               </label>
               <input
                 type="url"
@@ -462,6 +740,51 @@ const Profile = () => {
                 className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white disabled:bg-gray-100 dark:disabled:bg-gray-600"
                 placeholder="https://yourwebsite.com"
               />
+            </div>
+          </div>
+        </div>
+
+        {/* Achievement Section */}
+        {completionPercentage >= 100 && (
+          <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-lg shadow-sm p-6 mt-6 text-center">
+            <div className="text-6xl mb-4">🏆</div>
+            <h3 className="text-2xl font-bold text-white mb-2">
+              Profile Complete!
+            </h3>
+            <p className="text-white/90">
+              Congratulations! You've unlocked the Profile Master badge.
+            </p>
+            <div className="mt-4 inline-flex items-center space-x-2 bg-white/20 px-4 py-2 rounded-full">
+              <Award className="w-5 h-5 text-white" />
+              <span className="text-white font-medium">Profile Master</span>
+            </div>
+          </div>
+        )}
+
+        {/* Tips Section */}
+        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-6 mt-6">
+          <div className="flex items-center space-x-2 mb-4">
+            <Info className="w-5 h-5 text-blue-600" />
+            <h3 className="text-lg font-semibold text-blue-800 dark:text-blue-200">
+              Profile Tips
+            </h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-blue-700 dark:text-blue-300">
+            <div className="flex items-start space-x-2">
+              <Zap className="w-4 h-4 mt-0.5 text-blue-600" />
+              <span>Add a professional bio to showcase your expertise</span>
+            </div>
+            <div className="flex items-start space-x-2">
+              <Zap className="w-4 h-4 mt-0.5 text-blue-600" />
+              <span>Include your GitHub for code samples</span>
+            </div>
+            <div className="flex items-start space-x-2">
+              <Zap className="w-4 h-4 mt-0.5 text-blue-600" />
+              <span>Add LinkedIn for professional networking</span>
+            </div>
+            <div className="flex items-start space-x-2">
+              <Zap className="w-4 h-4 mt-0.5 text-blue-600" />
+              <span>Include a portfolio to showcase your work</span>
             </div>
           </div>
         </div>
