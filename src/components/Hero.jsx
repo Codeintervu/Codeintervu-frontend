@@ -15,7 +15,7 @@ const Hero = () => {
   };
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 px-6">
+    <section className="min-h-screen flex items-center justify-center bg-white dark:bg-gray-900 px-4 sm:px-6 mobile-safe-area">
       <div className="max-w-4xl mx-auto text-center">
         {/* Simple Badge */}
         {/* <div className="inline-block px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 text-sm font-medium rounded-full mb-12">
@@ -23,7 +23,7 @@ const Hero = () => {
         </div> */}
 
         {/* Main Headline */}
-        <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-8 leading-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white mb-6 sm:mb-8 leading-tight">
           Learn to Code Smarter,
           <br />
           <span className="text-teal-600 dark:text-teal-400">
@@ -33,20 +33,20 @@ const Hero = () => {
         </h1>
 
         {/* Description */}
-        <p className="text-xl text-gray-600 dark:text-gray-300 mb-12 max-w-2xl mx-auto">
+        <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 sm:mb-12 max-w-2xl mx-auto px-4">
           Gain confidence with structured lessons, real-world projects, and
           AI-powered feedback. Build job-ready coding skills that prepare you
           for interviews at top companies.
         </p>
 
         {/* CTA Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 justify-center items-center mb-16 sm:mb-20 px-4">
           {user ? (
             // Logged in user - show learning options
             <>
               <Link
                 to="/course"
-                className="px-8 py-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-lg rounded-lg transition-colors duration-200 flex items-center gap-2"
+                className="w-full sm:w-auto px-6 sm:px-8 py-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-base sm:text-lg rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 touch-target"
               >
                 Continue Learning
                 <Play className="w-5 h-5" />
@@ -54,7 +54,7 @@ const Hero = () => {
 
               <Link
                 to="/projects"
-                className="px-8 py-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-lg rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 flex items-center gap-2"
+                className="w-full sm:w-auto px-6 sm:px-8 py-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-base sm:text-lg rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 flex items-center justify-center gap-2 touch-target"
               >
                 View Projects
                 <BookOpen className="w-5 h-5" />
@@ -65,7 +65,7 @@ const Hero = () => {
             <>
               <button
                 onClick={handleGetStarted}
-                className="px-8 py-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-lg rounded-lg transition-colors duration-200 flex items-center gap-2"
+                className="w-full sm:w-auto px-6 sm:px-8 py-4 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-base sm:text-lg rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 touch-target"
               >
                 Start Learning Free
                 <ArrowRight className="w-5 h-5" />
@@ -73,7 +73,7 @@ const Hero = () => {
 
               <Link
                 to="/course"
-                className="px-8 py-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-lg rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200"
+                className="w-full sm:w-auto px-6 sm:px-8 py-4 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold text-base sm:text-lg rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 flex items-center justify-center touch-target"
               >
                 Browse Courses
               </Link>

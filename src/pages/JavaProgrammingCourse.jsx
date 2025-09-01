@@ -34,12 +34,12 @@ const JavaProgrammingCourse = () => {
   const scrollContainerRef = useRef(null);
 
   const courseData = {
-    title: "Java Programming",
+    title: "Core Java + DSA",
     description:
-      "Master Java fundamentals, OOP concepts, and build real-world applications",
+      "Master Core Java fundamentals, OOP concepts, Data Structures & Algorithms, and build real-world applications",
     rating: 4.8,
     totalStudents: 1200,
-    duration: "3 months",
+    duration: "4 months",
     price: 499,
     originalPrice: 3199,
     discount: 82,
@@ -48,12 +48,14 @@ const JavaProgrammingCourse = () => {
     totalLectures: 374,
     totalDuration: "61h 44m",
     features: [
-      "Core Java",
+      "Core Java Fundamentals",
       "OOP Concepts",
+      "Data Structures",
+      "Algorithms",
       "Collections Framework",
       "Exception Handling",
       "File I/O",
-      "Real-world Projects",
+      "Projects & Practice",
     ],
     courseContent: [
       {

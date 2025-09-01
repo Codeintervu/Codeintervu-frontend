@@ -29,22 +29,24 @@ const Course = () => {
   const courseOptions = [
     {
       value: "java-programming",
-      label: "Java Programming",
+      label: "Core Java + DSA",
       fee: 499,
-      duration: "3 months",
+      duration: "4 months",
       students: 1200,
       rating: 4.8,
       category: "programming",
       icon: <Code className="w-6 h-6" />,
       description:
-        "Master Java fundamentals, OOP concepts, and build real-world applications",
+        "Master Core Java fundamentals, OOP concepts, Data Structures & Algorithms, and build real-world applications",
       features: [
-        "Core Java",
+        "Core Java Fundamentals",
         "OOP Concepts",
+        "Data Structures",
+        "Algorithms",
         "Collections Framework",
         "Exception Handling",
         "File I/O",
-        "Projects",
+        "Projects & Practice",
       ],
     },
     {

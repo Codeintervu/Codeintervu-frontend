@@ -4,6 +4,13 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      screens: {
+        xs: "475px",
+      },
+      spacing: {
+        18: "4.5rem",
+        88: "22rem",
+      },
       colors: {
         "selective-yellow": "#FFB703",
         "eerie-black-1": "#171717",

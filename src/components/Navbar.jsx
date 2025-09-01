@@ -444,209 +444,212 @@ const Navbar = ({ tutorials }) => {
       </div>
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700 shadow-lg px-4 py-4">
-          <nav className="flex flex-col gap-4">
-            {/* Always show main navigation links */}
-            {navLinks.map((item) =>
-              item.external ? (
-                <a
-                  key={item.name}
-                  href={item.path}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                >
-                  {item.name}
-                </a>
-              ) : (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  onClick={closeMenus}
-                  className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                >
-                  {item.name}
-                </Link>
-              )
-            )}
+        <div className="md:hidden bg-white dark:bg-gray-800 border-t dark:border-gray-700 shadow-lg">
+          {/* Scrollable Menu Content */}
+          <div className="max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+            <nav className="flex flex-col gap-4 p-4">
+              {/* Always show main navigation links */}
+              {navLinks.map((item) =>
+                item.external ? (
+                  <a
+                    key={item.name}
+                    href={item.path}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors touch-target text-base font-medium"
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  <Link
+                    key={item.name}
+                    to={item.path}
+                    onClick={closeMenus}
+                    className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors touch-target text-base font-medium"
+                  >
+                    {item.name}
+                  </Link>
+                )
+              )}
 
-            {/* Projects Link */}
-            <Link
-              to="/projects"
-              onClick={closeMenus}
-              className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-            >
-              Projects
-            </Link>
+              {/* Projects Link */}
+              <Link
+                to="/projects"
+                onClick={closeMenus}
+                className="text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 py-3 px-4 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors touch-target text-base font-medium"
+              >
+                Projects
+              </Link>
 
-            {/* Tutorials Section (if available) */}
-            {tutorials && tutorials.length > 0 && (
+              {/* Tutorials Section (if available) */}
+              {tutorials && tutorials.length > 0 && (
+                <div className="text-gray-700 dark:text-gray-200">
+                  <p className="font-bold mb-3 text-lg">Tutorials</p>
+                  <div className="flex flex-col gap-2 pl-4">
+                    {tutorials.map((tutorial) => (
+                      <Link
+                        key={tutorial._id}
+                        to={`#${tutorial._id}`}
+                        className="block py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target"
+                        onClick={closeMenus}
+                      >
+                        {tutorial.title}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Compilers Section for Mobile */}
               <div className="text-gray-700 dark:text-gray-200">
-                <p className="font-bold mb-2">Tutorials</p>
+                <p className="font-bold mb-3 text-lg">Compilers</p>
                 <div className="flex flex-col gap-2 pl-4">
-                  {tutorials.map((tutorial) => (
-                    <Link
-                      key={tutorial._id}
-                      to={`#${tutorial._id}`}
-                      className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                      onClick={closeMenus}
-                    >
-                      {tutorial.title}
-                    </Link>
-                  ))}
+                  <Link
+                    to="/compilers/java-compiler"
+                    className="block py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target"
+                    onClick={closeMenus}
+                  >
+                    Java Compiler
+                  </Link>
+                  <Link
+                    to="/compilers/python-compiler"
+                    className="block py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target"
+                    onClick={closeMenus}
+                  >
+                    Python Compiler
+                  </Link>
+                  <Link
+                    to="/compilers/javascript-compiler"
+                    className="block py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target"
+                    onClick={closeMenus}
+                  >
+                    JavaScript Compiler
+                  </Link>
+                  <Link
+                    to="/compilers/c-compiler"
+                    className="block py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target"
+                    onClick={closeMenus}
+                  >
+                    C Compiler
+                  </Link>
+                  <Link
+                    to="/compilers/cpp-compiler"
+                    className="block py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target"
+                    onClick={closeMenus}
+                  >
+                    C++ Compiler
+                  </Link>
                 </div>
               </div>
-            )}
 
-            {/* Compilers Section for Mobile */}
-            <div className="text-gray-700 dark:text-gray-200">
-              <p className="font-bold mb-2">Compilers</p>
-              <div className="flex flex-col gap-2 pl-4">
-                <Link
-                  to="/compilers/java-compiler"
-                  className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                  onClick={closeMenus}
-                >
-                  Java Compiler
-                </Link>
-                <Link
-                  to="/compilers/python-compiler"
-                  className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                  onClick={closeMenus}
-                >
-                  Python Compiler
-                </Link>
-                <Link
-                  to="/compilers/javascript-compiler"
-                  className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                  onClick={closeMenus}
-                >
-                  JavaScript Compiler
-                </Link>
-                <Link
-                  to="/compilers/c-compiler"
-                  className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                  onClick={closeMenus}
-                >
-                  C Compiler
-                </Link>
-                <Link
-                  to="/compilers/cpp-compiler"
-                  className="block py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400"
-                  onClick={closeMenus}
-                >
-                  C++ Compiler
-                </Link>
-              </div>
-            </div>
-
-            {/* Authentication Section for Mobile */}
-            <div className="text-gray-700 dark:text-gray-200">
-              <p className="font-bold mb-2">Account</p>
-              <div className="flex flex-col gap-2 pl-4">
-                {user ? (
-                  <>
-                    <div className="flex items-center gap-2 py-1">
-                      <div className="w-6 h-6 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
-                        <FaUser className="w-3 h-3 text-teal-600 dark:text-teal-400" />
+              {/* Authentication Section for Mobile */}
+              <div className="text-gray-700 dark:text-gray-200">
+                <p className="font-bold mb-3 text-lg">Account</p>
+                <div className="flex flex-col gap-2 pl-4">
+                  {user ? (
+                    <>
+                      <div className="flex items-center gap-3 py-3 px-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                        <div className="w-8 h-8 bg-teal-100 dark:bg-teal-900 rounded-full flex items-center justify-center">
+                          <FaUser className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+                        </div>
+                        <span className="text-base text-gray-700 dark:text-gray-200 font-medium">
+                          {user.fullName}
+                        </span>
                       </div>
-                      <span className="text-sm text-gray-700 dark:text-gray-200">
-                        {user.fullName}
-                      </span>
-                    </div>
-                    <Link
-                      to="/profile"
-                      onClick={closeMenus}
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 text-left flex items-center gap-2"
-                    >
-                      <span className="w-4"></span>
-                      Profile
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 text-left flex items-center gap-2"
-                    >
-                      <span className="w-4"></span>
-                      Logout
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button
-                      onClick={() => handleAuthClick("login")}
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 text-left"
-                    >
-                      Sign In
-                    </button>
-                    <button
-                      onClick={() => handleAuthClick("register")}
-                      className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 text-left"
-                    >
-                      Create Account
-                    </button>
-                  </>
-                )}
+                      <Link
+                        to="/profile"
+                        onClick={closeMenus}
+                        className="py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target flex items-center gap-3"
+                      >
+                        <span className="w-4"></span>
+                        Profile
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target flex items-center gap-3 text-left"
+                      >
+                        <span className="w-4"></span>
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => handleAuthClick("login")}
+                        className="py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target text-left font-medium"
+                      >
+                        Sign In
+                      </button>
+                      <button
+                        onClick={() => handleAuthClick("register")}
+                        className="py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target text-left font-medium"
+                      >
+                        Create Account
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
 
-            {/* Interview Preparation Section for Mobile */}
-            <div className="text-gray-700 dark:text-gray-200">
-              <p className="font-bold mb-2">Interview Preparation</p>
-              <div className="flex flex-col gap-2 pl-4">
-                <Link
-                  to="/quiz"
-                  className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
-                  onClick={closeMenus}
-                >
-                  <FaQuestionCircle className="w-4 h-4" />
-                  Quiz
-                </Link>
-                <Link
-                  to="/interview-questions"
-                  className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
-                  onClick={closeMenus}
-                >
-                  <FaClipboardList className="w-4 h-4" />
-                  Interview Questions
-                </Link>
-                <Link
-                  to="/whiteboard"
-                  className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
-                  onClick={closeMenus}
-                >
-                  <FaChalkboardTeacher className="w-4 h-4" />
-                  Whiteboard
-                </Link>
-                <Link
-                  to="/mock-interviews"
-                  className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
-                  onClick={closeMenus}
-                >
-                  <FaUser className="w-4 h-4" />
-                  Mock Interviews
-                </Link>
-                <Link
-                  to="/coding-interviews"
-                  className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
-                  onClick={closeMenus}
-                >
-                  <FaCode className="w-4 h-4" />
-                  Coding Interviews
-                </Link>
+              {/* Interview Preparation Section for Mobile */}
+              <div className="text-gray-700 dark:text-gray-200">
+                <p className="font-bold mb-3 text-lg">Interview Preparation</p>
+                <div className="flex flex-col gap-2 pl-4">
+                  <Link
+                    to="/quiz"
+                    className="py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target flex items-center gap-3"
+                    onClick={closeMenus}
+                  >
+                    <FaQuestionCircle className="w-5 h-5" />
+                    Quiz
+                  </Link>
+                  <Link
+                    to="/interview-questions"
+                    className="py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target flex items-center gap-3"
+                    onClick={closeMenus}
+                  >
+                    <FaClipboardList className="w-5 h-5" />
+                    Interview Questions
+                  </Link>
+                  <Link
+                    to="/whiteboard"
+                    className="py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target flex items-center gap-3"
+                    onClick={closeMenus}
+                  >
+                    <FaChalkboardTeacher className="w-5 h-5" />
+                    Whiteboard
+                  </Link>
+                  <Link
+                    to="/mock-interviews"
+                    className="py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target flex items-center gap-3"
+                    onClick={closeMenus}
+                  >
+                    <FaUser className="w-5 h-5" />
+                    Mock Interviews
+                  </Link>
+                  <Link
+                    to="/coding-interviews"
+                    className="py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target flex items-center gap-3"
+                    onClick={closeMenus}
+                  >
+                    <FaCode className="w-5 h-5" />
+                    Coding Interviews
+                  </Link>
 
-                <a
-                  href="http://javabytrilochan.blogspot.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="py-1 text-sm text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 flex items-center gap-2"
-                  onClick={closeMenus}
-                >
-                  <FaBlog className="w-4 h-4" />
-                  Blog
-                </a>
+                  <a
+                    href="http://javabytrilochan.blogspot.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="py-3 px-4 text-base text-gray-700 dark:text-gray-200 hover:text-teal-600 dark:hover:text-teal-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors touch-target flex items-center gap-3"
+                    onClick={closeMenus}
+                  >
+                    <FaBlog className="w-5 h-5" />
+                    Blog
+                  </a>
+                </div>
               </div>
-            </div>
-          </nav>
+            </nav>
+          </div>
         </div>
       )}
 

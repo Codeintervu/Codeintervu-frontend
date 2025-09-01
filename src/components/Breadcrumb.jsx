@@ -5,6 +5,20 @@ import { FaChevronRight, FaHome } from "react-icons/fa";
 const Breadcrumb = ({ items = [] }) => {
   const location = useLocation();
 
+  // Course name mapping
+  const courseNameMapping = {
+    "java-programming": "Core Java + DSA",
+    "java-fullstack": "Java Full Stack",
+    "python-programming": "Python Programming",
+    "data-science": "Data Science",
+    "ai-machine-learning": "AI & Machine Learning",
+    devops: "DevOps",
+    "data-analytics": "Data Analytics",
+    "power-bi": "Power BI",
+    internship: "Internship",
+    project: "Project",
+  };
+
   // Generate breadcrumb items based on current path if no items provided
   const generateBreadcrumbs = () => {
     if (items.length > 0) return items;
@@ -26,6 +40,18 @@ const Breadcrumb = ({ items = [] }) => {
         name = "Support";
       } else if (segment === "support") {
         name = "Support";
+      } else if (segment === "course" && pathSegments[index + 1]) {
+        // Handle course names
+        const courseValue = pathSegments[index + 1];
+        name =
+          courseNameMapping[courseValue] ||
+          segment
+            .split("-")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+      } else if (courseNameMapping[segment]) {
+        // Direct course name mapping
+        name = courseNameMapping[segment];
       } else {
         name = segment
           .split("-")
