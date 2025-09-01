@@ -36,6 +36,7 @@ import {
   Award,
   Zap,
 } from "lucide-react";
+import Breadcrumb from "../components/Breadcrumb";
 
 const Profile = () => {
   const { user, setUser } = useAuth();
@@ -321,6 +322,9 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4">
+        {/* Breadcrumb */}
+        <Breadcrumb />
+
         {/* Profile Completion Header */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6">
           <div className="flex items-center justify-between mb-4">

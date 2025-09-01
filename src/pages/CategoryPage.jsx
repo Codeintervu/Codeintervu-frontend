@@ -4,7 +4,7 @@ import axios from "axios";
 import { FiLoader, FiAlertTriangle } from "react-icons/fi";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Menu, X } from "lucide-react";
+import { X } from "lucide-react";
 import Navbar from "../components/Navbar";
 import { escapeHtml } from "../utils/escapeHtml";
 import { Helmet } from "react-helmet";
@@ -411,13 +411,6 @@ const CategoryPage = () => {
       <div className="container mx-auto px-4 py-8">
         {tutorials.length > 0 ? (
           <div className="flex flex-col md:flex-row gap-8 min-w-0">
-            <button
-              className="md:hidden fixed top-4 left-4 z-50 bg-white dark:bg-gray-900 rounded-full p-2 shadow-lg border border-gray-200 dark:border-gray-700"
-              onClick={() => setMobileSidebarOpen(true)}
-              aria-label="Open tutorial sidebar"
-            >
-              <Menu size={28} />
-            </button>
             <div
               className={`fixed inset-0 z-40 flex md:hidden transition-all duration-300 ${
                 mobileSidebarOpen ? "" : "pointer-events-none"
@@ -635,7 +628,7 @@ const CategoryPage = () => {
                 </div>
               )}
             </main>
-            <aside className="w-full md:w-[250px] order-3 md:order-none mt-8 md:mt-0 flex-shrink-0">
+            <aside className="hidden md:block w-full md:w-[250px] order-3 md:order-none mt-8 md:mt-0 flex-shrink-0">
               {/* Ad Space */}
               {categoryAdImage ? (
                 <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 h-full">

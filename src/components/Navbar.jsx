@@ -34,10 +34,13 @@ const Navbar = ({ tutorials }) => {
   const compilersRef = useRef(null);
   const interviewPrepRef = useRef(null); // NEW
   const userDropdownRef = useRef(null);
+  const mobileUserDropdownRef = useRef(null); // NEW
   const { isDarkMode, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
   const [categories, setCategories] = useState([]);
   const closeTimeout = React.useRef(null);
+  const [isMobileUserDropdownOpen, setIsMobileUserDropdownOpen] =
+    useState(false); // NEW
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -72,8 +75,19 @@ const Navbar = ({ tutorials }) => {
       ) {
         setIsUserDropdownOpen(false);
       }
+      if (
+        mobileUserDropdownRef.current &&
+        !mobileUserDropdownRef.current.contains(event.target)
+      ) {
+        setIsMobileUserDropdownOpen(false);
+      }
     };
-    if (isCompilersOpen || isInterviewPrepOpen || isUserDropdownOpen) {
+    if (
+      isCompilersOpen ||
+      isInterviewPrepOpen ||
+      isUserDropdownOpen ||
+      isMobileUserDropdownOpen
+    ) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
       document.removeEventListener("mousedown", handleClickOutside);
@@ -81,7 +95,12 @@ const Navbar = ({ tutorials }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isCompilersOpen, isInterviewPrepOpen, isUserDropdownOpen]);
+  }, [
+    isCompilersOpen,
+    isInterviewPrepOpen,
+    isUserDropdownOpen,
+    isMobileUserDropdownOpen,
+  ]);
 
   const toggleNav = () => setIsOpen(!isOpen);
 
@@ -90,6 +109,7 @@ const Navbar = ({ tutorials }) => {
     setIsTutorialsOpen(false);
     setIsInterviewPrepOpen(false);
     setIsUserDropdownOpen(false);
+    setIsMobileUserDropdownOpen(false);
   };
 
   const handleAuthClick = (mode) => {
@@ -138,6 +158,60 @@ const Navbar = ({ tutorials }) => {
               <span className="text-gray-900 dark:text-white">INTERVU</span>
             </span>
           </Link>
+
+          {/* Mobile User Icon with Dropdown */}
+          <div className="md:hidden ml-2 relative" ref={mobileUserDropdownRef}>
+            {user ? (
+              <button
+                onClick={() =>
+                  setIsMobileUserDropdownOpen(!isMobileUserDropdownOpen)
+                }
+                className="flex items-center justify-center w-8 h-8 bg-teal-100 dark:bg-teal-900 rounded-full"
+              >
+                <FaUser className="w-4 h-4 text-teal-600 dark:text-teal-400" />
+              </button>
+            ) : (
+              <button
+                onClick={() => handleAuthClick("login")}
+                className="flex items-center justify-center w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full"
+              >
+                <FaUser className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+              </button>
+            )}
+
+            {/* Mobile User Dropdown */}
+            {isMobileUserDropdownOpen && user && (
+              <div className="absolute top-full right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg py-2 z-20 border border-gray-200 dark:border-gray-600">
+                <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-600">
+                  <p className="text-sm font-medium text-gray-900 dark:text-white">
+                    {user.fullName}
+                  </p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {user.email}
+                  </p>
+                </div>
+                <Link
+                  to="/profile"
+                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                  onClick={() => {
+                    setIsMobileUserDropdownOpen(false);
+                    closeMenus();
+                  }}
+                >
+                  Profile
+                </Link>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsMobileUserDropdownOpen(false);
+                  }}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Center Section: Desktop Navigation */}
