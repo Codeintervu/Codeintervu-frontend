@@ -138,12 +138,15 @@ const InterviewQuestionDetailPage = () => {
   };
 
   const getDifficultyColor = (difficulty) => {
+    if (difficulty === "Easy") difficulty = "Beginner";
+    if (difficulty === "Medium") difficulty = "Intermediate";
+    if (difficulty === "Hard") difficulty = "Expert";
     switch (difficulty) {
-      case "Easy":
+      case "Beginner":
         return "bg-green-500";
-      case "Medium":
+      case "Intermediate":
         return "bg-yellow-500";
-      case "Hard":
+      case "Expert":
         return "bg-red-500";
       default:
         return "bg-gray-500";

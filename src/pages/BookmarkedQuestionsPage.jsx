@@ -218,13 +218,17 @@ const BookmarkedQuestionsPage = () => {
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
                         <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            question.difficulty === "Easy"
+                          className={`px-2 py-1 rounded-full text-xs font-medium ${(() => {
+                            let d = question.difficulty;
+                            if (d === "Easy") d = "Beginner";
+                            if (d === "Medium") d = "Intermediate";
+                            if (d === "Hard") d = "Expert";
+                            return d === "Beginner"
                               ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                              : question.difficulty === "Medium"
+                              : d === "Intermediate"
                               ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
-                              : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
-                          }`}
+                              : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400";
+                          })()}`}
                         >
                           {question.difficulty}
                         </span>

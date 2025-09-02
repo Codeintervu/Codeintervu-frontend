@@ -37,11 +37,18 @@ const InterviewQuestionsPage = () => {
   const [totalQuestions, setTotalQuestions] = useState(0);
   const [questionsPerPage] = useState(10);
 
+  const formatDifficulty = (value) => {
+    if (value === "Easy") return "Beginner";
+    if (value === "Medium") return "Intermediate";
+    if (value === "Hard") return "Expert";
+    return value;
+  };
+
   const baseDifficulties = [
     { id: "all", name: "All Difficulties" },
-    { id: "Easy", name: "Easy" },
-    { id: "Medium", name: "Medium" },
-    { id: "Hard", name: "Hard" },
+    { id: "Beginner", name: "Beginner" },
+    { id: "Intermediate", name: "Intermediate" },
+    { id: "Expert", name: "Expert" },
   ];
 
   // Load bookmarked questions from localStorage on component mount
@@ -160,14 +167,22 @@ const InterviewQuestionsPage = () => {
       });
       setCategoryCounts(updatedCategoryCounts);
 
-      // Update difficulty counts
+      // Update difficulty counts (support legacy keys)
+      const legacyMap = {
+        Beginner: "Easy",
+        Intermediate: "Medium",
+        Expert: "Hard",
+      };
       const updatedDifficultyCounts = {};
       baseDifficulties.forEach((difficulty) => {
         if (difficulty.id === "all") {
           updatedDifficultyCounts[difficulty.id] = statsData.total;
         } else {
+          const legacyKey = legacyMap[difficulty.id];
           updatedDifficultyCounts[difficulty.id] =
-            statsData.byDifficulty[difficulty.id] || 0;
+            statsData.byDifficulty[difficulty.id] ||
+            (legacyKey ? statsData.byDifficulty[legacyKey] : 0) ||
+            0;
         }
       });
       setDifficultyCounts(updatedDifficultyCounts);
@@ -520,14 +535,14 @@ const InterviewQuestionsPage = () => {
                         <div className="flex items-center gap-3 mb-3">
                           <span
                             className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              question.difficulty === "Easy"
+                              question.difficulty === "Beginner"
                                 ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400"
-                                : question.difficulty === "Medium"
+                                : question.difficulty === "Intermediate"
                                 ? "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400"
                                 : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"
                             }`}
                           >
-                            {question.difficulty}
+                            {formatDifficulty(question.difficulty)}
                           </span>
                           <span className="text-sm text-gray-500 dark:text-gray-400">
                             {question.categoryName}

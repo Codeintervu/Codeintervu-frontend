@@ -102,9 +102,9 @@ export const generateQuestionMetaTags = (question) => {
 
   // Create a more engaging description for social sharing
   const difficultyEmoji = {
-    Easy: "🟢",
-    Medium: "🟡",
-    Hard: "🔴",
+    Beginner: "🟢",
+    Intermediate: "🟡",
+    Expert: "🔴",
   };
 
   const difficultyBadge = difficultyEmoji[question.difficulty] || "⚪";
