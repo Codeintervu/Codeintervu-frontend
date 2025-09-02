@@ -40,7 +40,7 @@ const JavaProgrammingCourse = () => {
     rating: 4.8,
     totalStudents: 1200,
     duration: "4 months",
-    price: 499,
+    price: 1999,
     originalPrice: 3199,
     discount: 82,
     instructor: "Dr. Angela Yu",
@@ -842,7 +842,7 @@ const JavaProgrammingCourse = () => {
                         Start subscription
                       </button>
                       <p className="text-lg font-bold text-gray-900 dark:text-white">
-                        ₹499.00/course
+                        ₹1999.00/course
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
                         Cancel anytime

@@ -30,7 +30,7 @@ const Course = () => {
     {
       value: "java-programming",
       label: "Core Java + DSA",
-      fee: 499,
+      fee: 1999,
       duration: "4 months",
       students: 1200,
       rating: 4.8,
@@ -52,7 +52,7 @@ const Course = () => {
     {
       value: "java-fullstack",
       label: "Java Full Stack",
-      fee: 499,
+      fee: 1999,
       duration: "6 months",
       students: 850,
       rating: 4.9,
@@ -72,7 +72,7 @@ const Course = () => {
     {
       value: "python-programming",
       label: "Python Programming",
-      fee: 499,
+      fee: 1999,
       duration: "3 months",
       students: 1500,
       rating: 4.7,
@@ -92,7 +92,7 @@ const Course = () => {
     {
       value: "data-science",
       label: "Data Science",
-      fee: 499,
+      fee: 1999,
       duration: "6 months",
       students: 650,
       rating: 4.9,
@@ -112,7 +112,7 @@ const Course = () => {
     {
       value: "ai-machine-learning",
       label: "AI & Machine Learning",
-      fee: 499,
+      fee: 1999,
       duration: "8 months",
       students: 420,
       rating: 4.9,
@@ -132,7 +132,7 @@ const Course = () => {
     {
       value: "devops",
       label: "DevOps",
-      fee: 499,
+      fee: 1999,
       duration: "4 months",
       students: 780,
       rating: 4.8,
@@ -152,7 +152,7 @@ const Course = () => {
     {
       value: "data-analytics",
       label: "Data Analytics",
-      fee: 499,
+      fee: 1999,
       duration: "4 months",
       students: 920,
       rating: 4.7,
@@ -172,7 +172,7 @@ const Course = () => {
     {
       value: "power-bi",
       label: "Power BI",
-      fee: 499,
+      fee: 1999,
       duration: "3 months",
       students: 1100,
       rating: 4.6,
@@ -192,7 +192,7 @@ const Course = () => {
     {
       value: "internship",
       label: "Internship",
-      fee: 499,
+      fee: 1999,
       duration: "2 months",
       students: 2000,
       rating: 4.5,
@@ -211,7 +211,7 @@ const Course = () => {
     {
       value: "project",
       label: "Project",
-      fee: 499,
+      fee: 1999,
       duration: "1 month",
       students: 1500,
       rating: 4.6,
@@ -262,7 +262,7 @@ const Course = () => {
         </title>
         <meta
           name="description"
-          content="Master programming with our comprehensive courses in Java, Python, Data Science, AI & ML, DevOps, and more. All courses at ₹499. Start your coding journey today!"
+          content="Master programming with our comprehensive courses in Java, Python, Data Science, AI & ML, DevOps, and more. All courses at ₹1999. Start your coding journey today!"
         />
         <meta
           name="keywords"
@@ -280,7 +280,7 @@ const Course = () => {
         />
         <meta
           property="og:description"
-          content="Master programming with our comprehensive courses in Java, Python, Data Science, AI & ML, DevOps, and more. All courses at ₹499."
+          content="Master programming with our comprehensive courses in Java, Python, Data Science, AI & ML, DevOps, and more. All courses at ₹1999."
         />
         <meta
           property="og:image"
@@ -297,7 +297,7 @@ const Course = () => {
         />
         <meta
           property="twitter:description"
-          content="Master programming with our comprehensive courses in Java, Python, Data Science, AI & ML, DevOps, and more. All courses at ₹499."
+          content="Master programming with our comprehensive courses in Java, Python, Data Science, AI & ML, DevOps, and more. All courses at ₹1999."
         />
         <meta
           property="twitter:image"
@@ -324,7 +324,7 @@ const Course = () => {
             },
             offers: {
               "@type": "Offer",
-              price: "499",
+              price: "1999",
               priceCurrency: "INR",
             },
             courseMode: "online",
