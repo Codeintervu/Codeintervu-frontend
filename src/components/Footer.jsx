@@ -15,7 +15,7 @@ const Footer = () => {
       "Plot No-741, 2nd Floor,",
       "Jayadev Vihar, 751013",
       "Bhubaneswar: Odisha",
-      "Call: 0674-2361252",
+      "Call: +91-89842 89279",
       "Mail: info@codeintervu.com",
     ],
   };

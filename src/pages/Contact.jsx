@@ -92,7 +92,7 @@ const Contact = () => {
                         Phone
                       </h3>
                       <p className="text-gray-600 dark:text-gray-300">
-                        0674-2361252
+                        +91-89842 89279
                       </p>
                     </div>
                   </div>
@@ -388,7 +388,7 @@ const Contact = () => {
               </div>
               <div className="text-gray-300 text-sm">
                 <p>📧 info@codeintervu.com</p>
-                <p>📞 0674-2361252</p>
+                <p>📞 +91-89842 89279</p>
               </div>
             </div>
           </div>
