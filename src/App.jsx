@@ -13,7 +13,6 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Support from "./pages/Support";
 import Course from "./pages/Course";
-import JavaProgrammingCourse from "./pages/JavaProgrammingCourse";
 import CategoryPage from "./pages/CategoryPage";
 import JavaCompiler from "./compilers/JavaCompiler";
 import PythonCompiler from "./compilers/PythonCompiler";
@@ -62,10 +61,6 @@ const AppContent = () => {
           <Route path="/contact" element={<Contact />} />
           <Route path="/support" element={<Support />} />
           <Route path="/course" element={<Course />} />
-          <Route
-            path="/course/java-programming"
-            element={<JavaProgrammingCourse />}
-          />
           <Route path="/quiz" element={<QuizListPage />} />
           <Route path="/quiz/:slug" element={<QuizMCQPage />} />
           <Route

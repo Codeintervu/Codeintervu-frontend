@@ -446,22 +446,22 @@ const Course = () => {
                       </div>
                     </div>
 
-                    {/* Price and CTA */}
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <span className="text-2xl font-bold text-teal-600 dark:text-teal-400">
-                          {formatPrice(course.fee)}
-                        </span>
-                        <span className="text-sm text-gray-500 dark:text-gray-400 ml-1">
+                    {/* Price Button */}
+                    <div className="flex items-center justify-center">
+                      <button
+                        onClick={() => {
+                          if (course.value === "java-programming") {
+                            alert("Course details page coming soon!");
+                          } else {
+                            navigate(`/course/${course.value}`);
+                          }
+                        }}
+                        className="bg-teal-600 hover:bg-teal-700 text-white px-6 py-3 rounded-lg font-bold text-2xl transition-colors duration-200 flex items-center gap-2"
+                      >
+                        {formatPrice(course.fee)}
+                        <span className="text-sm font-normal opacity-80">
                           /course
                         </span>
-                      </div>
-                      <button
-                        onClick={() => navigate(`/course/${course.value}`)}
-                        className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center gap-2"
-                      >
-                        <Play className="w-4 h-4" />
-                        Enroll Now
                       </button>
                     </div>
                   </div>

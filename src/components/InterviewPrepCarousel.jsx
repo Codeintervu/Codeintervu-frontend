@@ -60,22 +60,24 @@ const InterviewPrepCarousel = () => {
       link: "/interview-questions",
       color: "bg-orange-500",
     },
-    {
-      id: "mock-interviews",
-      title: "Mock Interviews",
-      description: "Simulate real interview scenarios",
-      icon: <FaUser className="h-[16px] w-[16px] text-white" />,
-      link: "/mock-interviews",
-      color: "bg-red-500",
-    },
-    {
-      id: "coding-practice",
-      title: "Coding Practice",
-      description: "Live coding sessions",
-      icon: <FaCode className="h-[16px] w-[16px] text-white" />,
-      link: "/coding-interviews",
-      color: "bg-yellow-500",
-    },
+    // Mock Interviews - Not implemented yet
+    // {
+    //   id: "mock-interviews",
+    //   title: "Mock Interviews",
+    //   description: "Simulate real interview scenarios",
+    //   icon: <FaUser className="h-[16px] w-[16px] text-white" />,
+    //   link: "/mock-interviews",
+    //   color: "bg-red-500",
+    // },
+    // Coding Practice - Not implemented yet
+    // {
+    //   id: "coding-practice",
+    //   title: "Coding Practice",
+    //   description: "Live coding sessions",
+    //   icon: <FaCode className="h-[16px] w-[16px] text-white" />,
+    //   link: "/coding-interviews",
+    //   color: "bg-yellow-500",
+    // },
     {
       id: "blog",
       title: "Blog",

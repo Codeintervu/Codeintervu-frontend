@@ -266,7 +266,8 @@ const Navbar = ({ tutorials }) => {
                       Draw & explain concepts
                     </span>
                   </Link>
-                  <Link
+                  {/* Mock Interviews - Not implemented yet */}
+                  {/* <Link
                     to="/mock-interviews"
                     className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
@@ -278,8 +279,10 @@ const Navbar = ({ tutorials }) => {
                     <span className="text-xs text-gray-700 dark:text-gray-400">
                       Simulate real interviews
                     </span>
-                  </Link>
-                  <Link
+                  </Link> */}
+
+                  {/* Coding Practice - Not implemented yet */}
+                  {/* <Link
                     to="/coding-interviews"
                     className="px-4 py-3 text-center text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600 rounded flex flex-col items-center gap-2"
                     onClick={closeMenus}
@@ -291,7 +294,7 @@ const Navbar = ({ tutorials }) => {
                     <span className="text-xs text-gray-700 dark:text-gray-400">
                       Live coding sessions
                     </span>
-                  </Link>
+                  </Link> */}
                   <a
                     href="http://javabytrilochan.blogspot.com"
                     target="_blank"
